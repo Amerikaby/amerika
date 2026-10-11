@@ -42,7 +42,7 @@ p{margin:0}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:8px}
 .logo{font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:.02em}
 .logo span{color:var(--red)}
-.nav{display:flex;gap:16px;flex-wrap:wrap;font-weight:500;font-size:15px}
+.nav{display:flex;gap:18px;flex-wrap:wrap;font-weight:500;font-size:15px}
 .nav a{text-decoration:none;color:var(--muted)}
 .nav a:hover{color:var(--ink)}
 .contact{margin-left:auto;display:flex;align-items:center;gap:8px}
@@ -162,6 +162,20 @@ section{padding-block:64px}
 .lots figcaption{font-size:14px;color:var(--muted)}
 @media (max-width:760px){.lots{grid-template-columns:1fr 1fr}}
 
+/* Сколько вы сэкономите */
+.save{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.save article{border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px;background:var(--surface);min-width:0}
+.save h3{font-size:16px}
+.save .spec{font-size:13px;color:var(--muted)}
+.save .row{font-size:14px}
+.save .key{margin-top:4px;padding-top:8px;border-top:1px solid var(--line)}
+.save .key b{font-family:var(--display);font-size:20px}
+.save .gain{color:var(--ok);font-weight:700}
+.save button{margin-top:auto;background:none;border:0;padding:8px 0 0;font:600 14px/1.2 var(--body);color:var(--red);cursor:pointer;text-align:left}
+.save-note{font-size:13px;color:var(--muted);margin-top:16px;max-width:70ch}
+@media (max-width:960px){.save{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.save{grid-template-columns:1fr}}
+
 /* FAQ */
 .faq{display:flex;flex-direction:column;max-width:820px}
 .faq details{border-bottom:1px solid var(--line);padding-block:16px}
@@ -188,8 +202,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
 .mbar{display:none}
 @media (max-width:760px){
   .mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
-  .mbar .btn{flex:1;padding:12px 6px;font-size:13px}
-  .mbar .btn-red{flex:1.3}
+  .mbar .btn{flex:1;padding:12px 4px;font-size:13px}
   body{padding-bottom:72px}
 }
 </style>
@@ -323,6 +336,18 @@ footer div{display:flex;flex-direction:column;gap:4px}
   </div>
 </section>
 
+<section class="alt" id="save">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Сколько выйдет под ключ</p>
+      <h2>Популярные машины из США: цена до Минска</h2>
+      <p>Посчитано нашим калькулятором: лот, сборы аукциона, доставка, пошлина, утильсбор и наша услуга. Нажмите на карточку, чтобы поменять цифры под себя.</p>
+    </div>
+    <div class="save" id="saveGrid"></div>
+    <p class="save-note">Цена лота — пример: на аукционе такая машина может уйти дешевле или дороже, в зависимости от повреждений и пробега. Точный расчёт по конкретному лоту менеджер сделает бесплатно.</p>
+  </div>
+</section>
+
 <section class="alt" id="how">
   <div class="wrap">
     <div class="sec-head">
@@ -448,7 +473,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
 </div>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","url":"https://amerika.by/","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by","https://wa.me/375296332828"]}
+{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","url":"https://amerika.by/","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by"]}
 </script>
 <script>
 /* Все ставки и тарифы в одном месте. Логистика и сборы аукциона — ориентиры, их нужно сверить с актуальными ценами. */
@@ -544,7 +569,45 @@ document.querySelectorAll(".picks button").forEach(function(b){
 });
 $("calcForm").addEventListener("input", calc);
 $("calcForm").addEventListener("change", calc);
-calc();
+
+/* Карточки «Сколько выйдет под ключ». lot — пример цены лота, $.
+   market — цена такой же машины на av.by, $ (вписать после сверки, с датой в marketDate); пусто = строка экономии не показывается. */
+var SAVINGS = {
+  marketDate: "",
+  cars: [
+    {name:"Nissan Rogue",        year:2021, cc:2500, fuel:"ice", lot:11000, market:null},
+    {name:"Ford Edge",           year:2020, cc:2000, fuel:"ice", lot:10000, market:null},
+    {name:"Ford Escape",         year:2021, cc:1500, fuel:"ice", lot:9000,  market:null},
+    {name:"Hyundai Tucson",      year:2021, cc:2000, fuel:"ice", lot:10000, market:null},
+    {name:"Honda CR-V",          year:2021, cc:1500, fuel:"ice", lot:12000, market:null},
+    {name:"Jeep Grand Cherokee", year:2020, cc:3600, fuel:"ice", lot:14000, market:null},
+    {name:"BMW X3",              year:2021, cc:2000, fuel:"ice", lot:17000, market:null},
+    {name:"Tesla Model Y",       year:2021, cc:0,    fuel:"ev",  lot:18000, market:null}
+  ]
+};
+function setCalc(c){
+  $("price").value = c.lot; $("year").value = c.year; $("volume").value = c.cc;
+  $("region").value = "east"; $("benefit").checked = false;
+  document.querySelector('input[name="fuel"][value="' + c.fuel + '"]').checked = true;
+  return calc();
+}
+(function(){
+  var grid = $("saveGrid"), fuelName = {ice:"", hybrid:", гибрид", ev:", электро"};
+  SAVINGS.cars.forEach(function(c){
+    var t = setCalc(c).total, a = document.createElement("article");
+    var eng = c.fuel === "ev" ? "электро" : (c.cc / 1000).toFixed(1).replace(".", ",") + " л";
+    var html = '<h3>' + c.name + '</h3><span class="spec">' + c.year + ' · ' + eng + ' · через ' + (setCalc(c).port === "klaipeda" ? "Клайпеду" : "Поти") + '</span>'
+      + '<div class="row"><span>Лот, пример</span><span class="num">' + fmt(c.lot) + '</span></div>'
+      + '<div class="row key"><span>Под ключ в Минске</span><b class="num">' + fmt(t) + '</b></div>';
+    if (c.market) html += '<div class="row"><span>На av.by' + (SAVINGS.marketDate ? ', ' + SAVINGS.marketDate : '') + '</span><span class="num">' + fmt(c.market) + '</span></div>'
+      + '<div class="row"><span>Экономия</span><span class="num gain">' + fmt(c.market - t) + '</span></div>';
+    html += '<button type="button">Посчитать свою →</button>';
+    a.innerHTML = html;
+    a.querySelector("button").addEventListener("click", function(){ setCalc(c); $("calc").scrollIntoView({behavior:"smooth"}); });
+    grid.appendChild(a);
+  });
+  setCalc({lot:12000, year:nowYear - 4, cc:2000, fuel:"ice"});
+})();
 
 $("sendCalc").addEventListener("click", function(){
   var r = calc();
