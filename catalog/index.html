@@ -481,7 +481,7 @@ p{margin:0}
   }
   function turnkeyBill(t) {
     if (!t) return '';
-    var r = t.ben, P = t.o.port === 'klaipeda' ? 'Клайпеду' : 'Поти';
+    var r = t.ben, P = t.o.port === 'klaipeda' ? 'Клайпеды' : 'Поти';
     var lab = t.base.kind === 'buynow' ? 'Цена Buy Now' : t.base.kind === 'final' ? 'Цена торгов' : 'Цена машины (наша оценка)';
     var rows = t.base.kind === 'extra' ? [] : [[lab, r.price], ['Сбор аукциона', r.fee]];
     rows.push(['Доставка по США до порта', r.inland], ['Море до ' + P, r.sea], [(t.o.port === 'klaipeda' ? 'Клайпеда' : 'Поти') + ' → Минск', r.last]);
