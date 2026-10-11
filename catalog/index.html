@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Каталог авто с аукционов США: Copart и IAAI онлайн | Amerika.by</title>
+<meta name="description" content="Машины с аукционов Copart и IAAI онлайн: фото, пробег, повреждения, текущая ставка и дата торгов. Подберём, проверим и привезём в Минск под ключ.">
+<!-- Тестовая версия: закрыта от индексации до запуска -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Каталог лотов: фильтры слева, плитка или список справа, карточка лота во всплывающем окне. Стиль общий с /new. */
+:root{
+  --paper:#f5f6f9; --surface:#ffffff; --ink:#14213f; --muted:#5a6580; --line:#dde1ea;
+  --navy:#1b2f63; --red:#c8102e; --red-ink:#ffffff; --soft:#eef1f7; --ok:#1d7a4c; --warn:#a15c00; --bad:#b3261e;
+  --copart:#1a5fd0; --iaai:#c8102e;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:10px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 var(--body)}
+a{color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:11px 16px;font:600 15px/1 var(--body);cursor:pointer;text-decoration:none}
+.btn-red{background:var(--red);color:var(--red-ink)}
+.btn-red:hover{filter:brightness(1.08)}
+.btn-line{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-sm{padding:8px 12px;font-size:14px}
+
+/* Шапка */
+.top{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:6px}
+.logo img{display:block;height:56px;width:auto}
+.nav{display:flex;gap:16px;flex-wrap:wrap;font-weight:500;font-size:15px}
+.nav a{text-decoration:none;color:var(--muted)}
+.nav a:hover,.nav a[aria-current]{color:var(--ink)}
+.nav a[aria-current]{border-bottom:2px solid var(--red)}
+.contact{margin-left:auto;display:flex;align-items:center;gap:8px}
+.contact .btn{padding:9px 12px;font-size:14px}
+.phone{font-weight:700;font-size:17px;text-decoration:none;white-space:nowrap}
+@media (max-width:900px){.contact .btn{display:none}}
+@media (max-width:640px){.nav{display:none}.logo img{height:44px}.phone{font-size:15px}}
+
+/* Заголовок и поиск */
+.head{background:var(--navy);color:#fff;padding:26px 0 22px}
+.head h1{font-size:clamp(22px,3vw,32px)}
+.head p{color:#c3cce3;margin-top:8px;max-width:760px}
+.search{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.search input{flex:1 1 280px;min-width:0;font:16px var(--body);padding:12px 14px;border-radius:8px;border:0}
+.search select{font:15px var(--body);padding:0 10px;border-radius:8px;border:0;min-height:44px}
+.mode{margin-top:14px;font-size:14px;background:#2b3f78;border-radius:8px;padding:9px 12px;color:#dfe5f5}
+.mode b{color:#ffd36b}
+
+/* Раскладка */
+.layout{display:grid;grid-template-columns:270px 1fr;gap:24px;align-items:start;padding-block:24px 60px}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.filters{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;position:sticky;top:84px}
+@media (max-width:960px){.filters{position:static;display:none}.filters.open{display:block}}
+.filters h2{font-size:15px;margin-bottom:12px}
+.f{margin-bottom:14px}
+.f label,.f .lbl{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.f select,.f input[type=number]{width:100%;font:15px var(--body);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.f .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg label{margin:0;text-align:center;padding:8px 4px;font-size:14px;color:var(--ink);cursor:pointer;font-weight:500}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--ink);color:#fff}
+.seg label:has(input:focus-visible){outline:3px solid var(--red);outline-offset:-3px}
+.chk{display:flex;gap:9px;align-items:center;font-size:15px;margin:8px 0;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--red)}
+.f-actions{display:flex;gap:8px;margin-top:6px}
+.f-actions .btn{flex:1}
+.f-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+/* Панель над результатами */
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.bar .count{font-weight:600;margin-right:auto}
+.bar select{font:14px var(--body);padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.view{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.view button{border:0;background:none;padding:8px 12px;font:500 14px var(--body);cursor:pointer;color:var(--muted)}
+.view button[aria-pressed=true]{background:var(--ink);color:#fff}
+.show-filters{display:none}
+@media (max-width:960px){.show-filters{display:inline-flex}}
+
+/* Карточки */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:box-shadow .15s}
+.card:hover{box-shadow:0 12px 30px -18px rgba(20,33,63,.45)}
+.ph{position:relative;aspect-ratio:4/3;background:var(--soft) center/40% no-repeat;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .nophoto{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.badge{position:absolute;top:8px;left:8px;font:700 12px/1 var(--body);color:#fff;padding:5px 7px;border-radius:5px;letter-spacing:.03em}
+.b-copart{background:var(--copart)}
+.b-iaai{background:var(--iaai)}
+.timer{position:absolute;bottom:8px;left:8px;background:rgba(20,33,63,.88);color:#fff;font-size:13px;font-weight:600;padding:5px 8px;border-radius:6px}
+.timer.ended{background:rgba(90,101,128,.9)}
+.timer.soon{background:var(--red)}
+.ph .pc{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 6px;border-radius:5px}
+.ph .nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.88);font-size:18px;cursor:pointer;opacity:0;transition:opacity .15s}
+.card:hover .nav-btn,.ph .nav-btn:focus-visible{opacity:1}
+.nav-btn.prev{left:8px}.nav-btn.next{right:8px}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ttl{font-weight:700;font-size:16px;line-height:1.3}
+.meta{font-size:13px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:14px;margin:0}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag-ok{color:var(--ok);font-weight:600}
+.tag-warn{color:var(--warn);font-weight:600}
+.tag-bad{color:var(--bad);font-weight:600}
+.price{margin-top:auto;border-top:1px dashed var(--line);padding-top:10px}
+.price .lab{font-size:13px;color:var(--muted)}
+.price .val{font-family:var(--display);font-size:20px;font-weight:700}
+.price .sub{font-size:13px;color:var(--muted)}
+.price .res{font-size:13px;margin-top:4px}
+.price .res b{font-weight:600}
+.hint{border-bottom:1px dotted var(--muted);cursor:help}
+
+/* Список (как на bidfax) */
+.grid.list{grid-template-columns:1fr}
+.grid.list .card{flex-direction:row}
+.grid.list .ph{width:300px;flex:none;aspect-ratio:4/3}
+.grid.list .body{display:grid;grid-template-columns:1.1fr 1fr 200px;gap:8px 20px;align-items:start}
+.grid.list .facts dd{white-space:normal}
+.grid.list .head-col{grid-column:1/-1}
+.grid.list .price{margin:0;border:0;padding:0;grid-column:3;grid-row:2/4}
+@media (max-width:720px){.grid.list .card{flex-direction:column}.grid.list .ph{width:100%}.grid.list .body{display:flex}}
+
+.more{display:flex;justify-content:center;margin-top:22px}
+.empty,.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;text-align:center;color:var(--muted)}
+.err{color:var(--bad)}
+.skel{height:360px;border-radius:var(--r);background:linear-gradient(90deg,#e9ecf3 0,#f4f6fa 50%,#e9ecf3 100%);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}}
+
+/* Окно лота */
+dialog{border:0;padding:0;border-radius:14px;width:min(1080px,96vw);max-height:94vh;color:var(--ink)}
+dialog::backdrop{background:rgba(10,18,40,.6)}
+.lot{display:grid;grid-template-columns:1.35fr 1fr}
+@media (max-width:860px){.lot{grid-template-columns:1fr}}
+.gal{background:#0f1830;position:relative;align-self:start}
+.gal .big{aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
+.gal .big img{width:100%;height:100%;object-fit:contain}
+.gal .big .nophoto{color:#9aa6c4}
+.thumbs{display:flex;gap:6px;padding:8px;overflow-x:auto}
+.thumbs button{border:2px solid transparent;padding:0;background:none;cursor:pointer;flex:none;border-radius:6px;overflow:hidden}
+.thumbs button[aria-current=true]{border-color:#ffd36b}
+.thumbs img{width:76px;height:57px;object-fit:cover;display:block}
+.info{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.info h2{font-size:20px;padding-right:36px}
+.close{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:0;background:#fff;font-size:22px;cursor:pointer;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.ids{display:flex;gap:8px;flex-wrap:wrap;font-size:14px}
+.ids button{border:1px solid var(--line);background:var(--soft);border-radius:6px;padding:5px 8px;font:14px var(--body);cursor:pointer}
+.panel{background:var(--soft);border-radius:10px;padding:14px}
+.panel .val{font-family:var(--display);font-size:26px;font-weight:700}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin:0}
+.spec dt{color:var(--muted)}
+.spec dd{margin:0}
+.cta{display:flex;gap:8px;flex-wrap:wrap}
+.note{font-size:12px;color:var(--muted)}
+.hist{width:100%;border-collapse:collapse;font-size:14px}
+.hist th,.hist td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.hist th{color:var(--muted);font-weight:600;font-size:13px}
+.wide{grid-column:1/-1;padding:0 22px 22px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:100}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../new/"><img src="../new/img/logo.svg" alt="AMERIKA.BY" width="62" height="57"></a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="../new/">Главная</a>
+      <a href="./" aria-current="page">Каталог авто</a>
+      <a href="../new/#calc">Калькулятор</a>
+      <a href="../new/#how">Как мы работаем</a>
+    </nav>
+    <div class="contact">
+      <a class="phone" href="tel:+375296332828">+375 (29) 633-28-28</a>
+      <a class="btn btn-line" href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn btn-line" href="viber://chat?number=%2B375296332828">Viber</a>
+      <a class="btn btn-line" href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<section class="head">
+  <div class="wrap">
+    <h1>Авто с аукционов США онлайн</h1>
+    <p>Лоты Copart и IAAI: фото, пробег, повреждения, текущая ставка и время торгов. Цены здесь аукционные, без доставки и растаможки. Полную стоимость до Минска посчитает <a href="../new/#calc">калькулятор</a> или наш менеджер.</p>
+    <form class="search" id="search" role="search">
+      <input id="q" type="search" placeholder="VIN (17 знаков) или номер лота" autocomplete="off" aria-label="VIN или номер лота">
+      <select id="qsrc" aria-label="Аукцион для номера лота"><option value="copart_com">Copart</option><option value="iaai_com">IAAI</option></select>
+      <button class="btn btn-red" type="submit">Найти</button>
+    </form>
+    <p class="mode" id="mode" hidden></p>
+  </div>
+</section>
+
+<main class="wrap layout">
+  <form class="filters" id="filters" aria-label="Фильтры">
+    <h2>Фильтры</h2>
+    <div class="f">
+      <span class="lbl">Аукцион</span>
+      <div class="seg">
+        <label><input type="radio" name="domain_id" value="" checked>Все</label>
+        <label><input type="radio" name="domain_id" value="3">Copart</label>
+        <label><input type="radio" name="domain_id" value="1">IAAI</label>
+      </div>
+    </div>
+    <div class="f"><label for="f-make">Марка</label><select id="f-make" name="manufacturer_id"><option value="">Все марки</option></select></div>
+    <div class="f"><label for="f-model">Модель</label><select id="f-model" name="model_id" disabled><option value="">Все модели</option></select></div>
+    <div class="f">
+      <span class="lbl">Год выпуска</span>
+      <div class="pair">
+        <input type="number" name="from_year" min="1990" max="2027" placeholder="от" aria-label="Год от">
+        <input type="number" name="to_year" min="1990" max="2027" placeholder="до" aria-label="Год до">
+      </div>
+    </div>
+    <div class="f"><label for="f-bid">Текущая ставка до, $</label><input id="f-bid" type="number" name="bid_price_to" min="100" step="100" placeholder="например, 8000"></div>
+    <div class="f"><label for="f-km">Пробег до, км</label><input id="f-km" type="number" name="km_to" min="1000" step="1000" placeholder="например, 100000"></div>
+    <div class="f">
+      <label for="f-dmg">Повреждение</label>
+      <select id="f-dmg" name="damage">
+        <option value="">Любое</option>
+        <option value="Front End">Перед</option>
+        <option value="Rear End">Зад</option>
+        <option value="Side">Бок</option>
+        <option value="Minor Dent/Scratches">Мелкие вмятины, царапины</option>
+        <option value="Hail">Град</option>
+        <option value="Mechanical">Механика</option>
+        <option value="Normal Wear">Естественный износ</option>
+        <option value="Undercarriage">Днище</option>
+        <option value="Water/Flood">Вода, затопление</option>
+        <option value="Burn">Пожар</option>
+      </select>
+    </div>
+    <label class="chk"><input type="checkbox" name="condition" value="0">На ходу (Run&nbsp;&amp;&nbsp;Drive)</label>
+    <label class="chk"><input type="checkbox" name="buy_now" value="1">Есть «Купить сейчас»</label>
+    <label class="chk"><input type="checkbox" name="next_hours_auction" value="24">Торги в ближайшие 24 часа</label>
+    <div class="f-actions">
+      <button class="btn btn-red" type="submit">Показать</button>
+      <button class="btn btn-line" type="reset">Сбросить</button>
+    </div>
+    <p class="f-note">Только США. Ставки и цены в долларах, без сборов аукциона, доставки и растаможки.</p>
+  </form>
+
+  <section aria-live="polite">
+    <div class="bar">
+      <button class="btn btn-line btn-sm show-filters" id="show-filters" type="button" aria-expanded="false" aria-controls="filters">Фильтры</button>
+      <span class="count" id="count"></span>
+      <select id="sort" aria-label="Сортировка">
+        <option value="">Сначала новые</option>
+        <option value="soon">Ближайшие торги</option>
+        <option value="cheap">Ставка: дешевле</option>
+        <option value="dear">Ставка: дороже</option>
+        <option value="year">Год: новее</option>
+        <option value="km">Пробег: меньше</option>
+      </select>
+      <div class="view" role="group" aria-label="Вид">
+        <button type="button" data-view="grid" aria-pressed="true">Плитка</button>
+        <button type="button" data-view="list" aria-pressed="false">Список</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="more"><button class="btn btn-line" id="more" type="button" hidden>Показать ещё</button></div>
+  </section>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlg-title"></dialog>
+
+<script src="sample.js"></script>
+<script>
+(function () {
+  'use strict';
+  var API = 'api.php';
+  var state = { mode: 'api', items: [], page: 1, next: null, view: 'grid', loading: false };
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var grid = $('#grid'), form = $('#filters');
+
+  /* ---------- Словари ---------- */
+  var DMG = { 'front end': 'Перед', 'rear end': 'Зад', 'side': 'Бок', 'left side': 'Левый бок', 'right side': 'Правый бок', 'hail': 'Град',
+    'minor dent/scratches': 'Мелкие вмятины, царапины', 'mechanical': 'Механика', 'normal wear': 'Естественный износ', 'normal wear & tear': 'Естественный износ',
+    'undercarriage': 'Днище', 'water/flood': 'Вода, затопление', 'burn': 'Пожар', 'burn - engine': 'Пожар (двигатель)', 'all over': 'По всему кузову',
+    'rollover': 'Опрокидывание', 'vandalism': 'Вандализм', 'top/roof': 'Крыша', 'biohazard/chemical': 'Биологическое загрязнение',
+    'frame damage': 'Рама', 'stripped': 'Разукомплектован', 'none': 'Нет', 'unknown': 'Неизвестно', 'damage history': 'Были повреждения' };
+  var SEVERE = /burn|fire|flood|water|frame|rollover|all over|biohazard/i;
+  var COND = { run_and_drives: ['На ходу', 'ok'], engine_starts: ['Заводится', ''], enhanced: ['На ходу, проверен', 'ok'], used: ['Б/у', ''],
+    not_run: ['Не заводится', 'warn'], for_repair: ['Под ремонт', 'warn'], to_be_dismantled: ['На разбор', 'bad'], unconfirmed: ['Не подтверждено', 'warn'] };
+  var STATUS = { sale: 'Идут торги', upcoming: 'Скоро торги', future: 'Будущие торги', new_auction: 'Новый аукцион', sold: 'Продан',
+    not_sold: 'Не продан', on_approval: 'На одобрении продавца', failed: 'Не состоялся', not_on_sale: 'Снят с торгов', not_checked: 'Не проверен' };
+  var DRIVE = { all: 'Полный', front: 'Передний', rear: 'Задний' };
+  var FUEL = { gasoline: 'Бензин', diesel: 'Дизель', hybrid: 'Гибрид', electric: 'Электро', flexible: 'Flex Fuel', gas: 'Газ', hydrogen: 'Водород' };
+  var BODY = { sedan: 'Седан', wagon: 'Универсал', coupe: 'Купе', pickup: 'Пикап', suv: 'Кроссовер', cabrio: 'Кабриолет', van: 'Минивэн', hatchback: 'Хэтчбек', liftback: 'Лифтбек' };
+  var AIRBAGS = { intact: 'Целы', deployed: 'Сработали', missing: 'Отсутствуют', none: 'Нет' };
+
+  /* ---------- Утилиты ---------- */
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function num(v) { var n = typeof v === 'string' ? parseFloat(v) : v; return typeof n === 'number' && isFinite(n) && n > 0 ? n : 0; }
+  function usd(v) { return '$' + Math.round(v).toLocaleString('ru-RU'); }
+  function cap(s) { return String(s || '').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
+  function dmg(d) { if (!d || !d.name) return ''; return DMG[d.name.toLowerCase()] || d.name; }
+  function okUrl(u) { return typeof u === 'string' && (/^https?:\/\//i.test(u) || /^\.\.\/new\/img\//.test(u)); }
+  function toast(t) { var el = document.createElement('div'); el.className = 'toast'; el.textContent = t; document.body.appendChild(el); setTimeout(function () { el.remove(); }, 2200); }
+  function srcName(l) { return l && l.domain && l.domain.id === 1 ? 'IAAI' : 'Copart'; }
+  function ts(l) { var t = l && l.sale_date ? Date.parse(l.sale_date) : NaN; return isFinite(t) ? t : null; }
+  function finished(l) { return !!(l.archived || num(l.final_bid) || [6, 7, 8, 2].indexOf(l.status && l.status.id) >= 0); }
+
+  // Лот, который показывает карточка: открытый, с ближайшей датой, затем по статусу.
+  var STATUS_RANK = { 3: 0, 10: 1, 9: 1, 5: 1, 6: 2, 2: 3 };
+  function primaryLot(v) {
+    var lots = (v.lots || []).filter(function (l) { return l && l.domain && (l.domain.id === 1 || l.domain.id === 3); });
+    var dom = form.elements.domain_id.value;
+    if (dom) { var only = lots.filter(function (l) { return String(l.domain.id) === dom; }); if (only.length) lots = only; }
+    lots.sort(function (a, b) {
+      return (finished(a) - finished(b)) || ((ts(b) || 0) - (ts(a) || 0)) ||
+        ((STATUS_RANK[a.status && a.status.id] ?? 4) - (STATUS_RANK[b.status && b.status.id] ?? 4)) ||
+        (photos(b, 'normal').length - photos(a, 'normal').length);
+    });
+    return lots[0] || null;
+  }
+  function photos(l, kind) {
+    var im = l && l.images; if (!im) return [];
+    var list;
+    if (kind === 'big') {
+      list = (im.downloaded || []).slice();
+      var src = (im.big && im.big.length ? im.big : im.normal && im.normal.length ? im.normal : im.small) || [];
+      if (src.length > list.length) list = list.concat(src.slice(list.length));
+    } else list = (im.normal && im.normal.length ? im.normal : im.small) || [];
+    return list.filter(okUrl);
+  }
+
+  // Цена по правилам API: финальная ставка зависит от статуса, резерв только у открытого лота.
+  function priceInfo(l) {
+    var fb = num(l.final_bid), bn = num(l.buy_now), bid = num(l.bid), st = l.status && l.status.id, p = { reserve: 0 };
+    if (fb) {
+      if (st === 4) { p.lab = 'Ставка, ждёт одобрения продавца'; p.val = usd(fb); }
+      else if (st === 8) { p.lab = 'Макс. ставка, не продан'; p.val = usd(fb); }
+      else if (st === 6) { p.lab = 'Продан за'; p.val = usd(fb); }
+      else { p.lab = 'Финальная ставка'; p.val = usd(fb); }
+      p.done = true; return p;
+    }
+    if (l.archived || [6, 7, 8, 2].indexOf(st) >= 0) { p.lab = STATUS[l.status.name] || 'Торги завершены'; p.val = bid ? usd(bid) : '—'; p.done = true; return p; }
+    if (bn) { p.lab = 'Купить сейчас'; p.val = usd(bn); p.sub = 'Текущая ставка: ' + (bid ? usd(bid) : '$0'); }
+    else if (bid) { p.lab = 'Текущая ставка'; p.val = usd(bid); }
+    else if (st === 9 || st === 10 || (ts(l) && ts(l) > Date.now())) { p.lab = 'Ставок пока нет'; p.val = 'Торги скоро'; }
+    else { p.lab = 'Текущая ставка'; p.val = 'Ставок нет'; }
+    p.reserve = l.seller_reserve ? num(l.seller_reserve.price) : 0;
+    return p;
+  }
+  var RESERVE_HINT = 'Минимальная цена, на которую согласен продавец. Если торги закончатся ниже, машину не продадут.';
+
+  function timerHtml(l) {
+    var t = ts(l);
+    if (finished(l)) return '<span class="timer ended">Торги завершены</span>';
+    if (!t) return l.status && l.status.name === 'live' ? '<span class="timer soon">Live</span>' : '<span class="timer">Дата торгов уточняется</span>';
+    return '<span class="timer" data-ts="' + t + '"></span>';
+  }
+  function tick() {
+    var now = Date.now();
+    document.querySelectorAll('[data-ts]').forEach(function (el) {
+      var d = +el.getAttribute('data-ts') - now;
+      if (d <= 0) { el.textContent = 'Торги начались'; el.classList.add('soon'); return; }
+      var s = Math.floor(d / 1000), dd = Math.floor(s / 86400), hh = Math.floor(s % 86400 / 3600), mm = Math.floor(s % 3600 / 60), ss = s % 60;
+      el.textContent = 'Торги через ' + (dd ? dd + 'д ' : '') + hh + 'ч ' + mm + 'мин' + (dd ? '' : ' ' + ss + 'с');
+      el.classList.toggle('soon', d < 24 * 3600e3);
+    });
+  }
+  setInterval(tick, 1000);
+
+  function saleDate(l) {
+    var t = ts(l); if (!t) return '';
+    return new Date(t).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+  }
+  function odo(l) {
+    var o = l.odometer; if (!o || !(num(o.mi) || num(o.km))) return '';
+    var km = num(o.km) || Math.round(num(o.mi) * 1.609), s = Math.round(km).toLocaleString('ru-RU') + ' км';
+    if (num(o.mi)) s += ' (' + Math.round(o.mi).toLocaleString('ru-RU') + ' mi)';
+    if (o.status && o.status.id && o.status.id !== 1) s += ' · не точный';
+    return s;
+  }
+  function place(l) {
+    var loc = l.location || {}, city = loc.city && loc.city.name, st = loc.state && loc.state.code;
+    if (city) return cap(city) + (st ? ', ' + st.toUpperCase() : '');
+    return loc.location && loc.location.name ? cap(loc.location.name) : (loc.raw || '');
+  }
+  function titleDoc(l) {
+    var t = (l.detailed_title && l.detailed_title.name) || (l.title && l.title.name) || '';
+    var cls = /salvage|parts only|junk|non-repairable|certificate of destruction/i.test(t) ? 'tag-warn' : /clean/i.test(t) ? 'tag-ok' : '';
+    return t ? '<span class="' + cls + '">' + esc(t) + '</span>' : '';
+  }
+  function condHtml(l) {
+    var c = l.condition && COND[l.condition.name]; if (!c) return l.condition ? esc(l.condition.name) : '';
+    return '<span class="' + (c[1] ? 'tag-' + c[1] : '') + '">' + c[0] + '</span>';
+  }
+  function dmgHtml(l) {
+    var d = l.damage || {}, m = dmg(d.main), s = dmg(d.second); if (!m) return '';
+    var bad = SEVERE.test((d.main && d.main.name) || '') || SEVERE.test((d.second && d.second.name) || '');
+    return '<span class="' + (bad ? 'tag-bad' : '') + '">' + esc(m) + (s && s !== m ? ', ' + esc(s) : '') + '</span>';
+  }
+  function origUrl(l) {
+    if (l.domain.id === 3) return 'https://www.copart.com/lot/' + encodeURIComponent(l.lot);
+    return 'https://www.iaai.com/vehicledetail/' + encodeURIComponent(l.external_id || (l.lot + '~US'));
+  }
+
+  /* ---------- Карточка ---------- */
+  function cardHtml(v, i) {
+    var l = primaryLot(v); if (!l) return '';
+    var ph = photos(l, 'normal').slice(0, 5), p = priceInfo(l), src = srcName(l);
+    var img = ph.length ? '<img src="' + esc(ph[0]) + '" alt="' + esc(v.title) + '" loading="lazy" data-i="0">' : '<span class="nophoto">Нет фото</span>';
+    var navs = ph.length > 1 ? '<button class="nav-btn prev" type="button" aria-label="Предыдущее фото">‹</button><button class="nav-btn next" type="button" aria-label="Следующее фото">›</button><span class="pc">1/' + ph.length + '</span>' : '';
+    return '<article class="card" data-idx="' + i + '" tabindex="0" aria-label="' + esc(v.title) + '">' +
+      '<div class="ph" data-ph=\'' + esc(JSON.stringify(ph)) + '\'>' + img + '<span class="badge ' + (src === 'IAAI' ? 'b-iaai' : 'b-copart') + '">' + src + '</span>' + timerHtml(l) + navs + '</div>' +
+      '<div class="body">' +
+        '<div class="head-col"><div class="ttl">' + esc(v.title || (v.year + ' ' + (v.manufacturer && v.manufacturer.name))) + '</div>' +
+        '<div class="meta">Лот ' + esc(l.lot) + (saleDate(l) ? ' · ' + saleDate(l) : '') + '</div></div>' +
+        '<dl class="facts">' +
+          (odo(l) ? '<dt>Пробег</dt><dd>' + odo(l) + '</dd>' : '') +
+          (dmgHtml(l) ? '<dt>Повреждение</dt><dd>' + dmgHtml(l) + '</dd>' : '') +
+          (condHtml(l) ? '<dt>Состояние</dt><dd>' + condHtml(l) + '</dd>' : '') +
+        '</dl>' +
+        '<dl class="facts">' +
+          (titleDoc(l) ? '<dt>Документ</dt><dd>' + titleDoc(l) + '</dd>' : '') +
+          (place(l) ? '<dt>Площадка</dt><dd>' + esc(place(l)) + '</dd>' : '') +
+          (v.engine ? '<dt>Двигатель</dt><dd>' + esc(v.engine.name) + (v.drive_wheel ? ', ' + (DRIVE[v.drive_wheel.name] || v.drive_wheel.name).toLowerCase() + ' привод' : '') + '</dd>' : '') +
+        '</dl>' +
+        '<div class="price"><div class="lab">' + esc(p.lab) + '</div><div class="val num">' + esc(p.val) + '</div>' +
+          (p.sub ? '<div class="sub num">' + esc(p.sub) + '</div>' : '') +
+          (p.reserve ? '<div class="res num"><span class="hint" title="' + RESERVE_HINT + '">Резерв продавца</span>: <b>' + usd(p.reserve) + '</b></div>' : '') +
+        '</div>' +
+      '</div></article>';
+  }
+
+  function sorted(items) {
+    var k = $('#sort').value; if (!k) return items.map(function (v, i) { return [v, i]; });
+    var arr = items.map(function (v, i) { return [v, i, primaryLot(v)]; });
+    var big = Number.MAX_SAFE_INTEGER;
+    var key = {
+      soon: function (x) { var t = x[2] && ts(x[2]); return x[2] && !finished(x[2]) && t && t > Date.now() ? t : big; },
+      cheap: function (x) { return x[2] ? (num(x[2].final_bid) || num(x[2].bid) || big) : big; },
+      dear: function (x) { return x[2] ? -(num(x[2].final_bid) || num(x[2].bid)) : 0; },
+      year: function (x) { return -(x[0].year || 0); },
+      km: function (x) { return x[2] && x[2].odometer ? (num(x[2].odometer.km) || num(x[2].odometer.mi) * 1.609 || big) : big; }
+    }[k];
+    arr.sort(function (a, b) { return key(a) - key(b); });
+    return arr;
+  }
+  function render() {
+    if (!state.items.length) { grid.innerHTML = '<div class="empty">По этим фильтрам машин не нашлось. Попробуйте убрать часть условий.</div>'; $('#count').textContent = ''; $('#more').hidden = true; return; }
+    grid.innerHTML = sorted(state.items).map(function (x) { return cardHtml(x[0], x[1]); }).join('');
+    $('#count').textContent = 'Показано: ' + state.items.length + (state.next ? '+' : '');
+    $('#more').hidden = !state.next;
+    grid.querySelectorAll('img').forEach(function (im) { im.addEventListener('error', function () { im.replaceWith(Object.assign(document.createElement('span'), { className: 'nophoto', textContent: 'Нет фото' })); }, { once: true }); });
+    tick();
+  }
+
+  /* ---------- Загрузка данных ---------- */
+  function params() {
+    var fd = new FormData(form), q = {};
+    fd.forEach(function (v, k) { if (v !== '') q[k] = v; });
+    if (q.km_to) { q.odometer_to_mi = Math.round(q.km_to / 1.609); }
+    return q;
+  }
+  function saveUrl(q) {
+    var u = new URLSearchParams(); Object.keys(q).forEach(function (k) { if (k !== 'odometer_to_mi') u.set(k, q[k]); });
+    history.replaceState(null, '', u.toString() ? '?' + u : location.pathname);
+  }
+  function call(qs) {
+    return fetch(API + '?' + new URLSearchParams(qs), { headers: { accept: 'application/json' } }).then(function (r) {
+      return r.json().catch(function () { throw { error: 'bad_json' }; }).then(function (j) { if (!r.ok) throw j; return j; });
+    });
+  }
+
+  function sampleFilter(q) {
+    return window.SAMPLE_CARS.filter(function (v) {
+      var l = v.lots[0];
+      if (q.domain_id && String(l.domain.id) !== q.domain_id) return false;
+      if (q.manufacturer_id && String(v.manufacturer.id) !== q.manufacturer_id) return false;
+      if (q.model_id && String(v.model.id) !== q.model_id) return false;
+      if (q.from_year && v.year < +q.from_year) return false;
+      if (q.to_year && v.year > +q.to_year) return false;
+      if (q.bid_price_to && num(l.bid) > +q.bid_price_to) return false;
+      if (q.odometer_to_mi && l.odometer.mi > +q.odometer_to_mi) return false;
+      if (q.damage && !((l.damage.main && l.damage.main.name === q.damage) || (l.damage.second && l.damage.second.name === q.damage))) return false;
+      if (q.condition === '0' && !(l.condition && l.condition.id === 0)) return false;
+      if (q.buy_now && !num(l.buy_now)) return false;
+      if (q.next_hours_auction) { var t = ts(l); if (!t || t < Date.now() || t > Date.now() + 24 * 3600e3) return false; }
+      return true;
+    });
+  }
+
+  function load(append) {
+    if (state.loading) return;
+    var q = params(); saveUrl(q);
+    if (!append) { state.page = 1; grid.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>'; }
+    if (state.mode === 'sample') { state.items = sampleFilter(q); state.next = null; render(); return; }
+    state.loading = true; $('#more').disabled = true;
+    var qs = Object.assign({ ep: 'cars', page: state.page }, q); delete qs.km_to;
+    call(qs).then(function (j) {
+      var data = Array.isArray(j.data) ? j.data : [];
+      if (append) { var seen = {}; state.items.forEach(function (v) { seen[v.id] = 1; }); data = data.filter(function (v) { return v && !seen[v.id]; }); }
+      state.items = append ? state.items.concat(data) : data;
+      state.next = j.next_page || null;
+      render();
+    }).catch(function (e) {
+      if (e && e.error === 'no_key') { switchToSample(); load(); return; }
+      var msg = e && e.error === 'budget' ? 'Лимит запросов демо-ключа исчерпан. Новые поиски станут доступны после подключения тарифа.' : 'Не удалось загрузить лоты. Попробуйте ещё раз через минуту.';
+      if (append) toast(msg); else grid.innerHTML = '<div class="err">' + msg + '</div>';
+    }).finally(function () { state.loading = false; $('#more').disabled = false; });
+  }
+
+  function switchToSample() {
+    state.mode = 'sample';
+    var m = $('#mode'); m.hidden = false;
+    m.innerHTML = '<b>Тестовый режим.</b> Показаны примеры лотов, чтобы оценить вид каталога. Живые лоты Copart и IAAI появятся после подключения ключа API.';
+    fillMakes(uniq(window.SAMPLE_CARS.map(function (v) { return v.manufacturer; })));
+  }
+  function uniq(list) { var s = {}; return list.filter(function (x) { if (s[x.id]) return false; s[x.id] = 1; return true; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
+  function fillSelect(sel, list, first) {
+    var cur = sel.getAttribute('data-want') || sel.value;
+    sel.innerHTML = '<option value="">' + first + '</option>' + list.map(function (x) { return '<option value="' + x.id + '">' + esc(x.name) + '</option>'; }).join('');
+    if (cur && list.some(function (x) { return String(x.id) === cur; })) sel.value = cur;
+    sel.removeAttribute('data-want');
+  }
+  function fillMakes(list) { fillSelect($('#f-make'), list, 'Все марки'); loadModels(); }
+  function loadModels() {
+    var mk = $('#f-make').value, sel = $('#f-model');
+    if (!mk) { sel.disabled = true; fillSelect(sel, [], 'Все модели'); return; }
+    if (state.mode === 'sample') {
+      fillSelect(sel, uniq(window.SAMPLE_CARS.filter(function (v) { return String(v.manufacturer.id) === mk; }).map(function (v) { return v.model; })), 'Все модели');
+      sel.disabled = false; return;
+    }
+    sel.disabled = true;
+    call({ ep: 'models', manufacturer_id: mk }).then(function (j) {
+      fillSelect(sel, (j.data || []).filter(function (m) { return m.cars_qty > 0; }), 'Все модели'); sel.disabled = false;
+    }).catch(function () { fillSelect(sel, [], 'Все модели'); });
+  }
+
+  /* ---------- Окно лота ---------- */
+  var dlg = $('#dlg');
+  function openLot(v, wantLot) {
+    var l = (wantLot && (v.lots || []).filter(function (x) { return String(x.lot) === String(wantLot); })[0]) || primaryLot(v);
+    if (!l) { toast('У этой машины нет активных лотов'); return; }
+    var ph = photos(l, 'big'), p = priceInfo(l), src = srcName(l);
+    var seller = l.seller && l.seller.is_insurance ? 'Страховая компания' : (l.seller && l.seller.name) || (l.seller_type ? (l.seller_type.id === 1 ? 'Страховая компания' : 'Не страховая') : '');
+    var rows = [
+      ['Пробег', odo(l)], ['Повреждение', dmgHtml(l)], ['Состояние', condHtml(l)], ['Документ', titleDoc(l)],
+      ['Ключи', l.keys_available === true ? 'Есть' : l.keys_available === false ? '<span class="tag-warn">Нет</span>' : ''],
+      ['Подушки', l.airbags ? (AIRBAGS[l.airbags.name] || l.airbags.name) : ''],
+      ['Двигатель', [v.engine && v.engine.name, v.cylinders ? v.cylinders + ' цил.' : '', v.hp ? v.hp + ' л.с.' : ''].filter(Boolean).join(', ')],
+      ['Топливо', v.fuel ? FUEL[v.fuel.name] || v.fuel.name : ''], ['Привод', v.drive_wheel ? DRIVE[v.drive_wheel.name] || v.drive_wheel.name : ''],
+      ['Кузов', v.body_type ? BODY[v.body_type.name] || v.body_type.name : ''], ['КПП', v.transmission ? (v.transmission.id === 2 ? 'Механика' : 'Автомат') : ''],
+      ['Продавец', esc(seller)], ['Площадка', esc(place(l))], ['Ряд', esc(l.line || '')],
+      ['Стоимость до ДТП', num(l.pre_accident_price) ? usd(l.pre_accident_price) + ' <span class="note">(оценка аукциона)</span>' : ''],
+      ['Оценка ремонта', num(l.estimate_repair_price) ? usd(l.estimate_repair_price) + ' <span class="note">(оценка аукциона)</span>' : '']
+    ].filter(function (r) { return r[1]; });
+    var thumbs = ph.length > 1 ? '<div class="thumbs">' + ph.map(function (u, i) { return '<button type="button" data-g="' + i + '" aria-current="' + (i === 0) + '"><img src="' + esc(u) + '" alt="Фото ' + (i + 1) + '" loading="lazy"></button>'; }).join('') + '</div>' : '';
+    var msg = encodeURIComponent('Здравствуйте! Интересует ' + v.title + ', ' + src + ' лот ' + l.lot + ', VIN ' + v.vin);
+    dlg.innerHTML = '<button class="close" type="button" aria-label="Закрыть">×</button><div class="lot">' +
+      '<div class="gal"><div class="big">' + (ph.length ? '<img id="g-big" src="' + esc(ph[0]) + '" alt="' + esc(v.title) + '">' : '<span class="nophoto">Нет фото</span>') + '</div>' + thumbs + '</div>' +
+      '<div class="info">' +
+        '<div><h2 id="dlg-title">' + esc(v.title) + '</h2><p class="note" style="margin-top:4px"><span class="badge ' + (src === 'IAAI' ? 'b-iaai' : 'b-copart') + '" style="position:static">' + src + '</span> ' + esc(STATUS[l.status && l.status.name] || '') + '</p></div>' +
+        '<div class="ids"><button type="button" data-copy="' + esc(v.vin) + '">VIN ' + esc(v.vin) + ' ⧉</button><button type="button" data-copy="' + esc(l.lot) + '">Лот ' + esc(l.lot) + ' ⧉</button></div>' +
+        '<div class="panel"><div class="note">' + esc(p.lab) + '</div><div class="val num">' + esc(p.val) + '</div>' +
+          (p.sub ? '<div class="num">' + esc(p.sub) + '</div>' : '') +
+          (p.reserve ? '<div class="num" style="margin-top:6px"><span class="hint" title="' + RESERVE_HINT + '">Резерв продавца</span>: <b>' + usd(p.reserve) + '</b></div>' : '') +
+          (!p.done && saleDate(l) ? '<div style="margin-top:8px">Торги: <b>' + saleDate(l) + '</b> · <span data-ts="' + ts(l) + '"></span></div>' : '') +
+        '</div>' +
+        '<div class="cta"><a class="btn btn-red" href="https://t.me/amerikaa_by" target="_blank" rel="noopener" data-copy-msg="' + esc(decodeURIComponent(msg)) + '">Хочу эту машину</a>' +
+          '<a class="btn btn-line" href="../new/#calc">Посчитать под ключ</a>' +
+          '<a class="btn btn-line" href="https://wa.me/375296332828?text=' + msg + '" target="_blank" rel="noopener">WhatsApp</a></div>' +
+        '<p class="note">Цены аукционные, без сборов, доставки и растаможки. <a href="' + esc(origUrl(l)) + '" target="_blank" rel="noopener nofollow">Лот на ' + src + '</a></p>' +
+        '<dl class="spec">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl>' +
+      '</div>' +
+      '<div class="wide"><button class="btn btn-line btn-sm" type="button" id="hist-btn">История продаж по VIN</button><div id="hist"></div></div>' +
+      '</div>';
+    dlg.showModal(); tick();
+    dlg.querySelectorAll('.gal img, .thumbs img').forEach(function (im) { im.addEventListener('error', function () { im.style.visibility = 'hidden'; }, { once: true }); });
+    $('#hist-btn', dlg).onclick = function () { showHistory(v, this); };
+  }
+  function histRows(v) {
+    var rows = [];
+    (v.lots || []).forEach(function (l) {
+      var price = num(l.final_bid) || num(l.bid);
+      rows.push({ t: ts(l) || Date.parse(l.final_bid_updated_at || l.archived_at || l.created_at || '') || 0, src: srcName(l), lot: l.lot, price: price, st: l.status && l.status.name, odo: odo(l) });
+      (l.prices || []).forEach(function (h) {
+        var t = Date.parse(h.sale_date || h.final_bid_updated_at || '') || 0;
+        if (rows.some(function (r) { return r.lot === l.lot && r.t === t && r.price === num(h.bid); })) return;
+        rows.push({ t: t, src: srcName(l), lot: l.lot, price: num(h.bid), st: h.status && h.status.name, odo: '' });
+      });
+    });
+    return rows.sort(function (a, b) { return (a.t || Infinity) - (b.t || Infinity); });
+  }
+  function showHistory(v, btn) {
+    var box = $('#hist', dlg);
+    function draw(veh) {
+      var rows = histRows(veh);
+      if (rows.length < 2) { box.innerHTML = '<p class="note" style="margin-top:10px">Машина впервые на аукционе, других продаж по этому VIN нет.</p>'; return; }
+      box.innerHTML = '<table class="hist" style="margin-top:10px"><thead><tr><th>Дата</th><th>Аукцион</th><th>Лот</th><th>Ставка</th><th>Итог</th></tr></thead><tbody>' +
+        rows.map(function (r) {
+          var cls = r.st === 'sold' ? 'tag-ok' : /not_sold|failed|not_on_sale/.test(r.st || '') ? 'tag-bad' : '';
+          return '<tr><td>' + (r.t ? new Date(r.t).toLocaleDateString('ru-RU') : '—') + '</td><td>' + r.src + '</td><td>' + esc(r.lot) + '</td><td class="num">' + (r.price ? usd(r.price) : '—') + '</td><td class="' + cls + '">' + esc(STATUS[r.st] || r.st || '') + '</td></tr>';
+        }).join('') + '</tbody></table>';
+    }
+    btn.disabled = true;
+    if (state.mode === 'sample') { draw(v); return; }
+    box.innerHTML = '<p class="note" style="margin-top:10px">Загружаем историю…</p>';
+    call({ ep: 'vin', vin: v.vin }).then(function (j) { draw(j.data || v); }).catch(function () { draw(v); });
+  }
+
+  /* ---------- События ---------- */
+  grid.addEventListener('click', function (e) {
+    var nb = e.target.closest('.nav-btn');
+    if (nb) {
+      e.stopPropagation();
+      var box = nb.parentNode, list = JSON.parse(box.getAttribute('data-ph')), im = box.querySelector('img'); if (!im) return;
+      var i = (+im.getAttribute('data-i') + (nb.classList.contains('next') ? 1 : -1) + list.length) % list.length;
+      im.src = list[i]; im.setAttribute('data-i', i); box.querySelector('.pc').textContent = (i + 1) + '/' + list.length;
+      return;
+    }
+    var c = e.target.closest('.card'); if (c) openLot(state.items[+c.getAttribute('data-idx')]);
+  });
+  grid.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.classList.contains('card')) openLot(state.items[+e.target.getAttribute('data-idx')]); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg || e.target.closest('.close')) { dlg.close(); return; }
+    var g = e.target.closest('[data-g]');
+    if (g) { $('#g-big', dlg).src = g.querySelector('img').src; dlg.querySelectorAll('[data-g]').forEach(function (b) { b.setAttribute('aria-current', b === g); }); return; }
+    var cp = e.target.closest('[data-copy]');
+    if (cp) { navigator.clipboard && navigator.clipboard.writeText(cp.getAttribute('data-copy')).then(function () { toast('Скопировано'); }); return; }
+    var cm = e.target.closest('[data-copy-msg]');
+    if (cm && navigator.clipboard) { navigator.clipboard.writeText(cm.getAttribute('data-copy-msg')).then(function () { toast('Текст о лоте скопирован, вставьте его в чат'); }); }
+  });
+  form.addEventListener('submit', function (e) { e.preventDefault(); load(false); if (innerWidth <= 960) toggleFilters(false); });
+  form.addEventListener('reset', function () { setTimeout(function () { $('#f-model').disabled = true; fillSelect($('#f-model'), [], 'Все модели'); load(false); }, 0); });
+  $('#f-make').addEventListener('change', loadModels);
+  $('#more').addEventListener('click', function () { if (state.next) { state.page = state.next; load(true); } });
+  $('#sort').addEventListener('change', render);
+  document.querySelectorAll('.view button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.view = b.getAttribute('data-view'); grid.classList.toggle('list', state.view === 'list');
+      document.querySelectorAll('.view button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      try { localStorage.setItem('catalogView', state.view); } catch (err) {}
+    });
+  });
+  function toggleFilters(open) { form.classList.toggle('open', open); $('#show-filters').setAttribute('aria-expanded', open); }
+  $('#show-filters').addEventListener('click', function () { toggleFilters(!form.classList.contains('open')); });
+
+  $('#search').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = $('#q').value.trim().toUpperCase().replace(/\s+/g, ''), dom = $('#qsrc').value;
+    var isVin = /^[A-HJ-NPR-Z0-9]{17}$/.test(q), isLot = /^\d{5,10}[A-Z]?$/.test(q);
+    if (!isVin && !isLot) { toast('Введите VIN из 17 знаков или номер лота цифрами'); return; }
+    if (state.mode === 'sample') {
+      var hit = window.SAMPLE_CARS.filter(function (v) { return isVin ? v.vin === q : v.lots.some(function (l) { return l.lot === q; }); })[0];
+      if (hit) openLot(hit, isLot ? q : null); else toast('В тестовых данных такой машины нет');
+      return;
+    }
+    var req = isVin ? { ep: 'vin', vin: q } : { ep: 'lot', lot: q, domain: dom };
+    call(req).then(function (j) { if (j.data) openLot(j.data, isLot ? q : null); else toast('Ничего не найдено'); })
+      .catch(function (err) { toast(err && err.error === 'budget' ? 'Лимит демо-ключа исчерпан' : 'Ничего не найдено'); });
+  });
+
+  /* ---------- Старт ---------- */
+  (function init() {
+    try { if (localStorage.getItem('catalogView') === 'list') document.querySelector('.view [data-view=list]').click(); } catch (err) {}
+    var u = new URLSearchParams(location.search);
+    u.forEach(function (val, k) {
+      var el = form.elements[k]; if (!el) return;
+      if (el instanceof RadioNodeList) el.value = val;
+      else if (el.type === 'checkbox') el.checked = true;
+      else if (el.tagName === 'SELECT') el.setAttribute('data-want', val);
+      else el.value = val;
+    });
+    var mk = u.get('manufacturer_id'); if (mk) $('#f-model').setAttribute('data-want', u.get('model_id') || '');
+    if (mk) { var o = document.createElement('option'); o.value = mk; $('#f-make').appendChild(o); $('#f-make').value = mk; }
+    if (location.protocol === 'file:') { switchToSample(); load(); return; }
+    call({ ep: 'status' }).then(function (s) {
+      if (!s.has_key) { switchToSample(); load(); return; }
+      call({ ep: 'manufacturers' }).then(function (j) {
+        $('#f-make').setAttribute('data-want', mk || '');
+        fillMakes((j.data || []).filter(function (m) { return m.cars_qty > 0; }));
+      }).catch(function () {});
+      load();
+    }).catch(function () { switchToSample(); load(); });
+  })();
+})();
+</script>
+</body>
+</html>
