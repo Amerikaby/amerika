@@ -24,6 +24,8 @@
 }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--body)}
@@ -40,6 +42,7 @@ p{margin:0}
 /* Шапка */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:8px}
+.logo img{display:block;height:52px;width:auto}
 .logo{font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:.02em}
 .logo span{color:var(--red)}
 .nav{display:flex;gap:16px;flex-wrap:wrap;font-weight:500;font-size:15px}
@@ -56,7 +59,7 @@ p{margin:0}
 .btn-line:hover{border-color:var(--ink)}
 @media (max-width:760px){.nav{display:none}.contact{display:none}.top .wrap{min-height:52px}}
 .lead-short{display:none}
-@media (max-width:600px){.lead-long{display:none}.lead-short{display:block}.hero{padding-block:24px 32px}.trust{display:none}}
+@media (max-width:600px){.lead-long{display:none}.lead-short{display:block}.hero{padding-block:20px 28px}.hero-copy{gap:16px}.trust{display:none}section{padding-block:44px}.sec-head{margin-bottom:22px}.logo img{height:42px}}
 
 /* Первый экран */
 .hero{padding-block:48px 56px;background:var(--hero-bg);color:var(--hero-ink)}
@@ -171,6 +174,28 @@ section{padding-block:64px}
 .soon div{display:flex;flex-direction:column;gap:8px;max-width:640px;min-width:0}
 .soon p{color:var(--muted)}
 
+
+/* Компьютер: компактный заголовок сверху, под ним большой калькулятор во всю ширину, расширенные поля всегда открыты */
+@media (min-width:900px){
+  .hero{padding-block:20px 32px}
+  .hero .wrap{grid-template-columns:1fr;gap:22px}
+  .hero-copy{display:grid;grid-template-columns:1fr auto;align-items:end;gap:10px 40px;padding-top:0}
+  .hero-copy .eyebrow,.hero-copy h1,.hero-copy .lead{grid-column:1}
+  .hero h1{font-size:clamp(26px,2.5vw,34px)}
+  .hero-copy{grid-template-columns:minmax(0,1fr) auto}
+  .hero .lead{font-size:16px}
+  .hero-copy .facts{grid-column:2;grid-row:1/4;align-self:center;min-width:380px}
+  .hero-copy .trust,.hero-copy .cta-row,.hero-copy .lead-long{display:none}
+  .hero-copy .lead-short{display:block}
+  .hero h1 br{display:none}
+  .calc-body{display:grid;grid-template-columns:1.35fr 1fr;align-items:start}
+  .calc-body .bill{border-top:0;border-left:1px dashed var(--line);padding:20px 24px;position:sticky;top:80px}
+  .calc form{grid-template-columns:repeat(4,1fr)}
+  .calc form .field.wide,.calc form .wide{grid-column:1/-1}
+  #adv{display:grid!important;grid-template-columns:repeat(2,1fr)}
+  .adv-toggle{display:none}
+}
+
 /* Лоты */
 .lots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .lots figure{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -228,7 +253,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#top">AMERIKA<span>.BY</span></a>
+    <a class="logo" href="#top"><img src="img/logo.svg" alt="AMERIKA.BY" width="62" height="57"></a>
     <nav class="nav" aria-label="Разделы">
       <a href="#calc">Калькулятор</a>
       <a href="#how">Как мы работаем</a>
@@ -263,7 +288,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
         <span>Проверка Carfax и AutoCheck</span>
         <span>Партнёрское СТО для ремонта</span>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div class="cta-row">
         <a class="btn btn-red" href="#calc">Посчитать свою машину</a>
         <a class="btn btn-line" href="#lead">5 вариантов за 60 минут</a>
       </div>
@@ -271,6 +296,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
 
     <div class="calc" id="calc">
       <div class="calc-head"><h2>Расчёт под ключ до Минска</h2><small>предварительный</small></div>
+      <div class="calc-body">
       <form id="calcForm" autocomplete="off">
         <div class="tabs wide" role="radiogroup" aria-label="Что считаем">
           <label><input type="radio" name="mode" value="price" checked><span>Цена лота → итого</span></label>
@@ -352,6 +378,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
         <div class="actions">
           <a class="btn btn-red" href="#lead" id="sendCalc">Получить точный расчёт</a>
         </div>
+      </div>
       </div>
     </div>
   </div>
