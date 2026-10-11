@@ -385,7 +385,7 @@ p{margin:0}
       list = (im.downloaded || []).slice();
       var src = (im.big && im.big.length ? im.big : im.normal && im.normal.length ? im.normal : im.small) || [];
       if (src.length > list.length) list = list.concat(src.slice(list.length));
-    } else list = (im.normal && im.normal.length ? im.normal : im.small && im.small.length ? im.small : im.downloaded) || [];
+    } else list = (im.downloaded && im.downloaded.length ? im.downloaded : im.normal && im.normal.length ? im.normal : im.small) || []; // копии AuctionsAPI открываются и без VPN
     return list.filter(okUrl);
   }
 
@@ -714,7 +714,7 @@ p{margin:0}
     var seller = sellerKind(l) === 'ins' ? 'Страховая компания' + (l.seller && l.seller.name ? ' (' + esc(l.seller.name) + ')' : '') : esc(sellerText(l));
     var d = l.damage || {}, val = function (x, lab) { return num(x) ? usd(x) + ' <span class="note">' + lab + '</span>' : ''; };
     var msg = encodeURIComponent('Здравствуйте! Интересует ' + v.title + ', ' + src + ' лот ' + l.lot + ', VIN ' + v.vin + ' ' + location.href);
-    gal.list = ph; gal.i = 0;
+    gal.list = ph; gal.i = 0; gal.bad = {};
     if (!state.listTitle) state.listTitle = document.title;
     document.title = v.title + ', лот ' + l.lot + ' | Amerika.by';
     lotview.innerHTML =
@@ -771,14 +771,24 @@ p{margin:0}
       '<section class="box" style="margin-top:16px"><h2>История продаж по VIN</h2><button class="btn btn-line btn-sm" type="button" id="hist-btn">Показать историю</button><div id="hist"></div></section>';
     listview.hidden = true; headview.hidden = true; lotview.hidden = false;
     window.scrollTo(0, 0); tick();
-    lotview.querySelectorAll('.thumbs img').forEach(function (im) { im.addEventListener('error', function () { im.parentNode.remove(); }, { once: true }); });
+    lotview.querySelectorAll('.thumbs img').forEach(function (im) {
+      im.addEventListener('error', function () { var b = im.parentNode; gal.bad[+b.getAttribute('data-g')] = 1; b.remove(); galGo(gal.i); }, { once: true });
+    });
+    var big = $('#g-big', lotview);
+    if (big) big.addEventListener('error', function () { gal.bad[gal.i] = 1; galGo(gal.i + 1); });
     $('#hist-btn', lotview).onclick = function () { showHistory(v, this); };
   }
-  function galGo(i) {
-    if (!gal.list.length) return;
-    gal.i = (i + gal.list.length) % gal.list.length;
-    $('#g-big', lotview).src = gal.list[gal.i];
-    var c = $('#g-count', lotview); if (c) c.textContent = (gal.i + 1) + ' / ' + gal.list.length;
+  // Фото с серверов Copart/IAAI могут не открываться (например, с мобильного интернета без VPN): такие пропускаем.
+  function galGo(i, step) {
+    var n = gal.list.length; if (!n) return;
+    i = (i + n) % n;
+    for (var k = 0; k < n && gal.bad[i]; k++) i = (i + (step || 1) + n) % n;
+    if (gal.bad[i]) { $('.big', lotview).innerHTML = '<span class="nophoto">Фото доступны на сайте аукциона</span>'; return; }
+    gal.i = i;
+    var gb = $('#g-big', lotview); if (!gb) return;
+    gb.src = gal.list[gal.i];
+    var good = gal.list.filter(function (u, j) { return !gal.bad[j]; }).length, pos = gal.list.slice(0, gal.i + 1).filter(function (u, j) { return !gal.bad[j]; }).length;
+    var c = $('#g-count', lotview); if (c) c.textContent = pos + ' / ' + good;
     lotview.querySelectorAll('[data-g]').forEach(function (b) { b.setAttribute('aria-current', +b.getAttribute('data-g') === gal.i); });
   }
   function openLotByUrl(fromHistory) {
@@ -839,7 +849,7 @@ p{margin:0}
       return;
     }
     var g = e.target.closest('[data-g]'); if (g) { galGo(+g.getAttribute('data-g')); return; }
-    var nb = e.target.closest('.gnav'); if (nb) { galGo(gal.i + (nb.classList.contains('next') ? 1 : -1)); return; }
+    var nb = e.target.closest('.gnav'); if (nb) { var st = nb.classList.contains('next') ? 1 : -1; galGo(gal.i + st, st); return; }
     var gl = $('#gal', lotview);
     if (e.target.closest('.gclose')) { gl.classList.remove('full'); return; }
     if (e.target.closest('.big') && gal.list.length) { gl.classList.toggle('full'); return; }
@@ -852,7 +862,7 @@ p{margin:0}
     if (lotview.hidden) return;
     var gl = $('#gal', lotview);
     if (e.key === 'ArrowRight') galGo(gal.i + 1);
-    else if (e.key === 'ArrowLeft') galGo(gal.i - 1);
+    else if (e.key === 'ArrowLeft') galGo(gal.i - 1, -1);
     else if (e.key === 'Escape' && gl) gl.classList.remove('full');
   });
   window.addEventListener('popstate', function () {
