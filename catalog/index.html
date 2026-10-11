@@ -254,14 +254,6 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
         <option value="">Любая дата</option>
       </select>
     </div>
-    <div class="f">
-      <label for="f-seller">Продавец</label>
-      <select id="f-seller" name="seller">
-        <option value="">Любой</option>
-        <option value="ins">Страховая компания</option>
-        <option value="non">Не страховая (дилер, банк, прокат)</option>
-      </select>
-    </div>
     <label class="chk"><input type="checkbox" name="condition" value="0">На ходу (Run&nbsp;&amp;&nbsp;Drive)</label>
     <label class="chk"><input type="checkbox" name="buy_now" value="1">Есть «Купить сейчас»</label>
     <div class="f-actions">
@@ -461,7 +453,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
         '</dl>' +
         '<dl class="facts">' +
           (titleDoc(l) ? '<dt>Документ</dt><dd>' + titleDoc(l) + '</dd>' : '') +
-          (sellerText(l) ? '<dt>Продавец</dt><dd>' + esc(sellerText(l)) + '</dd>' : '') +
+          '<dt>Продавец</dt><dd>' + esc(sellerText(l)) + '</dd>' +
           (place(l) ? '<dt>Площадка</dt><dd>' + esc(place(l)) + '</dd>' : '') +
           (v.engine ? '<dt>Двигатель</dt><dd>' + esc(v.engine.name) + (v.drive_wheel ? ', ' + (DRIVE[v.drive_wheel.name] || v.drive_wheel.name).toLowerCase() + ' привод' : '') + '</dd>' : '') +
         '</dl>' +
@@ -486,16 +478,10 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
     arr.sort(function (a, b) { return key(a) - key(b); });
     return arr;
   }
-  function visible() {
-    var k = form.elements.seller.value;
-    return k ? state.items.filter(function (v) { var l = primaryLot(v); return l && sellerKind(l) === k; }) : state.items;
-  }
   function render() {
-    var shown = visible();
-    if (state.items.length && !shown.length) { grid.innerHTML = '<div class="empty">Среди загруженных машин нет подходящих по продавцу. У многих лотов Copart продавец не указан. Нажмите «Показать ещё» или уберите фильтр.</div>'; $('#count').textContent = 'Показано: 0 из ' + state.items.length; $('#more').hidden = !state.next; return; }
     if (!state.items.length) { grid.innerHTML = '<div class="empty">По этим фильтрам машин не нашлось. Попробуйте убрать часть условий.</div>'; $('#count').textContent = ''; $('#more').hidden = true; return; }
-    grid.innerHTML = sorted(state.items).filter(function (x) { return shown.indexOf(x[0]) >= 0; }).map(function (x) { return cardHtml(x[0], x[1]); }).join('');
-    $('#count').textContent = 'Показано: ' + shown.length + (shown.length < state.items.length ? ' из ' + state.items.length : '') + (state.next ? '+' : '');
+    grid.innerHTML = sorted(state.items).map(function (x) { return cardHtml(x[0], x[1]); }).join('');
+    $('#count').textContent = 'Показано: ' + state.items.length + (state.next ? '+' : '');
     $('#more').hidden = !state.next;
     grid.querySelectorAll('img').forEach(function (im) { im.addEventListener('error', function () { im.replaceWith(Object.assign(document.createElement('span'), { className: 'nophoto', textContent: 'Нет фото' })); }, { once: true }); });
     tick();
@@ -543,7 +529,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
     if (!append) { state.page = 1; grid.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>'; }
     if (state.mode === 'sample') { state.items = sampleFilter(q); state.next = null; render(); return; }
     state.loading = true; $('#more').disabled = true;
-    var qs = Object.assign({ ep: 'cars', page: state.page }, q); delete qs.km_to; delete qs.when; delete qs.seller;
+    var qs = Object.assign({ ep: 'cars', page: state.page }, q); delete qs.km_to; delete qs.when;
     call(qs).then(function (j) {
       var data = Array.isArray(j.data) ? j.data : [];
       if (append) { var seen = {}; state.items.forEach(function (v) { seen[v.id] = 1; }); data = data.filter(function (v) { return v && !seen[v.id]; }); }
@@ -683,7 +669,6 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
   $('#f-make').addEventListener('change', loadModels);
   $('#more').addEventListener('click', function () { if (state.next) { state.page = state.next; load(true); } });
   $('#sort').addEventListener('change', render);
-  $('#f-seller').addEventListener('change', function () { saveUrl(params()); render(); });
   document.querySelectorAll('.view button').forEach(function (b) {
     b.addEventListener('click', function () {
       state.view = b.getAttribute('data-view'); grid.classList.toggle('list', state.view === 'list');
