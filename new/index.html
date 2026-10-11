@@ -42,10 +42,12 @@ p{margin:0}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:8px}
 .logo{font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:.02em}
 .logo span{color:var(--red)}
-.nav{display:flex;gap:18px;flex-wrap:wrap;font-weight:500;font-size:15px}
+.nav{display:flex;gap:16px;flex-wrap:wrap;font-weight:500;font-size:15px}
 .nav a{text-decoration:none;color:var(--muted)}
 .nav a:hover{color:var(--ink)}
-.contact{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.contact{margin-left:auto;display:flex;align-items:center;gap:8px}
+.contact .btn{padding:9px 12px;font-size:14px}
+@media (max-width:1180px){.nav a[href="#faq"],.nav a[href="#contacts"]{display:none}}
 .phone{font-weight:700;font-size:17px;text-decoration:none;white-space:nowrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:12px 18px;font:600 15px/1 var(--body);cursor:pointer;text-decoration:none}
 .btn-red{background:var(--red);color:var(--red-ink)}
@@ -186,7 +188,8 @@ footer div{display:flex;flex-direction:column;gap:4px}
 .mbar{display:none}
 @media (max-width:760px){
   .mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
-  .mbar .btn{flex:1}
+  .mbar .btn{flex:1;padding:12px 6px;font-size:13px}
+  .mbar .btn-red{flex:1.3}
   body{padding-bottom:72px}
 }
 </style>
@@ -206,6 +209,8 @@ footer div{display:flex;flex-direction:column;gap:4px}
     <div class="contact">
       <a class="phone" href="tel:+375296332828">+375 (29) 633-28-28</a>
       <a class="btn btn-line" href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn btn-line" href="viber://chat?number=%2B375296332828">Viber</a>
+      <a class="btn btn-line" href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
 </header>
@@ -410,6 +415,8 @@ footer div{display:flex;flex-direction:column;gap:4px}
       <div class="channels" id="contacts">
         <a href="tel:+375296332828">+375 (29) 633-28-28</a>
         <a href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram: @amerikaa_by</a>
+        <a href="viber://chat?number=%2B375296332828">Viber: +375 (29) 633-28-28</a>
+        <a href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp: +375 (29) 633-28-28</a>
         <a href="https://www.instagram.com/amerika.by/" target="_blank" rel="noopener">Instagram: @amerika.by</a>
         <span style="color:var(--muted)">Минск, ул. Большое Стиклево, 83, 3 этаж · Пн–Пт 10:00–19:00</span>
       </div>
@@ -436,10 +443,12 @@ footer div{display:flex;flex-direction:column;gap:4px}
 <div class="mbar">
   <a class="btn btn-red" href="tel:+375296332828">Позвонить</a>
   <a class="btn btn-line" href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram</a>
+  <a class="btn btn-line" href="viber://chat?number=%2B375296332828">Viber</a>
+  <a class="btn btn-line" href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp</a>
 </div>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","url":"https://amerika.by/","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by"]}
+{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","url":"https://amerika.by/","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by","https://wa.me/375296332828"]}
 </script>
 <script>
 /* Все ставки и тарифы в одном месте. Логистика и сборы аукциона — ориентиры, их нужно сверить с актуальными ценами. */
