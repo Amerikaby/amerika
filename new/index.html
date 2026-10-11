@@ -16,7 +16,7 @@
 :root{
   --paper:#f5f6f9; --surface:#ffffff; --ink:#14213f; --muted:#5a6580; --line:#dde1ea;
   --navy:#1b2f63; --red:#c8102e; --red-ink:#ffffff; --soft:#eef1f7; --ok:#1d7a4c;
-  --hero-bg:#14213f; --hero-ink:#ffffff; --hero-muted:#b9c3dc; --hero-line:#33416a; --hero-accent:#ffd36b;
+  --hero-bg:#1f3263; --hero-ink:#ffffff; --hero-muted:#b9c3dc; --hero-line:#33416a; --hero-accent:#ffd36b;
   --display:"Unbounded","Golos Text",system-ui,sans-serif;
   --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --r:10px;
@@ -62,7 +62,8 @@ p{margin:0}
 @media (max-width:600px){.lead-long{display:none}.lead-short{display:block}.hero{padding-block:20px 28px}.hero-copy{gap:16px}.trust{display:none}section{padding-block:44px}.sec-head{margin-bottom:22px}.logo img{height:52px}}
 
 /* Первый экран */
-.hero{padding-block:48px 56px;background:var(--hero-bg);color:var(--hero-ink)}
+.hero{padding-block:48px 56px;background:var(--hero-bg);color:var(--hero-ink);position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;z-index:-1;width:min(900px,140vw);aspect-ratio:62/57;right:-8%;top:50%;transform:translateY(-50%) rotate(-18deg);background:url(img/logo.svg) center/contain no-repeat;opacity:.07;pointer-events:none}
 .hero .eyebrow,.hero .lead,.hero .facts span,.hero .trust{color:var(--hero-muted)}
 .hero .facts,.hero .facts div+div{border-color:var(--hero-line)}
 .hero .btn-line{color:var(--hero-ink);border-color:var(--hero-line)}
