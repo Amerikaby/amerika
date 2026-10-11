@@ -254,6 +254,14 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
         <option value="">Любая дата</option>
       </select>
     </div>
+    <div class="f">
+      <label for="f-seller">Продавец</label>
+      <select id="f-seller" name="seller">
+        <option value="">Любой</option>
+        <option value="ins">Страховая компания</option>
+        <option value="non">Не страховая (дилер, банк, прокат)</option>
+      </select>
+    </div>
     <label class="chk"><input type="checkbox" name="condition" value="0">На ходу (Run&nbsp;&amp;&nbsp;Drive)</label>
     <label class="chk"><input type="checkbox" name="buy_now" value="1">Есть «Купить сейчас»</label>
     <div class="f-actions">
@@ -320,6 +328,20 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
   function dmg(d) { if (!d || !d.name) return ''; return DMG[d.name.toLowerCase()] || d.name; }
   function okUrl(u) { return typeof u === 'string' && (/^https?:\/\//i.test(u) || /^\.\.\/new\/img\//.test(u)); }
   function toast(t) { var el = document.createElement('div'); el.className = 'toast'; el.textContent = t; document.body.appendChild(el); setTimeout(function () { el.remove(); }, 2200); }
+  // Продавец: 'ins' страховая, 'non' не страховая, '' неизвестно (у Copart часто не указан).
+  function sellerKind(l) {
+    if (l.seller && l.seller.is_insurance === true) return 'ins';
+    if (l.seller_type && l.seller_type.id === 1) return 'ins';
+    if (l.seller && l.seller.is_insurance === false) return 'non';
+    if (l.seller_type && l.seller_type.id === 2) return 'non';
+    return '';
+  }
+  function sellerText(l) {
+    var k = sellerKind(l);
+    if (k === 'ins') return 'Страховая';
+    if (k === 'non') return l.seller && l.seller.name ? cap(String(l.seller.name).toLowerCase()) : 'Не страховая';
+    return '';
+  }
   function srcName(l) { return l && l.domain && l.domain.id === 1 ? 'IAAI' : 'Copart'; }
   function ts(l) { var t = l && l.sale_date ? Date.parse(l.sale_date) : NaN; return isFinite(t) ? t : null; }
   function finished(l) { return !!(l.archived || num(l.final_bid) || [6, 7, 8, 2].indexOf(l.status && l.status.id) >= 0); }
@@ -439,6 +461,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
         '</dl>' +
         '<dl class="facts">' +
           (titleDoc(l) ? '<dt>Документ</dt><dd>' + titleDoc(l) + '</dd>' : '') +
+          (sellerText(l) ? '<dt>Продавец</dt><dd>' + esc(sellerText(l)) + '</dd>' : '') +
           (place(l) ? '<dt>Площадка</dt><dd>' + esc(place(l)) + '</dd>' : '') +
           (v.engine ? '<dt>Двигатель</dt><dd>' + esc(v.engine.name) + (v.drive_wheel ? ', ' + (DRIVE[v.drive_wheel.name] || v.drive_wheel.name).toLowerCase() + ' привод' : '') + '</dd>' : '') +
         '</dl>' +
@@ -463,10 +486,16 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
     arr.sort(function (a, b) { return key(a) - key(b); });
     return arr;
   }
+  function visible() {
+    var k = form.elements.seller.value;
+    return k ? state.items.filter(function (v) { var l = primaryLot(v); return l && sellerKind(l) === k; }) : state.items;
+  }
   function render() {
+    var shown = visible();
+    if (state.items.length && !shown.length) { grid.innerHTML = '<div class="empty">Среди загруженных машин нет подходящих по продавцу. У многих лотов Copart продавец не указан. Нажмите «Показать ещё» или уберите фильтр.</div>'; $('#count').textContent = 'Показано: 0 из ' + state.items.length; $('#more').hidden = !state.next; return; }
     if (!state.items.length) { grid.innerHTML = '<div class="empty">По этим фильтрам машин не нашлось. Попробуйте убрать часть условий.</div>'; $('#count').textContent = ''; $('#more').hidden = true; return; }
-    grid.innerHTML = sorted(state.items).map(function (x) { return cardHtml(x[0], x[1]); }).join('');
-    $('#count').textContent = 'Показано: ' + state.items.length + (state.next ? '+' : '');
+    grid.innerHTML = sorted(state.items).filter(function (x) { return shown.indexOf(x[0]) >= 0; }).map(function (x) { return cardHtml(x[0], x[1]); }).join('');
+    $('#count').textContent = 'Показано: ' + shown.length + (shown.length < state.items.length ? ' из ' + state.items.length : '') + (state.next ? '+' : '');
     $('#more').hidden = !state.next;
     grid.querySelectorAll('img').forEach(function (im) { im.addEventListener('error', function () { im.replaceWith(Object.assign(document.createElement('span'), { className: 'nophoto', textContent: 'Нет фото' })); }, { once: true }); });
     tick();
@@ -514,7 +543,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
     if (!append) { state.page = 1; grid.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>'; }
     if (state.mode === 'sample') { state.items = sampleFilter(q); state.next = null; render(); return; }
     state.loading = true; $('#more').disabled = true;
-    var qs = Object.assign({ ep: 'cars', page: state.page }, q); delete qs.km_to; delete qs.when;
+    var qs = Object.assign({ ep: 'cars', page: state.page }, q); delete qs.km_to; delete qs.when; delete qs.seller;
     call(qs).then(function (j) {
       var data = Array.isArray(j.data) ? j.data : [];
       if (append) { var seen = {}; state.items.forEach(function (v) { seen[v.id] = 1; }); data = data.filter(function (v) { return v && !seen[v.id]; }); }
@@ -561,7 +590,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
     var l = (wantLot && (v.lots || []).filter(function (x) { return String(x.lot) === String(wantLot); })[0]) || primaryLot(v);
     if (!l) { toast('У этой машины нет активных лотов'); return; }
     var ph = photos(l, 'big'), p = priceInfo(l), src = srcName(l);
-    var seller = l.seller && l.seller.is_insurance ? 'Страховая компания' : (l.seller && l.seller.name) || (l.seller_type ? (l.seller_type.id === 1 ? 'Страховая компания' : 'Не страховая') : '');
+    var seller = sellerKind(l) === 'ins' ? 'Страховая компания' + (l.seller && l.seller.name ? ' (' + l.seller.name + ')' : '') : sellerText(l);
     var rows = [
       ['Пробег', odo(l)], ['Повреждение', dmgHtml(l)], ['Состояние', condHtml(l)], ['Документ', titleDoc(l)],
       ['Ключи', l.keys_available === true ? 'Есть' : l.keys_available === false ? '<span class="tag-warn">Нет</span>' : ''],
@@ -654,6 +683,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
   $('#f-make').addEventListener('change', loadModels);
   $('#more').addEventListener('click', function () { if (state.next) { state.page = state.next; load(true); } });
   $('#sort').addEventListener('change', render);
+  $('#f-seller').addEventListener('change', function () { saveUrl(params()); render(); });
   document.querySelectorAll('.view button').forEach(function (b) {
     b.addEventListener('click', function () {
       state.view = b.getAttribute('data-view'); grid.classList.toggle('list', state.view === 'list');
@@ -688,7 +718,7 @@ dialog::backdrop{background:rgba(10,18,40,.6)}
       var el = form.elements[k]; if (!el) return;
       if (el instanceof RadioNodeList) el.value = val;
       else if (el.type === 'checkbox') el.checked = true;
-      else if (el.tagName === 'SELECT') el.setAttribute('data-want', val);
+      else if (el.tagName === 'SELECT') { el.setAttribute('data-want', val); el.value = val; }
       else el.value = val;
     });
     var mk = u.get('manufacturer_id'); if (mk) $('#f-model').setAttribute('data-want', u.get('model_id') || '');
