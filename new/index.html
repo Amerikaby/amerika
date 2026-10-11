@@ -98,6 +98,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy);outline:none}
 .picks{display:flex;gap:6px;flex-wrap:wrap}
 .picks button{font:500 13px/1 var(--body);color:var(--navy);background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:8px 12px;cursor:pointer}
 .picks button:hover{border-color:var(--navy)}
+.tabs{display:flex;gap:4px;background:var(--soft);border-radius:10px;padding:4px;grid-column:1/-1}
+.tabs label{flex:1;position:relative;cursor:pointer}
+.tabs input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;top:0}
+.tabs span{display:block;text-align:center;padding:9px 8px;border-radius:7px;font-weight:600;font-size:14px;color:var(--muted)}
+.tabs input:checked+span{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(20,33,63,.15)}
+.tabs input:focus-visible+span{outline:3px solid var(--red);outline-offset:2px}
+.wide{grid-column:1/-1}
+.hint{font-size:13px;color:var(--muted);margin:-4px 0 0}
+.adv-toggle{justify-self:start;background:none;border:0;padding:4px 0;font:600 15px/1.3 var(--body);color:var(--navy);cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.adv-toggle[aria-expanded="true"] span{display:inline-block;transform:rotate(180deg)}
+.adv{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.checks{gap:8px;justify-content:center}
+.maxbid{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:12px 14px;margin-bottom:8px;border-radius:10px;background:var(--soft)}
+.maxbid b{font-family:var(--display);font-size:clamp(22px,3vw,28px);color:var(--ok)}
+.route.warn{background:#fff4e0;color:#7a4b00}
+@media (max-width:480px){.adv{grid-template-columns:1fr}}
 .route{grid-column:1/-1;font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:10px 12px}
 .route b{color:var(--ink)}
 .bill{border-top:1px dashed var(--line);padding:16px 20px 20px;display:flex;flex-direction:column;gap:6px}
@@ -256,17 +272,21 @@ footer div{display:flex;flex-direction:column;gap:4px}
     <div class="calc" id="calc">
       <div class="calc-head"><h2>Расчёт под ключ до Минска</h2><small>предварительный</small></div>
       <form id="calcForm" autocomplete="off">
+        <div class="tabs wide" role="radiogroup" aria-label="Что считаем">
+          <label><input type="radio" name="mode" value="price" checked><span>Цена лота → итого</span></label>
+          <label><input type="radio" name="mode" value="budget"><span>Бюджет → до какой ставки</span></label>
+        </div>
         <div class="field wide">
           <label id="pickLabel">Быстрый пример</label>
           <div class="picks" role="group" aria-labelledby="pickLabel">
             <button type="button" data-p="14000,2021,2500,ice">Toyota RAV4 2021</button>
             <button type="button" data-p="11000,2020,2500,ice">Toyota Camry 2020</button>
             <button type="button" data-p="9000,2022,1500,ice">VW Jetta 2022</button>
-            <button type="button" data-p="16000,2021,0,ev">Tesla Model 3 2021</button>
+            <button type="button" data-p="16000,2021,0,alt">Tesla Model 3 2021</button>
           </div>
         </div>
         <div class="field">
-          <label for="price">Цена лота на аукционе, $</label>
+          <label for="price" id="priceLabel">Цена лота на аукционе, $</label>
           <input id="price" type="number" inputmode="numeric" min="100" step="100" value="12000">
         </div>
         <div class="field">
@@ -278,30 +298,49 @@ footer div{display:flex;flex-direction:column;gap:4px}
           <input id="volume" type="number" inputmode="numeric" min="0" step="100" value="2000">
         </div>
         <div class="field">
-          <label for="region">Где стоит машина</label>
-          <select id="region">
-            <option value="east">Восточное побережье (NJ, NY, GA, FL)</option>
-            <option value="center">Центр и юг (TX, IL, OH)</option>
-            <option value="west">Западное побережье (CA, WA, OR)</option>
-          </select>
-        </div>
-        <div class="field wide">
           <label id="fuelLabel">Двигатель</label>
           <div class="seg" role="radiogroup" aria-labelledby="fuelLabel">
             <label><input type="radio" name="fuel" value="ice" checked><span>Бензин / дизель</span></label>
-            <label><input type="radio" name="fuel" value="hybrid"><span>Гибрид</span></label>
-            <label><input type="radio" name="fuel" value="ev"><span>Электро</span></label>
+            <label><input type="radio" name="fuel" value="alt"><span>Гибрид / электро</span></label>
           </div>
         </div>
-        <div class="field wide">
-          <label for="benefit" class="check" style="font-weight:500"><input id="benefit" type="checkbox"> Льгота 50% по Указу № 140 (многодетные, инвалиды I и II группы)</label>
+        <p class="hint wide" id="evHint" hidden>Для электромобиля укажите объём 0.</p>
+
+        <button type="button" class="adv-toggle wide" id="advToggle" aria-expanded="false" aria-controls="adv">Расширенный расчёт: аукцион, площадка, порт <span aria-hidden="true">▾</span></button>
+        <div class="adv wide" id="adv" hidden>
+          <div class="field">
+            <label id="aucLabel">Аукцион</label>
+            <div class="seg" role="radiogroup" aria-labelledby="aucLabel">
+              <label><input type="radio" name="auction" value="copart" checked><span>Copart</span></label>
+              <label><input type="radio" name="auction" value="iaai"><span>IAAI</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="yard">Площадка</label>
+            <input id="yard" list="yardList" placeholder="Начните вводить: Alb…" autocomplete="off">
+            <datalist id="yardList"></datalist>
+          </div>
+          <div class="field">
+            <label for="port">Порт прибытия</label>
+            <select id="port">
+              <option value="auto">Подобрать автоматически</option>
+              <option value="klaipeda">Клайпеда (Литва)</option>
+              <option value="poti">Поти (Грузия)</option>
+            </select>
+          </div>
+          <div class="field checks">
+            <label for="sublot" class="check"><input id="sublot" type="checkbox"> Машина не на площадке аукциона (Sublot / Offsite), +100 $</label>
+            <label for="benefit" class="check"><input id="benefit" type="checkbox"> Льгота 50% по Указу № 140</label>
+          </div>
         </div>
         <p class="route" id="route"></p>
       </form>
       <div class="bill" aria-live="polite">
+        <div class="maxbid" id="maxbid" hidden><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
         <div class="row"><span>Лот на аукционе</span><span class="num" id="r-lot"></span></div>
         <div class="row"><span>Сборы аукциона</span><span class="num" id="r-fee"></span></div>
-        <div class="row"><span>Доставка по США до порта</span><span class="num" id="r-inland"></span></div>
+        <div class="row"><span id="r-inland-l">Доставка по США до порта</span><span class="num" id="r-inland"></span></div>
+        <div class="row" id="r-extra-row" hidden><span id="r-extra-l"></span><span class="num" id="r-extra"></span></div>
         <div class="row"><span id="r-sea-l">Море</span><span class="num" id="r-sea"></span></div>
         <div class="row"><span id="r-last-l">Доставка в Минск</span><span class="num" id="r-last"></span></div>
         <div class="row"><span>Таможенная пошлина</span><span class="num" id="r-duty"></span></div>
@@ -309,7 +348,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
         <div class="row ours"><span>Наша услуга</span><span class="num" id="r-ours"></span></div>
         <div class="total"><span>Итого в Минске</span><b class="num" id="r-total"></b></div>
         <small class="num" id="r-byn" style="color:var(--muted)"></small>
-        <p class="note">Расчёт ориентировочный. Точную сумму по конкретному лоту менеджер посчитает бесплатно. Таможня считает платежи по курсу на день декларации.</p>
+        <p class="note">Расчёт ориентировочный. Для точного расчёта по конкретной машине обращайтесь к менеджеру, это бесплатно: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации.</p>
         <div class="actions">
           <a class="btn btn-red" href="#lead" id="sendCalc">Получить точный расчёт</a>
         </div>
@@ -489,22 +528,32 @@ var CONFIG = {
     [5000,850],[6000,900],[8000,1000],[10000,1100],[15000,1250]
   ],
   auctionFeeTopPct: 0.085, // свыше 15 000 $
-  inland: {east:450, center:650, west:900},
+  sublot: 100,           // машина не на площадке аукциона (Sublot / Offsite), $ для клиента
+  altFuelEur: 175,       // доплата за доставку гибрида или электромобиля, EUR
+  inland: {east:450, center:650, west:900},   // если площадка не выбрана — east
   sea: {
     klaipeda: {east:1150, center:1350, west:1900},
     poti:     {east:1300, center:1500, west:2100}
   },
   lastLeg: {klaipeda:650, poti:1700},  // от порта до Минска, $
-  euMaxCc: 1900,                       // транзит через ЕС: до 1,9 л, без электро и гибридов
+  euMaxCc: 1900,                       // через ЕС: до 1,9 л, без гибридов и электро
   customsExtraByn: 945,                // утильсбор + сборы + СВХ и декларант, BYN
   duty: {                              // физлица, EUR за см³ или % от стоимости
     under3: [[8500,.54,2.5],[16700,.48,3.5],[42300,.48,5.5],[84500,.48,7.5],[169000,.48,15],[Infinity,.48,20]],
     from3to5: [[1000,1.5],[1500,1.7],[1800,2.5],[2300,2.7],[3000,3.0],[Infinity,3.6]],
     over5: [[1000,3.0],[1500,3.2],[1800,3.5],[2300,4.8],[3000,5.0],[Infinity,5.7]]
+  },
+  // Штаты по направлению к порту отправки в США. Заменим на ваш файл с ценой по каждой площадке.
+  states: {
+    west: ["CA","OR","WA","NV","AZ","ID","UT","MT","WY","AK","HI"],
+    center: ["TX","OK","LA","AR","KS","NE","CO","NM","MO","IA","MN","ND","SD","IL","WI","IN","MS"]
   }
 };
+var YARDS = {"copart": ["ACE - Carson, CA", "ACE - Perris, CA", "ADESA Boston, MA", "ADESA Great Lakes, OH", "ADESA New Jersey, NJ", "ADESA Sioux Falls, SD", "ADESA Wisconsin, WI", "Abilene, TX", "Adamsburg, PA", "Adesa PA, PA", "Akron-Canton, OH", "Albany, NY", "Albuquerque, NM", "Altoona, PA", "Amarillo, TX", "Anaheim, CA", "Anchorage, AK", "Andrews, TX", "Antelope, CA", "Appleton, WI", "Arizona Auto Auction, AZ", "Asheville, NC", "Ashland, VA", "Atlanta Auto Auction, GA", "Atlanta East, GA", "Atlanta North, GA", "Atlanta South, GA", "Atlanta West, GA", "Augusta, GA", "Austin, TX", "Avenel New Jersey, NJ", "Bakersfield, CA", "Baltimor, MD", "Bangor, ME", "Baton Rouge, LA", "Bay Area, CA", "Bel-Air Auto Auction, MD", "Billings, MT", "Birmingham, AL", "Boise, ID", "Boston - Shirley, MA", "Boston, MA", "Bowlimg Green, KY", "Bridgeport, CT", "Bridgeview, IL", "Buckhannon, WV", "Buffalo, NY", "Burlington, VT", "Candia, NH", "Cartersville, GA", "Casper, WY", "Central Auto Auction, NJ", "Central New Jersey, NJ", "Chambersburg, PA", "Charleston - SC, SC", "Charleston - WV, WV", "Charlotte, NC", "Chattanooga, TN", "Chicago North, IL", "Chicago South, IL", "Chicago West, IL", "China Grove, NC", "Cicero, IL", "Cincinnati, OH", "Clayton, GA", "Clearwater, FL", "Cleveland East, OH", "Cleveland West, OH", "Cleveland, OH", "Clinton, MD", "Colorado Springs, CO", "Columbia MO, MO", "Columbia SC, SC", "Columbus AL, AL", "Columbus OH, OH", "Concord, NC", "Corpus Christi, TX", "Culpeper,VA, VA", "Dallas South, TX", "Dallas, TX", "Danville, VA", "Davenport, IA", "Dayton, OH", "Defuniak Springs, FL", "Denver South, CO", "Denver, CO", "Des Moines, IA", "Detroit, MI", "Dothan, AL", "Dundalk, MD", "Dyer, IN", "Earlington, KY", "East Bay, CA", "East NC, NC", "El Paso, TX", "Eldridge, IA", "Englishtown, NJ", "Erie, PA", "Essex, MD", "Eugene, OR", "Exeter, RI", "Fargo, ND", "Fayetteville, NC", "Flint, MI", "Florence, SC", "Fontana, CA", "Fort Myers, FL", "Fort Wayne, IN", "Fort Worth North, TX", "Four Oaks, NC, NC", "Fredericksburg-South, VA", "Freetown, MA", "Fremont, CA", "Fresno, CA", "Ft. Pierce, FL", "Ft. Worth, TX", "Ft.Lauderdale, FL", "Glassboro East, NJ", "Glassboro West, NJ", "Golden Gate, CA", "Gr.Rapids, MI", "Graham, WA", "Grand Island, NE", "Grantville, PA", "Greater Auto Auction Phoenix, AZ", "Greensboro, NC", "Greenville, SC", "Greer, SC", "Grenada, MS", "Gulf Coast, MS", "Gulfport, MS", "Hammond, IN", "Hampton, VA, VA", "Harrisburg, PA", "Harrisonburg Auto Auction, VA", "Hartford City, IN", "Hartford, CT", "Hartford-South, CT", "Hayward, CA", "Helena, MT", "High Desert, CA", "Honolulu, HI", "Houston East, TX", "Houston, TX", "Houston-North, TX", "Huntsville, AL", "Indianapolis, IN", "Ionia, MI", "Jackson, MS", "Jacksonville East, FL", "Jacksonville West, FL", "Jacksonville, FL", "Kansas City, MO", "Kincheloe, MI", "Knoxville, TN", "Lafayette, LA", "Lansing, MI", "Las Vegas, NV", "Laurel, MD", "Lexington East KY, KY", "Lexington SC, SC", "Lexington West KY, KY", "Lincoln, IL, IL", "Lincoln, NE, NE", "Little Rock, AR", "Long Beach, CA", "Long Island, NY", "Longview, TX", "Los Angeles - Adesa, CA", "Los Angeles, CA", "Louisville, KY", "Lubbock, TX", "Lufkin, TX", "Lumberton, NC", "Lyman, ME", "MCAllen, TX", "Macon, GA", "Madison Heights, MI", "Madison South, WI", "Madison, WI", "Manchester, NH", "Manheim Albany, NY", "Manheim Arena Illinois, IL", "Manheim Arizona, AZ", "Manheim Auto Auction, PA", "Manheim Baltimore-Washington, MD", "Manheim Bishop Brothers, GA", "Manheim California, CA", "Manheim Carleton, MI", "Manheim Central California, CA", "Manheim Central Florida, FL", "Manheim Chicago, IL", "Manheim Cincinnati, OH", "Manheim Colorado, CO", "Manheim Dallas-Ft Worth, TX", "Manheim Darlington, SC", "Manheim Daytona Beach, FL", "Manheim Denver, CO", "Manheim Detroit, MI", "Manheim Fort Lauderdale, FL", "Manheim Fort Myers, FL", "Manheim Fort Wayne, IN", "Manheim Fredericksburg, VA", "Manheim Gateway St Louis, MO", "Manheim Georgia, GA", "Manheim Imperial Auto Auction, PA", "Manheim Imperial Florida, FL", "Manheim Kentucky, KY", "Manheim Lafayette, LA", "Manheim Lakeland, FL", "Manheim Metro Dallas, TX", "Manheim Metro Milwaukee, WI", "Manheim Milwaukee, WI", "Manheim Mississippi, MS", "Manheim Missouri, MO", "Manheim Nashville, TN", "Manheim Nevada, NV", "Manheim New England, MA", "Manheim New Jersey, NJ", "Manheim New Mexico, NM", "Manheim New Orleans, LA", "Manheim New York, NY", "Manheim North Carolina, NC", "Manheim Northstar Minnesota, MN", "Manheim Ohio, OH", "Manheim Oklahoma City, OK", "Manheim Orlando, FL", "Manheim Palm Beach, FL", "Manheim Pennsylvania, PA", "Manheim Pensacola, FL", "Manheim Philadelphia, PA", "Manheim Phoenix, AZ", "Manheim Pittsburg, PA", "Manheim Riverside, CA", "Manheim San Antonio, TX", "Manheim San Diego, CA", "Manheim San Francisco Bay, CA", "Manheim Seattle, WA", "Manheim Skyline Auto Auction, NY", "Manheim Southern California, CA", "Manheim St. Pete, FL", "Manheim Statesville, NC", "Manheim Tampa, FL", "Manheim Tennessee, TN", "Manheim Texas Hobby, TX", "Manheim Utah, UT", "Manheim Virginia (FREDERICKSBURG), VA", "Martinez, CA", "Mebane, GA", "Memphis, TN", "Mentone, CA", "Metro DC, DC", "Miami Central, FL", "Miami North, FL", "Miami South, FL", "Miami, FL", "Middletown, NY", "Milwaukee, WI", "Minneapolis /St. Paul, MN", "Minneapolis North, MN", "Minneapolis, MN", "Missoula, MT", "Mobile, AL", "Mocksville, NC", "Montgomery, AL", "Napa, CA", "Nashville, TN", "National Auto Dealers Exchange, NJ", "New Castle, DE", "New Orleans, LA", "Newburgh, NY", "North Boston, NY", "North Charleston - SC, SC", "North Hollywood, CA", "North Seattle, WA", "Northern New Jersey, NJ", "Northern Virginia, VA", "Ocala, FL", "Ogden, UT", "Oklahoma City, OK", "Omaha, NE", "Orlando North, FL", "Orlando South, FL", "Orlando, FL", "Paducah, KY", "Pasco, WA", "Pensacola, FL", "Peoria, IL", "Permian Basin, TX", "Philadelphia East, PA", "Philadelphia, PA", "Phoenix, AZ", "Pittsburg, PA", "Pittsburgh North, PA", "Pittsburgh South, PA", "Portage, WI", "Portland - Gorham, ME", "Portland North, OR", "Portland South, OR", "Portland West, OR", "Portland, OR", "Providence, RI", "Pulaski, VA", "Punta Gorda, FL", "Puyallup, WA", "Raleigh, NC", "Rancho Cucamonga, CA", "Rapid City, SD", "Redding, CA", "Reno, NV", "Richmond East, VA", "Richmond, VA", "Riverside, CA", "Roanoke, VA", "Rochester, NY", "Rosedale, MD", "Rutland, VT", "Sacramento, CA", "Salisbury, MD", "Salt Lake City, UT", "San Antonio, TX", "San Bernardino, CA", "San Diego, CA", "San Jose, CA", "Santa Clarita, CA", "Sarasota, FL", "Savannah, GA", "Sayreville, NJ", "Scranton, PA", "Seaford, DE", "Seattle, WA", "Shady Spring, WV, WV", "Shreveport, LA", "Sikeston, MO", "Sioux Falls, SD", "So Sacramento, CA", "Somerville, NJ", "South Bend, IN", "South Boston, VA", "Southern Illinois, IL", "Southern New Jersey, NJ", "Spartanburg, SC", "Spokane, WA", "Springfield, MO", "St. Cloud, MN", "St. Louis, MO", "Suffolk, VA", "Sun Valley, CA", "Syracuse, NY", "TOTAL RESOURCE AUC CENTRL PENN, PA", "Tallahassee, FL", "Tampa South, FL", "Tampa, FL", "Tanner, AL", "Taunton, MA", "Templeton, MA", "Tidewater, VA", "Tifton, GA", "Trenton, NJ", "Tucson, AZ", "Tulsa, OK", "Vallejo, CA", "Van Nuys, CA", "Waco, TX", "Walton, KY", "WashingtonDC, DC", "Wayland, MI", "Webster, NY", "West Palm Beach, FL", "West Warren, MA", "Western Colorado, CO", "Wheeling, WV", "Wichita, KS", "Wilmington, NC", "Windham, ME", "York Haven, PA", "York Springs, PA"], "iaai": ["ACE - Carson, CA", "ACE - Perris, CA", "ADESA Boston, MA", "ADESA Great Lakes, OH", "ADESA New Jersey, NJ", "ADESA Sioux Falls, SD", "ADESA Wisconsin, WI", "Abilene, TX", "Adamsburg, PA", "Adesa PA, PA", "Akron-Canton, OH", "Albany, NY", "Albuquerque, NM", "Altoona, PA", "Amarillo, TX", "Anaheim, CA", "Anchorage, AK", "Andrews, TX", "Antelope, CA", "Appleton, WI", "Arizona Auto Auction, AZ", "Asheville, NC", "Ashland, VA", "Atlanta Auto Auction, GA", "Atlanta East, GA", "Atlanta North, GA", "Atlanta South, GA", "Atlanta West, GA", "Augusta, GA", "Austin, TX", "Avenel New Jersey, NJ", "Bakersfield, CA", "Baltimor, MD", "Bangor, ME", "Baton Rouge, LA", "Bay Area, CA", "Bel-Air Auto Auction, MD", "Billings, MT", "Birmingham, AL", "Boise, ID", "Boston - Shirley, MA", "Boston, MA", "Bowlimg Green, KY", "Bridgeport, CT", "Bridgeview, IL", "Buckhannon, WV", "Buffalo, NY", "Burlington, VT", "Candia, NH", "Cartersville, GA", "Casper, WY", "Central Auto Auction, NJ", "Central New Jersey, NJ", "Chambersburg, PA", "Charleston - SC, SC", "Charleston - WV, WV", "Charlotte, NC", "Chattanooga, TN", "Chicago North, IL", "Chicago South, IL", "Chicago West, IL", "China Grove, NC", "Cicero, IL", "Cincinnati, OH", "Clayton, GA", "Clearwater, FL", "Cleveland East, OH", "Cleveland West, OH", "Cleveland, OH", "Clinton, MD", "Colorado Springs, CO", "Columbia MO, MO", "Columbia SC, SC", "Columbus AL, AL", "Columbus OH, OH", "Concord, NC", "Corpus Christi, TX", "Culpeper,VA, VA", "Dallas South, TX", "Dallas, TX", "Danville, VA", "Davenport, IA", "Dayton, OH", "Defuniak Springs, FL", "Denver South, CO", "Denver, CO", "Des Moines, IA", "Detroit, MI", "Dothan, AL", "Dundalk, MD", "Dyer, IN", "Earlington, KY", "East Bay, CA", "East NC, NC", "El Paso, TX", "Eldridge, IA", "Englishtown, NJ", "Erie, PA", "Essex, MD", "Eugene, OR", "Exeter, RI", "Fargo, ND", "Fayetteville, NC", "Flint, MI", "Florence, SC", "Fontana, CA", "Fort Myers, FL", "Fort Wayne, IN", "Fort Worth North, TX", "Four Oaks, NC, NC", "Fredericksburg-South, VA", "Freetown, MA", "Fremont, CA", "Fresno, CA", "Ft. Pierce, FL", "Ft. Worth, TX", "Ft.Lauderdale, FL", "Glassboro East, NJ", "Glassboro West, NJ", "Golden Gate, CA", "Gr.Rapids, MI", "Graham, WA", "Grand Island, NE", "Grantville, PA", "Greater Auto Auction Phoenix, AZ", "Greensboro, NC", "Greenville, SC", "Greer, SC", "Grenada, MS", "Gulf Coast, MS", "Gulfport, MS", "Hammond, IN", "Hampton, VA, VA", "Harrisburg, PA", "Harrisonburg Auto Auction, VA", "Hartford City, IN", "Hartford, CT", "Hartford-South, CT", "Hayward, CA", "Helena, MT", "High Desert, CA", "Honolulu, HI", "Houston East, TX", "Houston, TX", "Houston-North, TX", "Huntsville, AL", "Indianapolis, IN", "Ionia, MI", "Jackson, MS", "Jacksonville East, FL", "Jacksonville West, FL", "Jacksonville, FL", "Kansas City, MO", "Kincheloe, MI", "Knoxville, TN", "Lafayette, LA", "Lansing, MI", "Las Vegas, NV", "Laurel, MD", "Lexington East KY, KY", "Lexington SC, SC", "Lexington West KY, KY", "Lincoln, IL, IL", "Lincoln, NE, NE", "Little Rock, AR", "Long Beach, CA", "Long Island, NY", "Longview, TX", "Los Angeles - Adesa, CA", "Los Angeles, CA", "Louisville, KY", "Lubbock, TX", "Lufkin, TX", "Lumberton, NC", "Lyman, ME", "MCAllen, TX", "Macon, GA", "Madison Heights, MI", "Madison South, WI", "Madison, WI", "Manchester, NH", "Martinez, CA", "Mebane, GA", "Memphis, TN", "Mentone, CA", "Metro DC, DC", "Miami Central, FL", "Miami North, FL", "Miami South, FL", "Miami, FL", "Middletown, NY", "Milwaukee, WI", "Minneapolis /St. Paul, MN", "Minneapolis North, MN", "Minneapolis, MN", "Missoula, MT", "Mobile, AL", "Mocksville, NC", "Montgomery, AL", "Napa, CA", "Nashville, TN", "National Auto Dealers Exchange, NJ", "New Castle, DE", "New Orleans, LA", "Newburgh, NY", "North Boston, NY", "North Charleston - SC, SC", "North Hollywood, CA", "North Seattle, WA", "Northern New Jersey, NJ", "Northern Virginia, VA", "Ocala, FL", "Ogden, UT", "Oklahoma City, OK", "Omaha, NE", "Orlando North, FL", "Orlando South, FL", "Orlando, FL", "Paducah, KY", "Pasco, WA", "Pensacola, FL", "Peoria, IL", "Permian Basin, TX", "Philadelphia East, PA", "Philadelphia, PA", "Phoenix, AZ", "Pittsburg, PA", "Pittsburgh North, PA", "Pittsburgh South, PA", "Portage, WI", "Portland - Gorham, ME", "Portland North, OR", "Portland South, OR", "Portland West, OR", "Portland, OR", "Providence, RI", "Pulaski, VA", "Punta Gorda, FL", "Puyallup, WA", "Raleigh, NC", "Rancho Cucamonga, CA", "Rapid City, SD", "Redding, CA", "Reno, NV", "Richmond East, VA", "Richmond, VA", "Riverside, CA", "Roanoke, VA", "Rochester, NY", "Rosedale, MD", "Rutland, VT", "Sacramento, CA", "Salisbury, MD", "Salt Lake City, UT", "San Antonio, TX", "San Bernardino, CA", "San Diego, CA", "San Jose, CA", "Santa Clarita, CA", "Sarasota, FL", "Savannah, GA", "Sayreville, NJ", "Scranton, PA", "Seaford, DE", "Seattle, WA", "Shady Spring, WV, WV", "Shreveport, LA", "Sikeston, MO", "Sioux Falls, SD", "So Sacramento, CA", "Somerville, NJ", "South Bend, IN", "South Boston, VA", "Southern Illinois, IL", "Southern New Jersey, NJ", "Spartanburg, SC", "Spokane, WA", "Springfield, MO", "St. Cloud, MN", "St. Louis, MO", "Suffolk, VA", "Sun Valley, CA", "Syracuse, NY", "TOTAL RESOURCE AUC CENTRL PENN, PA", "Tallahassee, FL", "Tampa South, FL", "Tampa, FL", "Tanner, AL", "Taunton, MA", "Templeton, MA", "Tidewater, VA", "Tifton, GA", "Trenton, NJ", "Tucson, AZ", "Tulsa, OK", "Vallejo, CA", "Van Nuys, CA", "Waco, TX", "Walton, KY", "WashingtonDC, DC", "Wayland, MI", "Webster, NY", "West Palm Beach, FL", "West Warren, MA", "Western Colorado, CO", "Wheeling, WV", "Wichita, KS", "Wilmington, NC", "Windham, ME", "York Haven, PA", "York Springs, PA"]};
+var PORTS = {klaipeda:{name:"Клайпеду (Литва)", short:"Клайпеды", from:"Клайпеда"}, poti:{name:"Поти (Грузия)", short:"Поти", from:"Поти"}};
 
 var $ = function(id){return document.getElementById(id)};
+var val = function(name){return document.querySelector('input[name="' + name + '"]:checked').value};
 var fmt = function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ") + " $"};
 var nowYear = new Date().getFullYear();
 for (var y = nowYear; y >= nowYear - 20; y--) {
@@ -513,12 +562,23 @@ for (var y = nowYear; y >= nowYear - 20; y--) {
   $("year").appendChild(o);
 }
 
+function fillYards(){
+  var list = $("yardList"); list.innerHTML = "";
+  YARDS[val("auction")].forEach(function(n){ var o = document.createElement("option"); o.value = n; list.appendChild(o); });
+}
+function regionOf(yard){
+  var m = /,\s*([A-Z]{2})\s*$/.exec(yard || "");
+  if (!m) return null;
+  if (CONFIG.states.west.indexOf(m[1]) >= 0) return "west";
+  if (CONFIG.states.center.indexOf(m[1]) >= 0) return "center";
+  return "east";
+}
 function auctionFee(p){
   for (var i = 0; i < CONFIG.auctionFee.length; i++) if (p < CONFIG.auctionFee[i][0]) return CONFIG.auctionFee[i][1] + CONFIG.auctionFixed;
   return p * CONFIG.auctionFeeTopPct + CONFIG.auctionFixed;
 }
-function dutyUsd(priceUsd, year, cc, fuel){
-  if (fuel === "ev") return 0;
+function dutyUsd(priceUsd, year, cc, ev){
+  if (ev) return 0;
   var age = nowYear - year, eur = priceUsd / CONFIG.eurUsd, d = 0, t, i;
   if (age < 3) {
     t = CONFIG.duty.under3;
@@ -529,45 +589,92 @@ function dutyUsd(priceUsd, year, cc, fuel){
   }
   return d * CONFIG.eurUsd;
 }
-function calc(){
-  var price = Math.max(0, +$("price").value || 0);
-  var year = +$("year").value;
-  var cc = Math.max(0, +$("volume").value || 0);
-  var region = $("region").value;
-  var fuel = document.querySelector('input[name="fuel"]:checked').value;
-  var port = (fuel === "ice" && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti";
-  var fee = auctionFee(price), inland = CONFIG.inland[region];
-  var sea = CONFIG.sea[port][region], last = CONFIG.lastLeg[port];
-  var duty = dutyUsd(price, year, cc, fuel) * ($("benefit").checked ? .5 : 1);
+/* Полная стоимость для цены лота price при текущих настройках формы. */
+function cost(price, o){
+  var fee = auctionFee(price);
+  var inland = CONFIG.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
+  var sea = CONFIG.sea[o.port][o.region], last = CONFIG.lastLeg[o.port];
+  var extra = o.alt ? CONFIG.altFuelEur * CONFIG.eurUsd : 0;
+  var duty = dutyUsd(price, o.year, o.cc, o.ev) * (o.benefit ? .5 : 1);
   var cust = CONFIG.customsExtraByn / CONFIG.usdByn, ours = CONFIG.serviceByn / CONFIG.usdByn;
-  var total = price + fee + inland + sea + last + duty + cust + ours;
-
-  var portName = port === "klaipeda" ? "Клайпеду (Литва)" : "Поти (Грузия)";
-  var why = port === "klaipeda" ? "двигатель до 1,9 л можно везти через ЕС"
-          : (fuel === "ice" ? "через ЕС нельзя везти машины с двигателем больше 1,9 л" : "электромобили и гибриды обычно везём в обход ЕС");
-  $("route").innerHTML = "Маршрут: через <b>" + portName + "</b>, потому что " + why + ".";
-  $("r-lot").textContent = fmt(price);
-  $("r-fee").textContent = fmt(fee);
-  $("r-inland").textContent = fmt(inland);
-  $("r-sea-l").textContent = "Море до " + (port === "klaipeda" ? "Клайпеды" : "Поти");
-  $("r-sea").textContent = fmt(sea);
-  $("r-last-l").textContent = (port === "klaipeda" ? "Клайпеда" : "Поти") + " → Минск";
-  $("r-last").textContent = fmt(last);
-  $("r-duty").textContent = fuel === "ev" ? "0 $ (по квоте)" : fmt(duty);
-  $("r-cust").textContent = fmt(cust);
-  $("r-ours").textContent = fmt(ours);
-  $("r-total").textContent = fmt(total);
-  $("r-byn").textContent = "≈ " + Math.round(total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn;
-  return {price:price, year:year, cc:cc, fuel:fuel, port:port, total:Math.round(total)};
+  return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours,
+          total: price + fee + inland + sea + last + extra + duty + cust + ours};
 }
+function options(){
+  var cc = Math.max(0, +$("volume").value || 0), alt = val("fuel") === "alt";
+  var yard = $("yard").value.trim(), region = regionOf(yard) || "east";
+  var autoPort = (!alt && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti";
+  var port = $("port").value === "auto" ? autoPort : $("port").value;
+  return {year:+$("year").value, cc:cc, alt:alt, ev:alt && cc === 0, region:region, yard:yard,
+          port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked};
+}
+function calc(){
+  var o = options(), budget = val("mode") === "budget";
+  var input = Math.max(0, +$("price").value || 0), r;
+  if (budget) {
+    var lo = 0, hi = input;                 // ищем самую большую ставку, при которой итог укладывается в бюджет
+    if (cost(0, o).total > input) hi = 0;
+    for (var i = 0; i < 40; i++) { var mid = (lo + hi) / 2; if (cost(mid, o).total <= input) lo = mid; else hi = mid; }
+    r = cost(Math.floor(lo / 50) * 50, o);
+  } else {
+    r = cost(input, o);
+  }
+  $("priceLabel").textContent = budget ? "Ваш бюджет под ключ в Минске, $" : "Цена лота на аукционе, $";
+  $("maxbid").hidden = !budget;
+  $("r-max").textContent = fmt(r.price);
+  $("evHint").hidden = !o.alt;
+
+  var P = PORTS[o.port], txt;
+  if (o.port === o.autoPort) {
+    txt = "Маршрут: через <b>" + P.name + "</b>, " + (o.port === "klaipeda" ? "двигатель до 1,9 л можно везти через ЕС."
+      : (o.alt ? "гибриды и электромобили обычно везём в обход ЕС." : "через ЕС сейчас не везут машины с двигателем больше 1,9 л.")) + " Порт можно сменить в расширенном расчёте.";
+  } else if (o.port === "klaipeda") {
+    txt = "Через Клайпеду такую машину могут не пропустить: ограничения ЕС для двигателей больше 1,9 л, гибридов и электро. Уточните у менеджера.";
+  } else {
+    txt = "Маршрут: через <b>" + P.name + "</b>, вы выбрали его сами.";
+  }
+  $("route").innerHTML = txt;
+  $("route").classList.toggle("warn", o.port === "klaipeda" && o.port !== o.autoPort);
+
+  $("r-lot").textContent = fmt(r.price);
+  $("r-fee").textContent = fmt(r.fee);
+  $("r-inland-l").textContent = "Доставка по США до порта" + (o.yard ? "" : " (в среднем)") + (o.sublot ? ", с Sublot" : "");
+  $("r-inland").textContent = fmt(r.inland);
+  $("r-sea-l").textContent = "Море до " + P.short;
+  $("r-sea").textContent = fmt(r.sea);
+  $("r-last-l").textContent = P.from + " → Минск";
+  $("r-last").textContent = fmt(r.last);
+  $("r-extra-row").hidden = !r.extra;
+  $("r-extra-l").textContent = "Доплата за гибрид / электро";
+  $("r-extra").textContent = fmt(r.extra);
+  $("r-duty").textContent = o.ev ? "0 $ (электро)" : fmt(r.duty);
+  $("r-cust").textContent = fmt(r.cust);
+  $("r-ours").textContent = fmt(r.ours);
+  $("r-total").textContent = fmt(r.total);
+  $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn;
+  return {price:Math.round(r.price), year:o.year, cc:o.cc, alt:o.alt, port:o.port, yard:o.yard, budget:budget, total:Math.round(r.total)};
+}
+
+$("advToggle").addEventListener("click", function(){
+  var open = this.getAttribute("aria-expanded") !== "true";
+  this.setAttribute("aria-expanded", open); $("adv").hidden = !open;
+});
+document.querySelectorAll('input[name="auction"]').forEach(function(r){
+  r.addEventListener("change", function(){ fillYards(); $("yard").value = ""; calc(); });
+});
+document.querySelectorAll('input[name="mode"]').forEach(function(r){
+  r.addEventListener("change", function(){ $("price").value = r.value === "budget" ? 20000 : 12000; calc(); });
+});
 document.querySelectorAll(".picks button").forEach(function(b){
   b.addEventListener("click", function(){
     var v = b.dataset.p.split(",");
+    document.querySelector('input[name="mode"][value="price"]').checked = true;
     $("price").value = v[0]; $("year").value = v[1]; $("volume").value = v[2];
     document.querySelector('input[name="fuel"][value="' + v[3] + '"]').checked = true;
     calc();
   });
 });
+fillYards();
 $("calcForm").addEventListener("input", calc);
 $("calcForm").addEventListener("change", calc);
 
@@ -587,9 +694,10 @@ var SAVINGS = {
   ]
 };
 function setCalc(c){
+  document.querySelector('input[name="mode"][value="price"]').checked = true;
   $("price").value = c.lot; $("year").value = c.year; $("volume").value = c.cc;
-  $("region").value = "east"; $("benefit").checked = false;
-  document.querySelector('input[name="fuel"][value="' + c.fuel + '"]').checked = true;
+  $("yard").value = ""; $("port").value = "auto"; $("sublot").checked = false; $("benefit").checked = false;
+  document.querySelector('input[name="fuel"][value="' + (c.fuel === "ice" ? "ice" : "alt") + '"]').checked = true;
   return calc();
 }
 (function(){
@@ -612,8 +720,9 @@ function setCalc(c){
 
 $("sendCalc").addEventListener("click", function(){
   var r = calc();
-  var f = {ice:"бензин/дизель", hybrid:"гибрид", ev:"электро"}[r.fuel];
-  $("lcar").value = "Расчёт с калькулятора: лот " + r.price + " $, " + r.year + " г., " + r.cc + " см³, " + f + ", итого ≈ " + r.total + " $ под ключ.";
+  var f = r.alt ? (r.cc ? "гибрид" : "электро") : "бензин/дизель";
+  $("lcar").value = "Расчёт с калькулятора: " + (r.budget ? "бюджет " + r.total + " $, ставка до " + r.price + " $" : "лот " + r.price + " $, итого ≈ " + r.total + " $ под ключ")
+    + ", " + r.year + " г., " + r.cc + " см³, " + f + (r.yard ? ", площадка " + r.yard : "") + ", через " + PORTS[r.port].from + ".";
 });
 
 $("leadForm").addEventListener("submit", function(e){
