@@ -42,7 +42,7 @@ p{margin:0}
 /* Шапка */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:8px}
-.logo img{display:block;height:52px;width:auto}
+.logo img{display:block;height:72px;width:auto}
 .logo{font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:.02em}
 .logo span{color:var(--red)}
 .nav{display:flex;gap:16px;flex-wrap:wrap;font-weight:500;font-size:15px}
@@ -59,7 +59,7 @@ p{margin:0}
 .btn-line:hover{border-color:var(--ink)}
 @media (max-width:760px){.nav{display:none}.contact{display:none}.top .wrap{min-height:52px}}
 .lead-short{display:none}
-@media (max-width:600px){.lead-long{display:none}.lead-short{display:block}.hero{padding-block:20px 28px}.hero-copy{gap:16px}.trust{display:none}section{padding-block:44px}.sec-head{margin-bottom:22px}.logo img{height:42px}}
+@media (max-width:600px){.lead-long{display:none}.lead-short{display:block}.hero{padding-block:20px 28px}.hero-copy{gap:16px}.trust{display:none}section{padding-block:44px}.sec-head{margin-bottom:22px}.logo img{height:52px}}
 
 /* Первый экран */
 .hero{padding-block:48px 56px;background:var(--hero-bg);color:var(--hero-ink)}
@@ -70,7 +70,8 @@ p{margin:0}
 .hero .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:start}
 .hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0;padding-top:12px}
 .hero h1{font-size:clamp(30px,4.6vw,50px)}
-.hero h1 em{font-style:normal;color:var(--hero-accent)}
+.hero h1 em{font-style:normal;color:#ff4d5a}
+.hero h1 .h1-a{color:var(--hero-accent)}
 .lead{font-size:18px;color:var(--muted);max-width:34em}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .facts div{padding:14px 12px 14px 0;display:flex;flex-direction:column;gap:2px}
@@ -91,6 +92,7 @@ p{margin:0}
 .field.wide{grid-column:1/-1}
 label{font-size:13px;font-weight:600;color:var(--muted)}
 input,select,textarea{font:500 16px/1.2 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:11px 12px;width:100%;min-width:0}
+input:not([type=checkbox]):not([type=radio]),select{height:46px}
 input:focus,select:focus,textarea:focus{border-color:var(--navy);outline:none}
 .seg{display:flex;gap:6px;flex-wrap:wrap}
 .seg label{flex:1;min-width:max-content;cursor:pointer;position:relative}
@@ -189,8 +191,14 @@ section{padding-block:64px}
   .hero-copy .lead-short{display:block}
   .hero h1 br{display:none}
   .calc-body{display:grid;grid-template-columns:1.35fr 1fr;align-items:start}
-  .calc-body .bill{border-top:0;border-left:1px dashed var(--line);padding:20px 24px;position:sticky;top:80px}
-  .calc form{grid-template-columns:repeat(4,1fr)}
+  .calc-body .bill{border-top:0;border-left:1px dashed var(--line);padding:20px 24px;position:sticky;top:100px}
+  .calc form{grid-template-columns:1fr 1fr 1fr 2.3fr}
+  .calc form>.field{justify-content:flex-end}
+  .calc form>.field label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .calc form .seg{flex-wrap:nowrap}
+  .calc form .seg label{min-width:0}
+  .calc form .seg span{height:46px;padding:0 6px;font-size:13.5px;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+  .calc form .seg label{display:block}
   .calc form .field.wide,.calc form .wide{grid-column:1/-1}
   #adv{display:grid!important;grid-template-columns:repeat(2,1fr)}
   .adv-toggle{display:none}
@@ -229,7 +237,7 @@ section{padding-block:64px}
 .lead-sec .wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
 .lead-form{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .check{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted)}
-.check input{width:auto;margin-top:3px}
+.check input{flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;padding:0;accent-color:var(--navy)}
 .msg{font-size:14px;padding:10px 12px;border-radius:8px;background:var(--soft)}
 .channels{display:flex;flex-direction:column;gap:10px;margin-top:20px}
 .channels a{font-weight:600;text-decoration:none;color:var(--navy)}
@@ -275,7 +283,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
   <div class="wrap">
     <div class="hero-copy">
       <p class="eyebrow">Copart · IAAI · доставка в Минск</p>
-      <h1>Пригон авто из США <em>под ключ</em> в Беларусь</h1>
+      <h1><span class="h1-a">Пригон авто из США</span> <em>под ключ</em> в Беларусь</h1>
       <p class="lead lead-long">Подберём машину на аукционах Copart и IAAI, проверим историю и привезём до таможни в Минске. За автомобиль вы платите аукциону напрямую со своего счёта. Мы берём деньги только за свою работу, по договору.</p>
       <p class="lead lead-short">Подбор на Copart и IAAI, проверка и доставка до Минска. За машину платите аукциону сами, нам только за услугу.</p>
       <div class="facts">
@@ -303,16 +311,18 @@ footer div{display:flex;flex-direction:column;gap:4px}
           <label><input type="radio" name="mode" value="budget"><span>Бюджет → до какой ставки</span></label>
         </div>
         <div class="field wide">
-          <label id="pickLabel">Быстрый пример</label>
+          <label id="pickLabel">Самые ходовые машины</label>
           <div class="picks" role="group" aria-labelledby="pickLabel">
-            <button type="button" data-p="14000,2021,2500,ice">Toyota RAV4 2021</button>
-            <button type="button" data-p="11000,2020,2500,ice">Toyota Camry 2020</button>
-            <button type="button" data-p="9000,2022,1500,ice">VW Jetta 2022</button>
-            <button type="button" data-p="16000,2021,0,alt">Tesla Model 3 2021</button>
+            <button type="button" data-p="9000,2021,1500,ice">Chevrolet Equinox</button>
+            <button type="button" data-p="8000,2021,1300,ice">Chevrolet Trailblazer</button>
+            <button type="button" data-p="11000,2021,2500,ice">Nissan Rogue</button>
+            <button type="button" data-p="12000,2021,1500,ice">Ford Bronco Sport</button>
+            <button type="button" data-p="9000,2024,1200,ice">Chevrolet Trax</button>
+            <button type="button" data-p="9000,2022,1400,ice">VW Jetta</button>
           </div>
         </div>
         <div class="field">
-          <label for="price" id="priceLabel">Цена лота на аукционе, $</label>
+          <label for="price" id="priceLabel">Цена лота, $</label>
           <input id="price" type="number" inputmode="numeric" min="100" step="100" value="12000">
         </div>
         <div class="field">
@@ -320,7 +330,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
           <select id="year"></select>
         </div>
         <div class="field">
-          <label for="volume">Объём двигателя, см³</label>
+          <label for="volume">Объём, см³</label>
           <input id="volume" type="number" inputmode="numeric" min="0" step="100" value="2000">
         </div>
         <div class="field">
@@ -646,7 +656,7 @@ function calc(){
   } else {
     r = cost(input, o);
   }
-  $("priceLabel").textContent = budget ? "Ваш бюджет под ключ в Минске, $" : "Цена лота на аукционе, $";
+  $("priceLabel").textContent = budget ? "Бюджет под ключ, $" : "Цена лота, $";
   $("maxbid").hidden = !budget;
   $("r-max").textContent = fmt(r.price);
   $("evHint").hidden = !o.alt;
