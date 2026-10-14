@@ -1,391 +1,57 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-base="/new2/">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Авто из США под ключ: доставка и пригон в Беларусь | Amerika.by</title>
-<meta name="description" content="Авто из США в Беларусь под ключ: подбор на Copart и IAAI, проверка истории, доставка до Минска и растаможка. Пригоним машину по договору, за авто платите аукциону напрямую. Калькулятор полной стоимости, услуга от 599 BYN.">
+<meta name="description" content="Авто из США в Беларусь под ключ: подбор на Copart и IAAI, проверка истории, доставка до Минска и растаможка. Работаем по договору, за авто платите аукциону напрямую. Калькулятор полной стоимости, услуга от 599 BYN.">
 <!-- Тестовая версия: закрыта от индексации до запуска -->
 <meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://amerika.by/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Amerika.by">
+<meta property="og:title" content="Авто из США под ключ: доставка и пригон в Беларусь | Amerika.by">
+<meta property="og:description" content="Авто из США в Беларусь под ключ: подбор на Copart и IAAI, проверка истории, доставка до Минска и растаможка. Работаем по договору, за авто платите аукциону напрямую. Калькулятор полной стоимости, услуга от 599 BYN.">
+<meta property="og:url" content="https://amerika.by/">
+<meta property="og:image" content="https://amerika.by/img/nissan-rogue.jpg">
+<meta name="theme-color" content="#13284f">
+<link rel="icon" href="/new2/img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap&subset=cyrillic">
-<style>
-/* Вариант new2 «Доверие и цифры»: тёплый светлый фон, тёмно-синий + жёлтый, красный только для главной кнопки. */
-:root{
-  --paper:#faf6ee; --paper-2:#f3ecdf; --surface:#ffffff; --ink:#0f1f3d; --muted:#5b6478; --line:#e6dfd1;
-  --navy:#13284f; --navy-2:#1c3567; --navy-ink:#ffffff; --navy-muted:#b8c3db; --navy-line:#2d4677;
-  --yellow:#ffc531; --yellow-soft:#fff3cc; --yellow-ink:#3d2e00;
-  --red:#c8102e; --red-ink:#ffffff; --soft:#f4efe4; --ok:#1d7a4c;
-  --display:"Manrope",system-ui,sans-serif;
-  --body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --r:14px;
-  color-scheme:light;
-}
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-html{scroll-behavior:smooth;scroll-padding-top:96px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
-a{color:inherit}
-img{max-width:100%}
-.wrap{max-width:1200px;margin:0 auto;padding-inline:24px}
-h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.12;text-wrap:balance;margin:0;letter-spacing:-.015em}
-h2{font-size:clamp(28px,3.6vw,42px)}
-h3{font-size:19px;font-weight:700;letter-spacing:0}
-p{margin:0}
-.num{font-variant-numeric:tabular-nums}
-:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font:700 13px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--navy-2)}
-.eyebrow::before{content:"";width:18px;height:3px;border-radius:2px;background:var(--yellow)}
-
-/* Кнопки */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:10px;padding:14px 20px;font:700 16px/1 var(--display);cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn-red{background:var(--red);color:var(--red-ink);box-shadow:0 8px 20px -10px rgba(200,16,46,.7)}
-.btn-red:hover{filter:brightness(1.08)}
-.btn-navy{background:var(--navy);color:#fff}
-.btn-navy:hover{background:var(--navy-2)}
-.btn-line{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
-.btn-line:hover{border-color:var(--ink)}
-.btn-yellow{background:var(--yellow);color:var(--yellow-ink)}
-
-/* Шапка */
-.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:28px;min-height:84px;padding-block:8px}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo img{display:block;height:66px;width:auto}
-.logo span{display:flex;flex-direction:column;font:800 18px/1.1 var(--display);letter-spacing:.02em}
-.logo small{font:600 12px/1.2 var(--body);color:var(--muted);letter-spacing:0}
-.nav{display:flex;gap:22px;font:600 15px/1 var(--display)}
-.nav a{text-decoration:none;color:var(--muted);white-space:nowrap}
-.nav a:hover{color:var(--ink)}
-.contact{margin-left:auto;display:flex;align-items:center;gap:10px}
-.phone{display:flex;flex-direction:column;text-decoration:none;font:800 19px/1.15 var(--display);white-space:nowrap}
-.phone small{font:600 12px/1.2 var(--body);color:var(--muted)}
-.msgr{display:flex;gap:6px}
-.msgr a{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 12px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font:700 13px/1 var(--display);text-decoration:none;color:var(--navy)}
-.msgr a:hover{border-color:var(--navy)}
-@media (max-width:1180px){.nav a.opt{display:none}}
-@media (max-width:1020px){.nav{display:none}}
-@media (max-width:760px){
-  .top .wrap{min-height:60px;gap:12px;padding-inline:16px}
-  .logo img{height:46px}
-  .logo span{font-size:16px}
-  .logo small{display:none}
-  .msgr,.phone small{display:none}
-  .phone{font-size:16px}
-}
-@media (max-width:380px){.logo span{display:none}}
-
-/* Первый экран */
-.hero{padding-block:36px 36px;position:relative;overflow:hidden}
-.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
-.hero h1{font-size:clamp(36px,5.2vw,64px)}
-.hero h1 mark{background:linear-gradient(transparent 62%,var(--yellow) 62%);color:inherit;padding:0 .06em}
-.lead{font-size:19px;color:var(--muted);max-width:33em}
-.cta-row{display:flex;gap:12px;flex-wrap:wrap}
-.facts{display:flex;gap:28px;flex-wrap:wrap;padding-top:6px}
-.facts div{display:flex;flex-direction:column}
-.facts b{font:800 26px/1.1 var(--display)}
-.facts span{font-size:14px;color:var(--muted)}
-
-.guar{background:var(--navy);color:var(--navy-ink);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:6px;box-shadow:0 30px 60px -36px rgba(15,31,61,.6);position:relative;min-width:0}
-.guar-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--navy-line);margin-bottom:6px}
-.guar-head p{font:800 14px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--yellow)}
-.guar-head span{font-size:13px;color:var(--navy-muted)}
-.guar ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.guar li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--navy-line)}
-.guar li:last-child{border-bottom:0;padding-bottom:4px}
-.guar .ico{width:44px;height:44px;border-radius:12px;background:var(--yellow);color:var(--navy);display:grid;place-items:center}
-.guar .ico svg{width:24px;height:24px}
-.guar h3{font-size:20px;margin-bottom:4px}
-.guar li p{color:var(--navy-muted);font-size:15.5px}
-@media (max-width:960px){.hero .wrap{grid-template-columns:1fr;gap:28px}.hero{padding-block:28px 32px}}
-@media (max-width:600px){
-  .wrap{padding-inline:16px}
-  .hero h1{font-size:36px}
-  .lead{font-size:17px}
-  .facts{display:grid;grid-template-columns:auto auto auto;gap:12px;justify-content:space-between}
-  .facts b{font-size:19px}
-  .facts span{font-size:12.5px;line-height:1.3}
-  .guar{padding:20px;border-radius:16px}
-  .guar li{grid-template-columns:38px 1fr;gap:12px;padding:14px 0}
-  .guar .ico{width:38px;height:38px;border-radius:10px}
-  .guar h3{font-size:18px}
-  .cta-row .btn{flex:1}
-}
-
-/* Калькулятор */
-.calc-sec{background:var(--navy);color:var(--navy-ink);padding-block:56px;position:relative}
-.calc-sec .sec-head p{color:var(--navy-muted)}
-.calc-sec .eyebrow{color:var(--yellow)}
-.calc{color:var(--ink);background:var(--surface);border-radius:20px;overflow:hidden;min-width:0;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
-.calc-body{display:grid;grid-template-columns:1.25fr 1fr;align-items:stretch}
-.calc form{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:26px 28px;align-content:start}
-.field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.wide{grid-column:1/-1}
-label{font:700 13px/1.3 var(--display);color:var(--muted)}
-input,select,textarea{font:600 17px/1.2 var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;width:100%;min-width:0}
-input:not([type=checkbox]):not([type=radio]),select{height:50px}
-input:focus,select:focus,textarea:focus{border-color:var(--navy);outline:none;background:#fff}
-#price{font:800 22px/1 var(--display)}
-.seg{display:flex;gap:6px}
-.seg label{flex:1;min-width:0;cursor:pointer;position:relative}
-.seg input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;top:0}
-.seg span{display:flex;align-items:center;justify-content:center;text-align:center;height:50px;padding:0 8px;border:1.5px solid var(--line);border-radius:10px;color:var(--ink);font:600 14px/1.15 var(--display)}
-.seg input:checked+span{border-color:var(--navy);background:var(--navy);color:#fff}
-.seg input:focus-visible+span{outline:3px solid var(--yellow);outline-offset:2px}
-.picks{display:flex;gap:6px;flex-wrap:wrap}
-.picks button{font:700 13px/1 var(--display);color:var(--navy);background:var(--yellow-soft);border:1px solid #f3dc94;border-radius:999px;padding:9px 13px;cursor:pointer}
-.picks button:hover{background:var(--yellow)}
-.tabs{display:flex;gap:4px;background:var(--soft);border-radius:12px;padding:4px}
-.tabs label{flex:1;position:relative;cursor:pointer}
-.tabs input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;left:0;top:0}
-.tabs span{display:block;text-align:center;padding:11px 8px;border-radius:9px;font:700 14px/1.2 var(--display);color:var(--muted)}
-.tabs input:checked+span{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(15,31,61,.18)}
-.tabs input:focus-visible+span{outline:3px solid var(--yellow);outline-offset:2px}
-.hint{font-size:13px;color:var(--muted);margin:-6px 0 0}
-.adv-toggle{justify-self:start;background:none;border:0;padding:4px 0;font:700 15px/1.3 var(--display);color:var(--navy-2);cursor:pointer;text-align:left;text-decoration:underline;text-underline-offset:3px}
-.adv-toggle[aria-expanded="true"] span{display:inline-block;transform:rotate(180deg)}
-.adv{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
-.adv-title{grid-column:1/-1;font:800 12px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.adv input,.adv select{background:#fff}
-.checks{gap:10px;justify-content:center}
-.check{display:flex;gap:9px;align-items:flex-start;font:600 13.5px/1.35 var(--body);color:var(--ink);cursor:pointer}
-.check input{flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;padding:0;accent-color:var(--navy)}
-.route{grid-column:1/-1;font-size:14px;color:var(--muted);background:var(--soft);border-radius:10px;padding:11px 13px}
-.route b{color:var(--ink)}
-.route.warn{background:#fff1d6;color:#7a4b00}
-@media (max-width:480px){.adv{grid-template-columns:1fr}}
-
-/* Чек */
-.bill{background:var(--paper-2);padding:26px 28px;display:flex;flex-direction:column;gap:4px;border-left:1px solid var(--line);position:relative}
-.bill-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
-.bill-head b{font:800 18px/1.2 var(--display)}
-.bill-head span{font-size:13px;color:var(--muted)}
-.grp{font:800 11px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:12px;padding-bottom:4px;display:flex;justify-content:space-between;gap:8px}
-.grp i{font-style:normal;letter-spacing:0;text-transform:none;font-weight:700;color:var(--navy-2)}
-.row{display:flex;justify-content:space-between;gap:12px;font-size:15.5px;padding:3px 0;border-bottom:1px dotted #d8cfbd}
-.row span:first-child{color:var(--muted)}
-.row span:last-child{font-weight:700;white-space:nowrap}
-.row.ours{border-bottom:0;background:var(--yellow-soft);margin:2px -10px 0;padding:7px 10px;border-radius:8px}
-.row.ours span:first-child{color:var(--ink);font-weight:700}
-.maxbid{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:12px 14px;margin-bottom:6px;border-radius:12px;background:#e6f3ec}
-.maxbid span{font-weight:700}
-.maxbid b{font:800 clamp(22px,3vw,28px)/1 var(--display);color:var(--ok)}
-.total{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:16px 18px;border-radius:14px;background:var(--navy);color:#fff}
-.total span{font:700 15px/1.2 var(--display)}
-.total b{font:800 clamp(30px,3.4vw,40px)/1 var(--display);color:var(--yellow)}
-#r-byn{color:var(--muted);font-size:14px;text-align:right;margin-top:4px}
-.note{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.45}
-.bill .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.bill .actions .btn{flex:1}
-@media (min-width:961px){
-  .calc-sec{padding-block:40px 64px}
-  .calc-sec .sec-head{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:6px 20px;max-width:none;margin-bottom:24px}
-  .calc-sec .sec-head .eyebrow{flex-basis:100%}
-  .calc-sec h2{font-size:32px}
-  .calc-sec .sec-head p{font-size:16px;max-width:none}
-  #adv{display:grid!important}
-  .adv-toggle{display:none}
-  .bill-in{position:sticky;top:110px;display:flex;flex-direction:column;gap:4px}
-}
-@media (max-width:960px){
-  .calc-body{grid-template-columns:1fr}
-  .bill{border-left:0;border-top:1px dashed var(--line)}
-}
-@media (max-width:600px){
-  .calc-sec{padding-block:40px}
-  .calc{border-radius:16px}
-  .calc form{padding:18px 16px;gap:14px}
-  .bill{padding:20px 16px}
-  .tabs span{font-size:13px;padding:10px 4px}
-}
-@media (max-width:420px){.calc form{grid-template-columns:1fr}}
-
-/* Секции */
-section{padding-block:80px}
-.sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;max-width:760px}
-.sec-head p{color:var(--muted);font-size:18px}
-.white{background:var(--surface);border-block:1px solid var(--line)}
-@media (max-width:600px){section{padding-block:52px}.sec-head{margin-bottom:24px}.sec-head p{font-size:16.5px}h2{font-size:28px}}
-
-/* Что входит в цену */
-.inc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.inc article{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.inc article.ours{background:var(--yellow-soft);border-color:#f0d88a}
-.inc .to{display:flex;align-items:center;gap:10px;font:800 13px/1.2 var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--navy-2)}
-.inc .to b{width:30px;height:30px;border-radius:9px;background:var(--navy);color:var(--yellow);display:grid;place-items:center;font-size:14px;letter-spacing:0}
-.inc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.inc li{display:flex;flex-direction:column;gap:2px;font-size:15px;color:var(--muted)}
-.inc li strong{font:700 16px/1.3 var(--display);color:var(--ink)}
-.inc-foot{display:flex;gap:16px 32px;flex-wrap:wrap;margin-top:22px;padding:18px 22px;border-radius:var(--r);border:1.5px dashed #d7cbb2;font-size:15.5px;color:var(--muted)}
-.inc-foot b{color:var(--ink)}
-@media (max-width:1000px){.inc{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.inc{grid-template-columns:1fr}}
-
-/* Проверка */
-.check-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
-.photos{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
-.photos figure{margin:0;position:relative;min-width:0}
-.photos figure:first-child{grid-column:1/-1}
-.photos img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:var(--soft)}
-.photos figure:first-child img{aspect-ratio:16/9}
-.photos figcaption{position:absolute;left:10px;bottom:10px;background:rgba(15,31,61,.85);color:#fff;font:700 12.5px/1 var(--display);padding:7px 10px;border-radius:999px}
-.ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
-.ticks li{display:grid;grid-template-columns:32px 1fr;gap:14px}
-.ticks li::before{content:"";width:32px;height:32px;border-radius:50%;background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2313284f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/18px no-repeat}
-.ticks p{color:var(--muted);font-size:16px;margin-top:3px}
-@media (max-width:900px){.check-grid{grid-template-columns:1fr;gap:28px}.photos{order:2}}
-
-/* Сравнение */
-.cmp{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
-.cmp-row{display:grid;grid-template-columns:.8fr 1.1fr 1.1fr}
-.cmp-row>*{padding:18px 22px;border-top:1px solid var(--line);min-width:0}
-.cmp-row:first-child>*{border-top:0}
-.cmp-h>*{font:800 16px/1.25 var(--display);padding-block:20px}
-.cmp .cmp-h .us{background:var(--navy);color:#fff}
-.cmp-h .us small{display:block;font:600 13px/1.3 var(--body);color:var(--yellow);margin-top:2px}
-.cmp-h .them small{display:block;font:600 13px/1.3 var(--body);color:var(--muted);margin-top:2px}
-.cmp .k{font:700 15.5px/1.3 var(--display);background:var(--paper)}
-.cmp .us{background:#f6f8fc}
-.cmp-row:not(.cmp-h) .us{font-weight:600}
-.cmp-row:not(.cmp-h)>*{font-size:15.5px}
-.cmp-row:not(.cmp-h) .them{color:var(--muted)}
-.cmp .tag{display:block;font:800 11px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;color:var(--muted)}
-.cmp-note{margin-top:14px;font-size:14.5px;color:var(--muted);max-width:80ch}
-.soon{margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border:2px dashed #d7cbb2;border-radius:var(--r);padding:22px 24px;background:rgba(255,255,255,.5)}
-.soon div{display:flex;flex-direction:column;gap:6px;min-width:0;max-width:640px}
-.soon .badge{align-self:flex-start;font:800 11px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--yellow);color:var(--yellow-ink);padding:6px 9px;border-radius:6px}
-.soon p{color:var(--muted);font-size:15.5px}
-@media (max-width:760px){
-  .cmp-row{grid-template-columns:1fr 1fr}
-  .cmp-row .k{grid-column:1/-1;padding-bottom:6px;border-top:1px solid var(--line);background:var(--paper)}
-  .cmp-row:not(.cmp-h) .us,.cmp-row:not(.cmp-h) .them{border-top:0}
-  .cmp-row>*{padding:12px 14px}
-  .cmp-h .k{display:none}
-  .cmp-row:not(.cmp-h)>*{font-size:14.5px}
-}
-
-/* Шаги со сроками */
-.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;list-style:none;margin:0;padding:0}
-.timeline li{display:flex;flex-direction:column;gap:10px;padding:0 18px 0 0;position:relative;min-width:0}
-.timeline .dot{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.timeline .dot b{width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:var(--navy);color:var(--yellow);display:grid;place-items:center;font:800 16px/1 var(--display);position:relative;z-index:1}
-.timeline .dot::after{content:"";flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--navy) 0 8px,transparent 8px 14px);opacity:.35}
-.timeline li:last-child .dot::after{display:none}
-.timeline .when{align-self:flex-start;justify-self:start;font:800 13px/1 var(--display);background:var(--yellow-soft);color:var(--yellow-ink);border:1px solid #f0d88a;padding:7px 10px;border-radius:999px}
-.timeline p{color:var(--muted);font-size:15.5px}
-.timeline .who{font:700 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--navy-2)}
-.total-time{margin-top:36px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding:22px 26px;border-radius:var(--r);background:var(--navy);color:#fff}
-.total-time b{font:800 clamp(30px,4vw,44px)/1 var(--display);color:var(--yellow)}
-.total-time p{color:var(--navy-muted);max-width:62ch;font-size:16px}
-@media (max-width:1000px){
-  .timeline{grid-template-columns:1fr;gap:0}
-  .timeline li{display:grid;grid-template-columns:40px 1fr;gap:4px 16px;padding:0 0 26px}
-  .timeline .dot{grid-row:1/span 4;flex-direction:column;align-items:center;margin:0;height:100%}
-  .timeline .dot::after{width:3px;height:auto;flex:1;background:repeating-linear-gradient(180deg,var(--navy) 0 8px,transparent 8px 14px)}
-  .timeline li:last-child{padding-bottom:0}
-}
-
-/* Логистика */
-.atl{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
-.atl-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:30px;display:flex;flex-direction:column;gap:18px;min-width:0}
-.since{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.since b{font:800 64px/1 var(--display);color:var(--navy)}
-.since span{font:700 16px/1.3 var(--display);color:var(--muted)}
-.routes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.routes div{border-radius:12px;background:var(--paper);padding:16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.routes b{font:800 17px/1.2 var(--display)}
-.routes span{font-size:14.5px;color:var(--muted)}
-.path{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font:700 13px/1 var(--display);color:var(--navy)}
-.path i{font-style:normal;color:#b9a77d}
-.path span{background:var(--yellow-soft);padding:7px 8px;border-radius:8px;white-space:nowrap}
-@media (max-width:900px){.atl{grid-template-columns:1fr;gap:28px}}
-@media (max-width:480px){.routes{grid-template-columns:1fr}.since b{font-size:52px}.atl-card{padding:22px}}
-
-/* Тарифы */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
-.plan{border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;background:var(--surface);min-width:0;position:relative}
-.plan.hit{border:2px solid var(--navy);box-shadow:0 24px 50px -30px rgba(15,31,61,.5)}
-.plan .tag{position:absolute;top:-13px;left:24px;font:800 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;background:var(--yellow);color:var(--yellow-ink);padding:7px 10px;border-radius:7px}
-.plan .for{min-height:68px;display:flex;align-items:center;font-size:15px;color:var(--navy-2);font-weight:700;background:var(--paper);border-radius:10px;padding:10px 12px}
-.plan .price{font:800 44px/1 var(--display)}
-.plan .price small{font:700 17px/1 var(--display);color:var(--muted)}
-.plan ul{margin:0;padding:0;list-style:none;color:var(--ink);font-size:15.5px;display:flex;flex-direction:column;gap:8px;flex:1}
-.plan li{padding-left:24px;position:relative}
-.plan li::before{content:"";position:absolute;left:2px;top:.45em;width:12px;height:7px;border-left:2.5px solid var(--ok);border-bottom:2.5px solid var(--ok);transform:rotate(-45deg)}
-.plans-note{margin-top:20px;color:var(--muted);font-size:15px}
-@media (max-width:900px){.plans{grid-template-columns:1fr;gap:26px}.plan .for{min-height:0}}
-
-/* FAQ */
-.faq-grid{display:grid;grid-template-columns:.8fr 1.4fr;gap:48px;align-items:start}
-.faq{display:flex;flex-direction:column}
-.faq details{border-bottom:1px solid var(--line);padding-block:18px}
-.faq details:first-child{border-top:1px solid var(--line)}
-.faq summary{cursor:pointer;font:700 17.5px/1.35 var(--display);list-style:none;display:flex;justify-content:space-between;gap:16px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";flex:0 0 28px;height:28px;border-radius:50%;background:var(--yellow-soft);color:var(--navy);display:grid;place-items:center;font:800 18px/1 var(--display)}
-.faq details[open] summary::after{content:"−";background:var(--yellow)}
-.faq p{color:var(--muted);margin-top:10px;max-width:65ch;font-size:16px}
-@media (max-width:900px){.faq-grid{grid-template-columns:1fr;gap:20px}}
-
-/* Заявка */
-.lead-sec{background:var(--navy);color:#fff}
-.lead-sec .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-.lead-sec .sec-head p{color:var(--navy-muted)}
-.lead-sec .eyebrow{color:var(--yellow)}
-.lead-form{background:var(--surface);color:var(--ink);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px;min-width:0}
-.lead-form .check{color:var(--muted);font-weight:600}
-.msg{font-size:14.5px;padding:11px 13px;border-radius:10px;background:var(--yellow-soft)}
-.channels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
-.channels a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:12px;background:var(--navy-2);border:1px solid var(--navy-line);text-decoration:none;font:800 16px/1.2 var(--display);min-width:0}
-.channels a small{font:600 13px/1.2 var(--body);color:var(--navy-muted)}
-.channels a:hover{border-color:var(--yellow)}
-.addr{margin-top:16px;color:var(--navy-muted);font-size:15px}
-@media (max-width:900px){.lead-sec .wrap{grid-template-columns:1fr;gap:28px}}
-@media (max-width:420px){.channels{grid-template-columns:1fr}.lead-form{padding:20px}}
-
-footer{padding-block:36px;color:var(--muted);font-size:14px;background:var(--paper)}
-footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-footer div{display:flex;flex-direction:column;gap:4px}
-
-/* Нижняя панель на телефоне */
-.mbar{display:none}
-@media (max-width:760px){
-  .mbar{display:flex;gap:6px;position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line);box-shadow:0 -8px 24px -16px rgba(15,31,61,.35)}
-  .mbar .btn{flex:1;padding:13px 4px;font-size:13px;border-radius:10px}
-  .mbar .btn-red{flex:1.25}
-  .mbar .btn-line{background:var(--soft);border-color:var(--line);color:var(--navy)}
-  body{padding-bottom:72px}
-}
-</style>
+<link rel="stylesheet" href="/new2/assets/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","legalName":"ООО «МирАвтоИмпорт»","url":"https://amerika.by/","logo":"https://amerika.by/img/logo.svg","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","areaServed":"BY","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by","https://yandex.by/maps/org/amerika_bay/195163310146/"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Как я могу быть уверен, что деньги не пропадут?","acceptedAnswer":{"@type":"Answer","text":"За машину вы платите аукциону напрямую, банковским переводом со своего счёта. За доставку платите перевозчику, пошлину таможне. Нам только фиксированную сумму за услугу по договору. У нас офис в Минске: ул. Большое Стиклево, 83, 3 этаж."}},{"@type":"Question","name":"Сколько идёт машина из США в Минск?","acceptedAnswer":{"@type":"Answer","text":"Обычно 40–70 дней после оплаты лота: около 1–2 недель по США до порта, 4–6 недель морем, затем доставка в Минск. Через Поти путь дольше, чем через Клайпеду."}},{"@type":"Question","name":"Почему одни машины едут через Клайпеду, а другие через Поти?","acceptedAnswer":{"@type":"Answer","text":"Через Евросоюз сейчас можно везти в Беларусь легковые машины с двигателем не больше 1,9 литра. Машины с большим объёмом мы везём через грузинский порт Поти. Электромобили и гибриды обычно тоже идут через Поти. Точный маршрут подтвердим при расчёте."}},{"@type":"Question","name":"Могут ли появиться платежи, которых нет в расчёте?","acceptedAnswer":{"@type":"Answer","text":"В калькуляторе все обязательные статьи: лот, сборы аукциона, доставка, пошлина, утильсбор, СВХ, декларант и наша услуга. Отдельно идёт ремонт повреждений, его мы оцениваем до ставки. Курс валют на день оплаты может немного изменить сумму."}},{"@type":"Question","name":"Можно ли купить машину, которую я нашёл сам?","acceptedAnswer":{"@type":"Answer","text":"Да. Пришлите ссылку на лот или VIN, мы проверим историю и повреждения и посчитаем полную стоимость до ставки. Это тариф «Проверка лота»."}},{"@type":"Question","name":"Что если машина окажется хуже, чем на фото?","acceptedAnswer":{"@type":"Answer","text":"Перед ставкой мы проверяем историю по Carfax и AutoCheck, смотрим все фото и отчёт аукциона и оцениваем ремонт. Если риск высокий, честно отговорим от покупки."}},{"@type":"Question","name":"Есть ли льготы на растаможку?","acceptedAnswer":{"@type":"Answer","text":"По Указу № 140 многодетные семьи и инвалиды I и II группы платят половину пошлины. Для электромобилей действуют отдельные условия и квота, их уточним при расчёте."}}]}</script>
 </head>
 <body>
-
+<a class="skip" href="#main">К содержимому</a>
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#top"><img src="../new/img/logo.svg" alt="" width="62" height="57"><span>AMERIKA.BY<small>Авто из США</small></span></a>
-    <nav class="nav" aria-label="Разделы">
-      <a href="#calc">Калькулятор</a>
-      <a href="#price-inside">Что в цене</a>
-      <a href="#how">Сроки</a>
-      <a href="#prices">Тарифы</a>
-      <a class="opt" href="#faq">Вопросы</a>
-    </nav>
+    <a class="logo" href="/new2/" aria-label="Amerika.by — на главную"><img src="/new2/img/logo.svg" alt="" width="70" height="64"><span>AMERIKA.BY<small>Авто из США</small></span></a>
+    <nav class="nav" aria-label="Разделы сайта"><a href="/new2/katalog/">Каталог</a><a href="/new2/kalkulyator/">Калькулятор</a><a href="/new2/uslugi/">Услуги</a><a href="/new2/ceny/">Цены</a><a href="/new2/blog/">Блог</a><a href="/new2/o-kompanii/">О компании</a><a href="/new2/kontakty/">Контакты</a></nav>
     <div class="contact">
       <a class="phone num" href="tel:+375296332828">+375 (29) 633-28-28<small>Пн–Пт 10:00–19:00, Минск</small></a>
       <div class="msgr">
-        <a href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram</a>
-        <a href="viber://chat?number=%2B375296332828">Viber</a>
-        <a href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://t.me/amerikaa_by" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 4.2 18.4 19.6c-.2 1-.9 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.3 13.3l-4.6-1.5c-1-.3-1-1 .2-1.5L20.3 3c.9-.3 1.6.2 1.3 1.2z"/></svg></a>
+        <a href="viber://chat?number=%2B375296332828" aria-label="Viber" title="Viber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8c5 0 8.6 2.6 8.6 8.1S17 19 12 19c-.9 0-1.8-.1-2.6-.3L6 21.2v-3.6C3.9 16.2 3.4 13.7 3.4 11 3.4 5.4 7 2.8 12 2.8z"/><path d="M9.2 7.6c.4-.3 1-.2 1.2.3l.6 1.3c.2.4 0 .8-.3 1.1l-.4.3c.4 1 1.3 1.9 2.3 2.3l.3-.4c.3-.3.7-.5 1.1-.3l1.3.6c.5.2.6.8.3 1.2-.6.8-1.6 1.2-2.6.8-2-.8-3.6-2.4-4.4-4.4-.4-1 0-2 .6-2.8z"/></svg></a>
+        <a href="https://wa.me/375296332828" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.6 8.6 0 1 1 8 19.4z"/><path d="M9 8.3c.3-.3.8-.2 1 .2l.6 1.4c.1.3 0 .7-.3.9l-.4.3c.5 1 1.3 1.8 2.3 2.3l.3-.4c.2-.3.6-.4.9-.3l1.4.6c.4.2.5.7.2 1-.6.6-1.5.9-2.3.6-1.9-.7-3.4-2.2-4.1-4.1-.3-.8 0-1.7.4-2.5z"/></svg></a>
       </div>
     </div>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Меню">
+      <svg class="bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
   </div>
 </header>
+<nav class="mnav" id="mnav" aria-label="Меню" hidden>
+  <a class="item" href="/new2/katalog/">Каталог</a><a class="item" href="/new2/kalkulyator/">Калькулятор</a><div class="sub"><a href="/new2/kalkulyator/">Цена под ключ</a><a href="/new2/tamozhennyj-kalkulyator/">Таможенный калькулятор</a></div><a class="item" href="/new2/uslugi/">Услуги</a><div class="sub"><a href="/new2/uslugi/podbor-avto-na-aukcione/">Подбор авто на аукционе</a><a href="/new2/uslugi/proverka-istorii-po-bazam/">Проверка истории по базам</a><a href="/new2/uslugi/rastamozhka-avtomobiley/">Растаможка автомобилей</a><a href="/new2/uslugi/otslezhivanie-konteinerov/">Отслеживание контейнеров</a><a href="/new2/uslugi/dostavka-mototehniki/">Доставка мототехники</a><a href="/new2/uslugi/dostavka-zapchastey/">Доставка запчастей</a></div><a class="item" href="/new2/ceny/">Цены</a><a class="item" href="/new2/blog/">Блог</a><a class="item" href="/new2/o-kompanii/">О компании</a><a class="item" href="/new2/kontakty/">Контакты</a>
+  <a class="mphone num" href="tel:+375296332828">+375 (29) 633-28-28</a>
+  <p class="mmeta">Пн–Пт 10:00–19:00 · Минск, ул. Большое Стиклево, 83, 3 этаж</p>
+</nav>
+<main id="main">
 
-<main id="top">
+
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy">
@@ -433,11 +99,18 @@ footer div{display:flex;flex-direction:column;gap:4px}
     <div class="calc">
       <div class="calc-body">
       <form id="calcForm" autocomplete="off">
+        <div class="field wide">
+          <label id="vtypeLabel">Что везём</label>
+          <div class="seg" role="radiogroup" aria-labelledby="vtypeLabel">
+            <label><input type="radio" name="vtype" value="car" checked><span>Автомобиль</span></label>
+            <label><input type="radio" name="vtype" value="moto"><span>Мотоцикл</span></label>
+          </div>
+        </div>
         <div class="tabs wide" role="radiogroup" aria-label="Что считаем">
           <label><input type="radio" name="mode" value="price" checked><span>Цена лота → итого</span></label>
           <label><input type="radio" name="mode" value="budget"><span>Бюджет → до какой ставки</span></label>
         </div>
-        <div class="field wide">
+        <div class="field wide" id="carOnly">
           <label id="pickLabel">Популярные машины: нажмите, чтобы подставить</label>
           <div class="picks" role="group" aria-labelledby="pickLabel">
             <button type="button" data-p="9000,2021,1500,ice">Chevrolet Equinox</button>
@@ -460,11 +133,11 @@ footer div{display:flex;flex-direction:column;gap:4px}
           <label for="volume">Объём двигателя, см³</label>
           <input id="volume" type="number" inputmode="numeric" min="0" step="100" value="2000">
         </div>
-        <div class="field">
+        <div class="field" id="fuelField">
           <label id="fuelLabel">Двигатель</label>
           <div class="seg" role="radiogroup" aria-labelledby="fuelLabel">
             <label><input type="radio" name="fuel" value="ice" checked><span>Бензин / дизель</span></label>
-            <label><input type="radio" name="fuel" value="alt"><span>Гибрид / электро</span></label>
+            <label><input type="radio" name="fuel" value="alt"><span id="fuelAlt">Гибрид / электро</span></label>
           </div>
         </div>
         <p class="hint wide" id="evHint" hidden>Для электромобиля укажите объём 0.</p>
@@ -494,7 +167,7 @@ footer div{display:flex;flex-direction:column;gap:4px}
           </div>
           <div class="field checks">
             <label for="sublot" class="check"><input id="sublot" type="checkbox"> Машина не на площадке аукциона (Sublot / Offsite), +100 $</label>
-            <label for="benefit" class="check"><input id="benefit" type="checkbox"> Льгота 50% по Указу № 140</label>
+            <label for="benefit" class="check" id="benefitWrap"><input id="benefit" type="checkbox"> Льгота 50% по Указу № 140</label>
           </div>
         </div>
         <p class="route" id="route"></p>
@@ -512,12 +185,13 @@ footer div{display:flex;flex-direction:column;gap:4px}
         <div class="row"><span id="r-sea-l">Море</span><span class="num" id="r-sea"></span></div>
         <div class="row"><span id="r-last-l">Доставка в Минск</span><span class="num" id="r-last"></span></div>
         <div class="grp">Таможня <i>платите государству</i></div>
-        <div class="row"><span>Таможенная пошлина</span><span class="num" id="r-duty"></span></div>
-        <div class="row"><span>Утильсбор, СВХ, декларант</span><span class="num" id="r-cust"></span></div>
+        <div class="row"><span id="r-duty-l">Таможенная пошлина</span><span class="num" id="r-duty"></span></div>
+        <div class="row"><span id="r-cust-l">Утильсбор, СВХ, декларант</span><span class="num" id="r-cust"></span></div>
         <div class="grp">Мы <i>по договору</i></div>
         <div class="row ours"><span>Наша услуга</span><span class="num" id="r-ours"></span></div>
         <div class="total"><span>Итого в Минске</span><b class="num" id="r-total"></b></div>
         <small class="num" id="r-byn"></small>
+        <p class="note warn-note" id="motoNote" hidden><b>Расчёт для мотоциклов ориентировочный.</b> Доставку мотоцикла считаем по вашему лоту: стоимость места в контейнере зависит от размеров техники.</p>
         <p class="note">Расчёт ориентировочный: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации. Точный расчёт по конкретной машине менеджер сделает бесплатно.</p>
         <div class="actions">
           <a class="btn btn-red" href="#lead" id="sendCalc">Получить точный расчёт</a>
@@ -528,7 +202,6 @@ footer div{display:flex;flex-direction:column;gap:4px}
     </div>
   </div>
 </section>
-
 <section class="white" id="price-inside">
   <div class="wrap">
     <div class="sec-head">
@@ -576,9 +249,9 @@ footer div{display:flex;flex-direction:column;gap:4px}
 <section id="check">
   <div class="wrap check-grid">
     <div class="photos">
-      <figure><img src="../new/img/nissan-rogue.jpg" alt="Nissan Rogue с повреждением передней части на площадке аукциона" loading="lazy" width="640" height="480"><figcaption>Nissan Rogue · удар спереди</figcaption></figure>
-      <figure><img src="../new/img/chevrolet-equinox.jpg" alt="Chevrolet Equinox на площадке IAAI" loading="lazy" width="640" height="480"><figcaption>Chevrolet Equinox</figcaption></figure>
-      <figure><img src="../new/img/alfa-romeo-giulia.jpg" alt="Alfa Romeo Giulia с повреждением двери" loading="lazy" width="640" height="480"><figcaption>Alfa Romeo Giulia · дверь</figcaption></figure>
+      <figure><img src="/new2/img/nissan-rogue.jpg" alt="Nissan Rogue с повреждением передней части на площадке аукциона" loading="lazy" width="640" height="480"><figcaption>Nissan Rogue · удар спереди</figcaption></figure>
+      <figure><img src="/new2/img/chevrolet-equinox.jpg" alt="Chevrolet Equinox на площадке IAAI" loading="lazy" width="640" height="480"><figcaption>Chevrolet Equinox</figcaption></figure>
+      <figure><img src="/new2/img/alfa-romeo-giulia.jpg" alt="Alfa Romeo Giulia с повреждением двери" loading="lazy" width="640" height="480"><figcaption>Alfa Romeo Giulia · дверь</figcaption></figure>
     </div>
     <div>
       <div class="sec-head" style="margin-bottom:28px">
@@ -724,8 +397,40 @@ footer div{display:flex;flex-direction:column;gap:4px}
     <p class="plans-note">Доставка, пошлина и сборы в тариф не входят: вы платите их напрямую, суммы видно в калькуляторе.</p>
   </div>
 </section>
+<section class="white" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Услуги</p>
+      <h2>Что мы делаем, кроме подбора</h2>
+      <p>Можно заказать всё под ключ или только нужную часть: проверку лота, растаможку, доставку мотоцикла.</p>
+    </div>
+    <div class="svc"><a href="/new2/uslugi/podbor-avto-na-aukcione/" class="main"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><h3>Подбор авто на аукционе</h3><p>Ищем машину на Copart и IAAI под бюджет, проверяем и ведём торги.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/proverka-istorii-po-bazam/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><h3>Проверка истории по базам</h3><p>Carfax и AutoCheck по VIN: ДТП, владельцы, пробег до ставки.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/rastamozhka-avtomobiley/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 17h12v-3a2 2 0 0 0-2-2h-2.5V9a3 3 0 1 0-3 0v3H8a2 2 0 0 0-2 2z"/></svg></span><h3>Растаможка автомобилей</h3><p>Считаем платежи заранее, помогаем с декларантом и СВХ в Минске.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/otslezhivanie-konteinerov/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l2 5h14l2-5H3z"/><path d="M5 15V9h14v6M9 9V5h6v4"/></svg></span><h3>Отслеживание контейнеров</h3><p>Где сейчас машина: по VIN после погрузки в контейнер.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/dostavka-mototehniki/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5l4-6h5l4 6M14 6h3l1.5 4.5"/></svg></span><h3>Доставка мототехники</h3><p>Мотоциклы, квадроциклы и гидроциклы с аукционов США.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/dostavka-zapchastey/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></span><h3>Доставка запчастей</h3><p>Подскажем, где выгоднее купить запчасти под ремонт машины из США.</p><span class="go">Подробнее →</span></a></div>
+  </div>
+</section>
 
-<section class="white" id="faq">
+<section id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Каталог</p>
+      <h2>Примеры авто из США</h2>
+      <p>Лоты с Copart и IAAI, которые можно заказать с доставкой в Минск. Похожую машину подберём под ваш бюджет.</p>
+    </div>
+    <div class="cars six"><a class="car" href="/new2/katalog/ford-bronco-sport-big-bend-2022-4/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Ford Bronco Sport, Big Bend 2022" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Ford Bronco Sport, Big Bend 2022</h3><div class="meta"><b>2022</b><span>Ford</span></div></div></a><a class="car" href="/new2/katalog/volkswagen-taos-1-5t-se-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Volkswagen Taos, 1.5T Se 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Volkswagen Taos, 1.5T Se 2024</h3><div class="meta"><b>2024</b><span>VW</span></div></div></a><a class="car" href="/new2/katalog/hyundai-kona-n-line-2023/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Hyundai Kona, N Line 2023" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Hyundai Kona, N Line 2023</h3><div class="meta"><b>2023</b><span>Hyundai</span></div></div></a><a class="car" href="/new2/katalog/gmc-terrain-sle-2023/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="GMC Terrain, Sle 2023" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>GMC Terrain, Sle 2023</h3><div class="meta"><b>2023</b><span>GMC</span></div></div></a><a class="car" href="/new2/katalog/buick-encore-preferred-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Buick Encore, Preferred 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Buick Encore, Preferred 2024</h3><div class="meta"><b>2024</b><span>Buick</span></div></div></a><a class="car" href="/new2/katalog/chevrolet-equinox-awd-ls-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Chevrolet Equinox, Awd Ls 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Chevrolet Equinox, Awd Ls 2024</h3><div class="meta"><b>2024</b><span>Chevrolet</span></div></div></a></div>
+    <div class="sec-foot"><a class="btn btn-navy" href="/new2/katalog/">Весь каталог: 1227 авто</a></div>
+  </div>
+</section>
+
+<section class="white" id="blog">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Блог</p>
+      <h2>Разбираемся в аукционах, таможне и доставке</h2>
+    </div>
+    <div class="posts"><a class="post" href="/new2/blog/utilizacionnyj-sbor-belarus-2026/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/10/utilizacionnyj-sbor-belarus-2026-hero-1024x576.png" alt="" loading="lazy" decoding="async" width="1024" height="576"></div><div class="tx"><time datetime="2026-10-13">13 октября 2026</time><h3>Утилизационный сбор в Беларуси в 2026 году: ставки для автомобилей из США</h3><p>Ставки утилизационного сбора в Беларуси в 2026 году для автомобилей из США: размеры платежа, правила для физлиц и влияние возраста машины.</p></div></a><a class="post" href="/new2/blog/avto-posle-zatopleniya-iz-ssha/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/10/avto-posle-zatopleniya-iz-ssha-1024x576.png" alt="" loading="lazy" decoding="async" width="1024" height="576"></div><div class="tx"><time datetime="2026-10-09">9 октября 2026</time><h3>Автомобиль после затопления из США: как распознать утопленника и оценить риск</h3><p>Лоты с отметкой Water/Flood привлекают низкой ценой и целым кузовом. На фотографиях такая машина может выглядеть лучше автомобиля после ДТП: подушки на месте, панели ровные, стёкла целы. Главные повреждения скрыты…</p></div></a><a class="post" href="/new2/blog/avto-posle-grada-iz-ssha/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/10/avto-posle-grada-iz-ssha-1024x576.png" alt="" loading="lazy" decoding="async" width="1024" height="576"></div><div class="tx"><time datetime="2026-10-09">9 октября 2026</time><h3>Автомобиль после града из США: когда такой лот выгоден и как считать ремонт</h3><p>Автомобили с кодом Hail часто считают одними из самых понятных лотов на страховых аукционах США. Кузов покрыт вмятинами, но силовые элементы обычно не деформированы, подушки безопасности не срабатывали, а двигатель и…</p></div></a></div>
+    <div class="sec-foot"><a class="btn btn-line" href="/new2/blog/">Все статьи</a></div>
+  </div>
+</section>
+<section id="faq">
   <div class="wrap faq-grid">
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Вопросы</p>
@@ -743,238 +448,82 @@ footer div{display:flex;flex-direction:column;gap:4px}
     </div>
   </div>
 </section>
-
 <section class="lead-sec" id="lead">
   <div class="wrap">
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Бесплатно и без обязательств</p>
       <h2>Пришлём до 5 вариантов с аукциона и расчёт под ключ</h2>
       <p>Оставьте телефон и напишите, какую машину ищете. Менеджер подберёт лоты и посчитает полную цену до Минска. Подборка ни к чему не обязывает.</p>
-      <div class="channels" id="contacts">
+      <div class="channels">
         <a href="tel:+375296332828" class="num">+375 (29) 633-28-28<small>Позвонить</small></a>
         <a href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram<small>@amerikaa_by</small></a>
         <a href="viber://chat?number=%2B375296332828">Viber<small>+375 (29) 633-28-28</small></a>
         <a href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp<small>+375 (29) 633-28-28</small></a>
       </div>
-      <p class="addr">Офис: Минск, ул. Большое Стиклево, 83, 3 этаж · Пн–Пт <span style="white-space:nowrap">10:00–19:00</span></p>
+      <p class="addr">Офис: Минск, ул. Большое Стиклево, 83, 3 этаж · <span style="white-space:nowrap">Пн–Пт 10:00–19:00</span></p>
     </div>
-    <form class="lead-form" id="leadForm" novalidate>
+    <form class="lead-form" id="leadForm" data-lead novalidate>
       <div class="field"><label for="lname">Имя</label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
       <div class="field"><label for="lcar">Какую машину ищете</label><textarea id="lcar" name="car" rows="3" placeholder="Например: Toyota RAV4 2021, бюджет до 25 000 $ под ключ"></textarea></div>
-      <label class="check" for="lagree"><input id="lagree" type="checkbox" checked> Согласен на обработку персональных данных</label>
+      <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" checked> Согласен на обработку персональных данных</label>
       <button class="btn btn-red" type="submit">Получить подборку и расчёт</button>
-      <p class="msg" id="leadMsg" hidden></p>
+      <p class="msg" hidden></p>
     </form>
   </div>
 </section>
 </main>
-
-<footer>
+<footer class="foot">
   <div class="wrap">
-    <div><b style="color:var(--ink)">AMERIKA.BY</b><span>Авто из США в Беларусь под ключ</span></div>
-    <div><span>ООО «МирАвтоИмпорт», УНП 692205841</span><span>info@amerika.by</span></div>
+    <div class="foot-grid">
+      <div class="brand">
+        <b>AMERIKA.BY</b>
+        <span>Авто из США в Беларусь под ключ: подбор на Copart и IAAI, доставка до Минска и растаможка по договору.</span>
+        <a class="fphone num" href="tel:+375296332828">+375 (29) 633-28-28</a>
+        <div class="fmsgr">
+          <a href="https://t.me/amerikaa_by" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 4.2 18.4 19.6c-.2 1-.9 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.3 13.3l-4.6-1.5c-1-.3-1-1 .2-1.5L20.3 3c.9-.3 1.6.2 1.3 1.2z"/></svg>Telegram</a>
+          <a href="viber://chat?number=%2B375296332828"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8c5 0 8.6 2.6 8.6 8.1S17 19 12 19c-.9 0-1.8-.1-2.6-.3L6 21.2v-3.6C3.9 16.2 3.4 13.7 3.4 11 3.4 5.4 7 2.8 12 2.8z"/><path d="M9.2 7.6c.4-.3 1-.2 1.2.3l.6 1.3c.2.4 0 .8-.3 1.1l-.4.3c.4 1 1.3 1.9 2.3 2.3l.3-.4c.3-.3.7-.5 1.1-.3l1.3.6c.5.2.6.8.3 1.2-.6.8-1.6 1.2-2.6.8-2-.8-3.6-2.4-4.4-4.4-.4-1 0-2 .6-2.8z"/></svg>Viber</a>
+          <a href="https://wa.me/375296332828" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.6 8.6 0 1 1 8 19.4z"/><path d="M9 8.3c.3-.3.8-.2 1 .2l.6 1.4c.1.3 0 .7-.3.9l-.4.3c.5 1 1.3 1.8 2.3 2.3l.3-.4c.2-.3.6-.4.9-.3l1.4.6c.4.2.5.7.2 1-.6.6-1.5.9-2.3.6-1.9-.7-3.4-2.2-4.1-4.1-.3-.8 0-1.7.4-2.5z"/></svg>WhatsApp</a>
+        </div>
+      </div>
+      <div>
+        <h2>Разделы</h2>
+        <ul>
+          <li><a href="/new2/katalog/">Каталог авто из США</a></li>
+          <li><a href="/new2/kalkulyator/">Калькулятор под ключ</a></li>
+          <li><a href="/new2/tamozhennyj-kalkulyator/">Таможенный калькулятор</a></li>
+          <li><a href="/new2/ceny/">Цены</a></li>
+          <li><a href="/new2/blog/">Блог</a></li>
+          <li><a href="/new2/otzyvy/">Отзывы</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Услуги</h2>
+        <ul><li><a href="/new2/uslugi/podbor-avto-na-aukcione/">Подбор авто на аукционе</a></li><li><a href="/new2/uslugi/proverka-istorii-po-bazam/">Проверка истории по базам</a></li><li><a href="/new2/uslugi/rastamozhka-avtomobiley/">Растаможка автомобилей</a></li><li><a href="/new2/uslugi/otslezhivanie-konteinerov/">Отслеживание контейнеров</a></li><li><a href="/new2/uslugi/dostavka-mototehniki/">Доставка мототехники</a></li><li><a href="/new2/uslugi/dostavka-zapchastey/">Доставка запчастей</a></li></ul>
+      </div>
+      <div>
+        <h2>Офис в Минске</h2>
+        <ul>
+          <li>Минск, ул. Большое Стиклево, 83, 3 этаж</li>
+          <li>Пн–Пт 10:00–19:00</li>
+          <li><a href="mailto:info@amerika.by">info@amerika.by</a></li>
+          <li><a href="https://yandex.by/maps/?text=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D1%83%D0%BB.%20%D0%91%D0%BE%D0%BB%D1%8C%D1%88%D0%BE%D0%B5%20%D0%A1%D1%82%D0%B8%D0%BA%D0%BB%D0%B5%D0%B2%D0%BE%2C%2083" target="_blank" rel="noopener">Открыть на Яндекс Картах</a></li>
+          <li><a href="/new2/o-kompanii/">О компании</a> · <a href="/new2/kontakty/">Контакты</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 AMERIKA.BY · ООО «МирАвтоИмпорт», УНП 692205841</span>
+      <span>Цены и расчёты на сайте ориентировочные и не являются публичной офертой.</span>
+    </div>
   </div>
 </footer>
-
 <div class="mbar">
   <a class="btn btn-red" href="tel:+375296332828">Позвонить</a>
   <a class="btn btn-line" href="https://t.me/amerikaa_by" target="_blank" rel="noopener">Telegram</a>
   <a class="btn btn-line" href="viber://chat?number=%2B375296332828">Viber</a>
   <a class="btn btn-line" href="https://wa.me/375296332828" target="_blank" rel="noopener">WhatsApp</a>
 </div>
-
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"Amerika.by","url":"https://amerika.by/","telephone":"+375296332828","email":"info@amerika.by","address":{"@type":"PostalAddress","streetAddress":"ул. Большое Стиклево, 83, 3 этаж","addressLocality":"Минск","addressCountry":"BY"},"openingHours":"Mo-Fr 10:00-19:00","sameAs":["https://www.instagram.com/amerika.by/","https://t.me/amerikaa_by","https://wa.me/375296332828"]}
-</script>
-<script>
-/* Все ставки и тарифы в одном месте. Логистика и сборы аукциона — ориентиры, их нужно сверить с актуальными ценами. */
-var CONFIG = {
-  usdByn: 2.95,          // курс USD/BYN
-  eurUsd: 1.15,          // курс EUR/USD
-  serviceByn: 599,       // наша услуга (минимальный тариф)
-  leadEndpoint: "",      // сюда подставим вебхук amoCRM; пусто = тестовый режим
-  auctionFixed: 160,     // gate fee, environmental fee, документы, $
-  auctionFee: [          // сбор покупателя по цене лота, $
-    [500,200],[1000,350],[1500,450],[2000,525],[3000,650],[4000,750],
-    [5000,850],[6000,900],[8000,1000],[10000,1100],[15000,1250]
-  ],
-  auctionFeeTopPct: 0.085, // свыше 15 000 $
-  sublot: 100,           // машина не на площадке аукциона (Sublot / Offsite), $ для клиента
-  altFuelEur: 175,       // доплата за доставку гибрида или электромобиля, EUR
-  inland: {east:450, center:650, west:900},   // если площадка не выбрана — east
-  sea: {
-    klaipeda: {east:1150, center:1350, west:1900},
-    poti:     {east:1300, center:1500, west:2100}
-  },
-  lastLeg: {klaipeda:650, poti:1700},  // от порта до Минска, $
-  euMaxCc: 1900,                       // через ЕС: до 1,9 л, без гибридов и электро
-  customsExtraByn: 945,                // утильсбор + сборы + СВХ и декларант, BYN
-  duty: {                              // физлица, EUR за см³ или % от стоимости
-    under3: [[8500,.54,2.5],[16700,.48,3.5],[42300,.48,5.5],[84500,.48,7.5],[169000,.48,15],[Infinity,.48,20]],
-    from3to5: [[1000,1.5],[1500,1.7],[1800,2.5],[2300,2.7],[3000,3.0],[Infinity,3.6]],
-    over5: [[1000,3.0],[1500,3.2],[1800,3.5],[2300,4.8],[3000,5.0],[Infinity,5.7]]
-  },
-  // Штаты по направлению к порту отправки в США. Заменим на ваш файл с ценой по каждой площадке.
-  states: {
-    west: ["CA","OR","WA","NV","AZ","ID","UT","MT","WY","AK","HI"],
-    center: ["TX","OK","LA","AR","KS","NE","CO","NM","MO","IA","MN","ND","SD","IL","WI","IN","MS"]
-  }
-};
-var YARDS = {"copart": ["ACE - Carson, CA", "ACE - Perris, CA", "ADESA Boston, MA", "ADESA Great Lakes, OH", "ADESA New Jersey, NJ", "ADESA Sioux Falls, SD", "ADESA Wisconsin, WI", "Abilene, TX", "Adamsburg, PA", "Adesa PA, PA", "Akron-Canton, OH", "Albany, NY", "Albuquerque, NM", "Altoona, PA", "Amarillo, TX", "Anaheim, CA", "Anchorage, AK", "Andrews, TX", "Antelope, CA", "Appleton, WI", "Arizona Auto Auction, AZ", "Asheville, NC", "Ashland, VA", "Atlanta Auto Auction, GA", "Atlanta East, GA", "Atlanta North, GA", "Atlanta South, GA", "Atlanta West, GA", "Augusta, GA", "Austin, TX", "Avenel New Jersey, NJ", "Bakersfield, CA", "Baltimor, MD", "Bangor, ME", "Baton Rouge, LA", "Bay Area, CA", "Bel-Air Auto Auction, MD", "Billings, MT", "Birmingham, AL", "Boise, ID", "Boston - Shirley, MA", "Boston, MA", "Bowlimg Green, KY", "Bridgeport, CT", "Bridgeview, IL", "Buckhannon, WV", "Buffalo, NY", "Burlington, VT", "Candia, NH", "Cartersville, GA", "Casper, WY", "Central Auto Auction, NJ", "Central New Jersey, NJ", "Chambersburg, PA", "Charleston - SC, SC", "Charleston - WV, WV", "Charlotte, NC", "Chattanooga, TN", "Chicago North, IL", "Chicago South, IL", "Chicago West, IL", "China Grove, NC", "Cicero, IL", "Cincinnati, OH", "Clayton, GA", "Clearwater, FL", "Cleveland East, OH", "Cleveland West, OH", "Cleveland, OH", "Clinton, MD", "Colorado Springs, CO", "Columbia MO, MO", "Columbia SC, SC", "Columbus AL, AL", "Columbus OH, OH", "Concord, NC", "Corpus Christi, TX", "Culpeper,VA, VA", "Dallas South, TX", "Dallas, TX", "Danville, VA", "Davenport, IA", "Dayton, OH", "Defuniak Springs, FL", "Denver South, CO", "Denver, CO", "Des Moines, IA", "Detroit, MI", "Dothan, AL", "Dundalk, MD", "Dyer, IN", "Earlington, KY", "East Bay, CA", "East NC, NC", "El Paso, TX", "Eldridge, IA", "Englishtown, NJ", "Erie, PA", "Essex, MD", "Eugene, OR", "Exeter, RI", "Fargo, ND", "Fayetteville, NC", "Flint, MI", "Florence, SC", "Fontana, CA", "Fort Myers, FL", "Fort Wayne, IN", "Fort Worth North, TX", "Four Oaks, NC, NC", "Fredericksburg-South, VA", "Freetown, MA", "Fremont, CA", "Fresno, CA", "Ft. Pierce, FL", "Ft. Worth, TX", "Ft.Lauderdale, FL", "Glassboro East, NJ", "Glassboro West, NJ", "Golden Gate, CA", "Gr.Rapids, MI", "Graham, WA", "Grand Island, NE", "Grantville, PA", "Greater Auto Auction Phoenix, AZ", "Greensboro, NC", "Greenville, SC", "Greer, SC", "Grenada, MS", "Gulf Coast, MS", "Gulfport, MS", "Hammond, IN", "Hampton, VA, VA", "Harrisburg, PA", "Harrisonburg Auto Auction, VA", "Hartford City, IN", "Hartford, CT", "Hartford-South, CT", "Hayward, CA", "Helena, MT", "High Desert, CA", "Honolulu, HI", "Houston East, TX", "Houston, TX", "Houston-North, TX", "Huntsville, AL", "Indianapolis, IN", "Ionia, MI", "Jackson, MS", "Jacksonville East, FL", "Jacksonville West, FL", "Jacksonville, FL", "Kansas City, MO", "Kincheloe, MI", "Knoxville, TN", "Lafayette, LA", "Lansing, MI", "Las Vegas, NV", "Laurel, MD", "Lexington East KY, KY", "Lexington SC, SC", "Lexington West KY, KY", "Lincoln, IL, IL", "Lincoln, NE, NE", "Little Rock, AR", "Long Beach, CA", "Long Island, NY", "Longview, TX", "Los Angeles - Adesa, CA", "Los Angeles, CA", "Louisville, KY", "Lubbock, TX", "Lufkin, TX", "Lumberton, NC", "Lyman, ME", "MCAllen, TX", "Macon, GA", "Madison Heights, MI", "Madison South, WI", "Madison, WI", "Manchester, NH", "Manheim Albany, NY", "Manheim Arena Illinois, IL", "Manheim Arizona, AZ", "Manheim Auto Auction, PA", "Manheim Baltimore-Washington, MD", "Manheim Bishop Brothers, GA", "Manheim California, CA", "Manheim Carleton, MI", "Manheim Central California, CA", "Manheim Central Florida, FL", "Manheim Chicago, IL", "Manheim Cincinnati, OH", "Manheim Colorado, CO", "Manheim Dallas-Ft Worth, TX", "Manheim Darlington, SC", "Manheim Daytona Beach, FL", "Manheim Denver, CO", "Manheim Detroit, MI", "Manheim Fort Lauderdale, FL", "Manheim Fort Myers, FL", "Manheim Fort Wayne, IN", "Manheim Fredericksburg, VA", "Manheim Gateway St Louis, MO", "Manheim Georgia, GA", "Manheim Imperial Auto Auction, PA", "Manheim Imperial Florida, FL", "Manheim Kentucky, KY", "Manheim Lafayette, LA", "Manheim Lakeland, FL", "Manheim Metro Dallas, TX", "Manheim Metro Milwaukee, WI", "Manheim Milwaukee, WI", "Manheim Mississippi, MS", "Manheim Missouri, MO", "Manheim Nashville, TN", "Manheim Nevada, NV", "Manheim New England, MA", "Manheim New Jersey, NJ", "Manheim New Mexico, NM", "Manheim New Orleans, LA", "Manheim New York, NY", "Manheim North Carolina, NC", "Manheim Northstar Minnesota, MN", "Manheim Ohio, OH", "Manheim Oklahoma City, OK", "Manheim Orlando, FL", "Manheim Palm Beach, FL", "Manheim Pennsylvania, PA", "Manheim Pensacola, FL", "Manheim Philadelphia, PA", "Manheim Phoenix, AZ", "Manheim Pittsburg, PA", "Manheim Riverside, CA", "Manheim San Antonio, TX", "Manheim San Diego, CA", "Manheim San Francisco Bay, CA", "Manheim Seattle, WA", "Manheim Skyline Auto Auction, NY", "Manheim Southern California, CA", "Manheim St. Pete, FL", "Manheim Statesville, NC", "Manheim Tampa, FL", "Manheim Tennessee, TN", "Manheim Texas Hobby, TX", "Manheim Utah, UT", "Manheim Virginia (FREDERICKSBURG), VA", "Martinez, CA", "Mebane, GA", "Memphis, TN", "Mentone, CA", "Metro DC, DC", "Miami Central, FL", "Miami North, FL", "Miami South, FL", "Miami, FL", "Middletown, NY", "Milwaukee, WI", "Minneapolis /St. Paul, MN", "Minneapolis North, MN", "Minneapolis, MN", "Missoula, MT", "Mobile, AL", "Mocksville, NC", "Montgomery, AL", "Napa, CA", "Nashville, TN", "National Auto Dealers Exchange, NJ", "New Castle, DE", "New Orleans, LA", "Newburgh, NY", "North Boston, NY", "North Charleston - SC, SC", "North Hollywood, CA", "North Seattle, WA", "Northern New Jersey, NJ", "Northern Virginia, VA", "Ocala, FL", "Ogden, UT", "Oklahoma City, OK", "Omaha, NE", "Orlando North, FL", "Orlando South, FL", "Orlando, FL", "Paducah, KY", "Pasco, WA", "Pensacola, FL", "Peoria, IL", "Permian Basin, TX", "Philadelphia East, PA", "Philadelphia, PA", "Phoenix, AZ", "Pittsburg, PA", "Pittsburgh North, PA", "Pittsburgh South, PA", "Portage, WI", "Portland - Gorham, ME", "Portland North, OR", "Portland South, OR", "Portland West, OR", "Portland, OR", "Providence, RI", "Pulaski, VA", "Punta Gorda, FL", "Puyallup, WA", "Raleigh, NC", "Rancho Cucamonga, CA", "Rapid City, SD", "Redding, CA", "Reno, NV", "Richmond East, VA", "Richmond, VA", "Riverside, CA", "Roanoke, VA", "Rochester, NY", "Rosedale, MD", "Rutland, VT", "Sacramento, CA", "Salisbury, MD", "Salt Lake City, UT", "San Antonio, TX", "San Bernardino, CA", "San Diego, CA", "San Jose, CA", "Santa Clarita, CA", "Sarasota, FL", "Savannah, GA", "Sayreville, NJ", "Scranton, PA", "Seaford, DE", "Seattle, WA", "Shady Spring, WV, WV", "Shreveport, LA", "Sikeston, MO", "Sioux Falls, SD", "So Sacramento, CA", "Somerville, NJ", "South Bend, IN", "South Boston, VA", "Southern Illinois, IL", "Southern New Jersey, NJ", "Spartanburg, SC", "Spokane, WA", "Springfield, MO", "St. Cloud, MN", "St. Louis, MO", "Suffolk, VA", "Sun Valley, CA", "Syracuse, NY", "TOTAL RESOURCE AUC CENTRL PENN, PA", "Tallahassee, FL", "Tampa South, FL", "Tampa, FL", "Tanner, AL", "Taunton, MA", "Templeton, MA", "Tidewater, VA", "Tifton, GA", "Trenton, NJ", "Tucson, AZ", "Tulsa, OK", "Vallejo, CA", "Van Nuys, CA", "Waco, TX", "Walton, KY", "WashingtonDC, DC", "Wayland, MI", "Webster, NY", "West Palm Beach, FL", "West Warren, MA", "Western Colorado, CO", "Wheeling, WV", "Wichita, KS", "Wilmington, NC", "Windham, ME", "York Haven, PA", "York Springs, PA"], "iaai": ["ACE - Carson, CA", "ACE - Perris, CA", "ADESA Boston, MA", "ADESA Great Lakes, OH", "ADESA New Jersey, NJ", "ADESA Sioux Falls, SD", "ADESA Wisconsin, WI", "Abilene, TX", "Adamsburg, PA", "Adesa PA, PA", "Akron-Canton, OH", "Albany, NY", "Albuquerque, NM", "Altoona, PA", "Amarillo, TX", "Anaheim, CA", "Anchorage, AK", "Andrews, TX", "Antelope, CA", "Appleton, WI", "Arizona Auto Auction, AZ", "Asheville, NC", "Ashland, VA", "Atlanta Auto Auction, GA", "Atlanta East, GA", "Atlanta North, GA", "Atlanta South, GA", "Atlanta West, GA", "Augusta, GA", "Austin, TX", "Avenel New Jersey, NJ", "Bakersfield, CA", "Baltimor, MD", "Bangor, ME", "Baton Rouge, LA", "Bay Area, CA", "Bel-Air Auto Auction, MD", "Billings, MT", "Birmingham, AL", "Boise, ID", "Boston - Shirley, MA", "Boston, MA", "Bowlimg Green, KY", "Bridgeport, CT", "Bridgeview, IL", "Buckhannon, WV", "Buffalo, NY", "Burlington, VT", "Candia, NH", "Cartersville, GA", "Casper, WY", "Central Auto Auction, NJ", "Central New Jersey, NJ", "Chambersburg, PA", "Charleston - SC, SC", "Charleston - WV, WV", "Charlotte, NC", "Chattanooga, TN", "Chicago North, IL", "Chicago South, IL", "Chicago West, IL", "China Grove, NC", "Cicero, IL", "Cincinnati, OH", "Clayton, GA", "Clearwater, FL", "Cleveland East, OH", "Cleveland West, OH", "Cleveland, OH", "Clinton, MD", "Colorado Springs, CO", "Columbia MO, MO", "Columbia SC, SC", "Columbus AL, AL", "Columbus OH, OH", "Concord, NC", "Corpus Christi, TX", "Culpeper,VA, VA", "Dallas South, TX", "Dallas, TX", "Danville, VA", "Davenport, IA", "Dayton, OH", "Defuniak Springs, FL", "Denver South, CO", "Denver, CO", "Des Moines, IA", "Detroit, MI", "Dothan, AL", "Dundalk, MD", "Dyer, IN", "Earlington, KY", "East Bay, CA", "East NC, NC", "El Paso, TX", "Eldridge, IA", "Englishtown, NJ", "Erie, PA", "Essex, MD", "Eugene, OR", "Exeter, RI", "Fargo, ND", "Fayetteville, NC", "Flint, MI", "Florence, SC", "Fontana, CA", "Fort Myers, FL", "Fort Wayne, IN", "Fort Worth North, TX", "Four Oaks, NC, NC", "Fredericksburg-South, VA", "Freetown, MA", "Fremont, CA", "Fresno, CA", "Ft. Pierce, FL", "Ft. Worth, TX", "Ft.Lauderdale, FL", "Glassboro East, NJ", "Glassboro West, NJ", "Golden Gate, CA", "Gr.Rapids, MI", "Graham, WA", "Grand Island, NE", "Grantville, PA", "Greater Auto Auction Phoenix, AZ", "Greensboro, NC", "Greenville, SC", "Greer, SC", "Grenada, MS", "Gulf Coast, MS", "Gulfport, MS", "Hammond, IN", "Hampton, VA, VA", "Harrisburg, PA", "Harrisonburg Auto Auction, VA", "Hartford City, IN", "Hartford, CT", "Hartford-South, CT", "Hayward, CA", "Helena, MT", "High Desert, CA", "Honolulu, HI", "Houston East, TX", "Houston, TX", "Houston-North, TX", "Huntsville, AL", "Indianapolis, IN", "Ionia, MI", "Jackson, MS", "Jacksonville East, FL", "Jacksonville West, FL", "Jacksonville, FL", "Kansas City, MO", "Kincheloe, MI", "Knoxville, TN", "Lafayette, LA", "Lansing, MI", "Las Vegas, NV", "Laurel, MD", "Lexington East KY, KY", "Lexington SC, SC", "Lexington West KY, KY", "Lincoln, IL, IL", "Lincoln, NE, NE", "Little Rock, AR", "Long Beach, CA", "Long Island, NY", "Longview, TX", "Los Angeles - Adesa, CA", "Los Angeles, CA", "Louisville, KY", "Lubbock, TX", "Lufkin, TX", "Lumberton, NC", "Lyman, ME", "MCAllen, TX", "Macon, GA", "Madison Heights, MI", "Madison South, WI", "Madison, WI", "Manchester, NH", "Martinez, CA", "Mebane, GA", "Memphis, TN", "Mentone, CA", "Metro DC, DC", "Miami Central, FL", "Miami North, FL", "Miami South, FL", "Miami, FL", "Middletown, NY", "Milwaukee, WI", "Minneapolis /St. Paul, MN", "Minneapolis North, MN", "Minneapolis, MN", "Missoula, MT", "Mobile, AL", "Mocksville, NC", "Montgomery, AL", "Napa, CA", "Nashville, TN", "National Auto Dealers Exchange, NJ", "New Castle, DE", "New Orleans, LA", "Newburgh, NY", "North Boston, NY", "North Charleston - SC, SC", "North Hollywood, CA", "North Seattle, WA", "Northern New Jersey, NJ", "Northern Virginia, VA", "Ocala, FL", "Ogden, UT", "Oklahoma City, OK", "Omaha, NE", "Orlando North, FL", "Orlando South, FL", "Orlando, FL", "Paducah, KY", "Pasco, WA", "Pensacola, FL", "Peoria, IL", "Permian Basin, TX", "Philadelphia East, PA", "Philadelphia, PA", "Phoenix, AZ", "Pittsburg, PA", "Pittsburgh North, PA", "Pittsburgh South, PA", "Portage, WI", "Portland - Gorham, ME", "Portland North, OR", "Portland South, OR", "Portland West, OR", "Portland, OR", "Providence, RI", "Pulaski, VA", "Punta Gorda, FL", "Puyallup, WA", "Raleigh, NC", "Rancho Cucamonga, CA", "Rapid City, SD", "Redding, CA", "Reno, NV", "Richmond East, VA", "Richmond, VA", "Riverside, CA", "Roanoke, VA", "Rochester, NY", "Rosedale, MD", "Rutland, VT", "Sacramento, CA", "Salisbury, MD", "Salt Lake City, UT", "San Antonio, TX", "San Bernardino, CA", "San Diego, CA", "San Jose, CA", "Santa Clarita, CA", "Sarasota, FL", "Savannah, GA", "Sayreville, NJ", "Scranton, PA", "Seaford, DE", "Seattle, WA", "Shady Spring, WV, WV", "Shreveport, LA", "Sikeston, MO", "Sioux Falls, SD", "So Sacramento, CA", "Somerville, NJ", "South Bend, IN", "South Boston, VA", "Southern Illinois, IL", "Southern New Jersey, NJ", "Spartanburg, SC", "Spokane, WA", "Springfield, MO", "St. Cloud, MN", "St. Louis, MO", "Suffolk, VA", "Sun Valley, CA", "Syracuse, NY", "TOTAL RESOURCE AUC CENTRL PENN, PA", "Tallahassee, FL", "Tampa South, FL", "Tampa, FL", "Tanner, AL", "Taunton, MA", "Templeton, MA", "Tidewater, VA", "Tifton, GA", "Trenton, NJ", "Tucson, AZ", "Tulsa, OK", "Vallejo, CA", "Van Nuys, CA", "Waco, TX", "Walton, KY", "WashingtonDC, DC", "Wayland, MI", "Webster, NY", "West Palm Beach, FL", "West Warren, MA", "Western Colorado, CO", "Wheeling, WV", "Wichita, KS", "Wilmington, NC", "Windham, ME", "York Haven, PA", "York Springs, PA"]};
-var PORTS = {klaipeda:{name:"Клайпеду (Литва)", short:"Клайпеды", from:"Клайпеда"}, poti:{name:"Поти (Грузия)", short:"Поти", from:"Поти"}};
-
-var $ = function(id){return document.getElementById(id)};
-var val = function(name){return document.querySelector('input[name="' + name + '"]:checked').value};
-var fmt = function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ") + " $"};
-var nowYear = new Date().getFullYear();
-for (var y = nowYear; y >= nowYear - 20; y--) {
-  var o = document.createElement("option"); o.value = y; o.textContent = y;
-  if (y === nowYear - 4) o.selected = true;
-  $("year").appendChild(o);
-}
-
-function fillYards(){
-  var list = $("yardList"); list.innerHTML = "";
-  YARDS[val("auction")].forEach(function(n){ var o = document.createElement("option"); o.value = n; list.appendChild(o); });
-}
-function regionOf(yard){
-  var m = /,\s*([A-Z]{2})\s*$/.exec(yard || "");
-  if (!m) return null;
-  if (CONFIG.states.west.indexOf(m[1]) >= 0) return "west";
-  if (CONFIG.states.center.indexOf(m[1]) >= 0) return "center";
-  return "east";
-}
-function auctionFee(p){
-  for (var i = 0; i < CONFIG.auctionFee.length; i++) if (p < CONFIG.auctionFee[i][0]) return CONFIG.auctionFee[i][1] + CONFIG.auctionFixed;
-  return p * CONFIG.auctionFeeTopPct + CONFIG.auctionFixed;
-}
-function dutyUsd(priceUsd, year, cc, ev){
-  if (ev) return 0;
-  var age = nowYear - year, eur = priceUsd / CONFIG.eurUsd, d = 0, t, i;
-  if (age < 3) {
-    t = CONFIG.duty.under3;
-    for (i = 0; i < t.length; i++) if (eur <= t[i][0]) { d = Math.max(eur * t[i][1], cc * t[i][2]); break; }
-  } else {
-    t = age <= 5 ? CONFIG.duty.from3to5 : CONFIG.duty.over5;
-    for (i = 0; i < t.length; i++) if (cc <= t[i][0]) { d = cc * t[i][1]; break; }
-  }
-  return d * CONFIG.eurUsd;
-}
-/* Полная стоимость для цены лота price при текущих настройках формы. */
-function cost(price, o){
-  var fee = auctionFee(price);
-  var inland = CONFIG.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
-  var sea = CONFIG.sea[o.port][o.region], last = CONFIG.lastLeg[o.port];
-  var extra = o.alt ? CONFIG.altFuelEur * CONFIG.eurUsd : 0;
-  var duty = dutyUsd(price, o.year, o.cc, o.ev) * (o.benefit ? .5 : 1);
-  var cust = CONFIG.customsExtraByn / CONFIG.usdByn, ours = CONFIG.serviceByn / CONFIG.usdByn;
-  return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours,
-          total: price + fee + inland + sea + last + extra + duty + cust + ours};
-}
-function options(){
-  var cc = Math.max(0, +$("volume").value || 0), alt = val("fuel") === "alt";
-  var yard = $("yard").value.trim(), region = regionOf(yard) || "east";
-  var autoPort = (!alt && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti";
-  var port = $("port").value === "auto" ? autoPort : $("port").value;
-  return {year:+$("year").value, cc:cc, alt:alt, ev:alt && cc === 0, region:region, yard:yard,
-          port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked};
-}
-function calc(){
-  var o = options(), budget = val("mode") === "budget";
-  var input = Math.max(0, +$("price").value || 0), r;
-  if (budget) {
-    var lo = 0, hi = input;                 // ищем самую большую ставку, при которой итог укладывается в бюджет
-    if (cost(0, o).total > input) hi = 0;
-    for (var i = 0; i < 40; i++) { var mid = (lo + hi) / 2; if (cost(mid, o).total <= input) lo = mid; else hi = mid; }
-    r = cost(Math.floor(lo / 50) * 50, o);
-  } else {
-    r = cost(input, o);
-  }
-  $("priceLabel").textContent = budget ? "Бюджет под ключ, $" : "Цена лота, $";
-  $("maxbid").hidden = !budget;
-  $("r-max").textContent = fmt(r.price);
-  $("evHint").hidden = !o.alt;
-
-  var P = PORTS[o.port], txt;
-  if (o.port === o.autoPort) {
-    txt = "Маршрут: через <b>" + P.name + "</b>, " + (o.port === "klaipeda" ? "двигатель до 1,9 л можно везти через ЕС."
-      : (o.alt ? "гибриды и электромобили обычно везём в обход ЕС." : "через ЕС сейчас не везут машины с двигателем больше 1,9 л.")) + " Порт можно сменить.";
-  } else if (o.port === "klaipeda") {
-    txt = "Через Клайпеду такую машину могут не пропустить: ограничения ЕС для двигателей больше 1,9 л, гибридов и электро. Уточните у менеджера.";
-  } else {
-    txt = "Маршрут: через <b>" + P.name + "</b>, вы выбрали его сами.";
-  }
-  $("route").innerHTML = txt;
-  $("route").classList.toggle("warn", o.port === "klaipeda" && o.port !== o.autoPort);
-
-  $("r-lot").textContent = fmt(r.price);
-  $("r-fee").textContent = fmt(r.fee);
-  $("r-inland-l").textContent = "Доставка по США до порта" + (o.yard ? "" : " (в среднем)") + (o.sublot ? ", с Sublot" : "");
-  $("r-inland").textContent = fmt(r.inland);
-  $("r-sea-l").textContent = "Море до " + P.short;
-  $("r-sea").textContent = fmt(r.sea);
-  $("r-last-l").textContent = P.from + " → Минск";
-  $("r-last").textContent = fmt(r.last);
-  $("r-extra-row").hidden = !r.extra;
-  $("r-extra-l").textContent = "Доплата за гибрид / электро";
-  $("r-extra").textContent = fmt(r.extra);
-  $("r-duty").textContent = o.ev ? "0 $ (электро)" : fmt(r.duty);
-  $("r-cust").textContent = fmt(r.cust);
-  $("r-ours").textContent = fmt(r.ours);
-  $("r-total").textContent = fmt(r.total);
-  $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn;
-  return {price:Math.round(r.price), year:o.year, cc:o.cc, alt:o.alt, port:o.port, yard:o.yard, budget:budget, total:Math.round(r.total)};
-}
-
-$("advToggle").addEventListener("click", function(){
-  var open = this.getAttribute("aria-expanded") !== "true";
-  this.setAttribute("aria-expanded", open); $("adv").hidden = !open;
-});
-document.querySelectorAll('input[name="auction"]').forEach(function(r){
-  r.addEventListener("change", function(){ fillYards(); $("yard").value = ""; calc(); });
-});
-document.querySelectorAll('input[name="mode"]').forEach(function(r){
-  r.addEventListener("change", function(){ $("price").value = r.value === "budget" ? 20000 : 12000; calc(); });
-});
-document.querySelectorAll(".picks button").forEach(function(b){
-  b.addEventListener("click", function(){
-    var v = b.dataset.p.split(",");
-    document.querySelector('input[name="mode"][value="price"]').checked = true;
-    $("price").value = v[0]; $("year").value = v[1]; $("volume").value = v[2];
-    document.querySelector('input[name="fuel"][value="' + v[3] + '"]').checked = true;
-    calc();
-  });
-});
-fillYards();
-$("calcForm").addEventListener("input", calc);
-$("calcForm").addEventListener("change", calc);
-
-calc();
-
-$("sendCalc").addEventListener("click", function(){
-  var r = calc();
-  var f = r.alt ? (r.cc ? "гибрид" : "электро") : "бензин/дизель";
-  $("lcar").value = "Расчёт с калькулятора: " + (r.budget ? "бюджет " + r.total + " $, ставка до " + r.price + " $" : "лот " + r.price + " $, итого ≈ " + r.total + " $ под ключ")
-    + ", " + r.year + " г., " + r.cc + " см³, " + f + (r.yard ? ", площадка " + r.yard : "") + ", через " + PORTS[r.port].from + ".";
-});
-
-$("leadForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  var msg = $("leadMsg"), phone = $("lphone").value.replace(/\D/g, "");
-  msg.hidden = false;
-  if (phone.length < 9) { msg.textContent = "Укажите телефон, чтобы менеджер мог с вами связаться."; return; }
-  if (!$("lagree").checked) { msg.textContent = "Отметьте согласие на обработку данных."; return; }
-  var data = {name:$("lname").value, phone:$("lphone").value, car:$("lcar").value, source:"amerika.by/new2"};
-  if (!CONFIG.leadEndpoint) {
-    msg.textContent = "Это тестовая версия сайта, заявка никуда не отправлена. После подключения amoCRM она будет сразу приходить менеджеру.";
-    return;
-  }
-  msg.textContent = "Отправляем…";
-  fetch(CONFIG.leadEndpoint, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data)})
-    .then(function(r){ if (!r.ok) throw 0; msg.textContent = "Заявка принята. Менеджер перезвонит в течение часа в рабочее время."; e.target.reset(); })
-    .catch(function(){ msg.textContent = "Не получилось отправить. Позвоните нам: +375 (29) 633-28-28 или напишите в Telegram."; });
-});
-</script>
+<script src="/new2/assets/site.js" defer></script>
 </body>
 </html>

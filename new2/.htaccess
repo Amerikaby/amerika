@@ -1,0 +1,8 @@
+# Тестовая версия: отключаем правила WordPress внутри этой папки и отдаём свою 404.
+# При переносе в корень сайта этот файл НЕ копировать поверх .htaccess WordPress.
+RewriteEngine Off
+DirectoryIndex index.html
+ErrorDocument 404 /new2/404.html
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
