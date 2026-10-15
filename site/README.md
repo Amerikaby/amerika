@@ -29,6 +29,22 @@ OUT=/tmp/site BASE=/ node site/build.mjs   # собрать в другую па
 
 `canonical`, JSON-LD и `sitemap.xml` всегда указывают на будущие адреса `https://amerika.by/...` без `/new2/`.
 
+`PUBLIC_URL` (по умолчанию `https://amerika.by`) — где сайт реально открыт сейчас. Из него и `BASE` собираются
+абсолютные адреса `og:image` и логотипа в разметке, чтобы превью в мессенджерах работало уже на тесте.
+Для поддомена: `PUBLIC_URL=https://new.amerika.by BASE=/ node site/build.mjs`.
+
+## Адреса
+
+Совпадают со старым сайтом, чтобы не терять позиции: каталог `/auto-usa/`, машина `/auto-usa/<slug>/`,
+марка `/usa/<марка>/` (модели старого сайта `/usa/<марка>/<модель>/` → фильтр `?model=` на странице марки),
+электромобили `/auto-usa/elektromobily-usa/`, блог `/blog/<slug>/`, услуги `/uslugi/...`, `/ceny/`, `/kontakty/`,
+`/otzyvy/`, `/tamozhennyj-kalkulator/`, `/privacy-policy/`. Новые: `/kalkulyator/`, `/o-kompanii/`, `/uslugi/`,
+`/uslugi/podbor-avto-na-aukcione/`.
+
+`site/redirects.htaccess` — карта 301 для всех остальных адресов старого сайта (модели, Европа/Канада/Китай,
+`/o-nas/`, `/faqs/`, `/instagram/` и т. д.). Генерируется при сборке из XML-карт старого сайта. В `new2/` не
+подключается: при переезде вставить в `.htaccess` корня перед правилами сайта.
+
 ## Выкладка
 
 1. `node site/build.mjs`
@@ -46,6 +62,9 @@ OUT=/tmp/site BASE=/ node site/build.mjs   # собрать в другую па
 - `build.mjs` — сборка: загрузка данных, каталог, страницы машин и марок, блог, sitemap, 404.
 - `fetch.mjs` — загрузка из WordPress REST API с кешем.
 - `partials.mjs` — `<head>`, шапка, меню, подвал, форма заявки, контакты (`SITE`), пункты меню и услуги.
+- `data-fixes.mjs` — ручные поправки к данным (фото, объёмы, регистр).
+- `redirects.htaccess` — сгенерированная карта 301 для переезда.
+- `assets/calc-core.js` — формулы калькуляторов без DOM (браузер и сборка считают одинаково).
 - `pages/home.mjs` — главная (дизайн и тексты new2), `pages/calc-widget.mjs` — разметка калькулятора,
   `pages/static.mjs` — калькуляторы, услуги, цены, о компании, контакты, отзывы.
 - `lib/html.mjs` — очистка HTML из WordPress (убирает обёртки, классы, span, переписывает ссылки).
@@ -54,10 +73,24 @@ OUT=/tmp/site BASE=/ node site/build.mjs   # собрать в другую па
 - `assets/site.js` — меню, формы, калькуляторы, фильтр каталога, галерея. При сборке склеивается с `config.js` в `new2/assets/site.js`.
 - `assets/site.css` — общие стили.
 
+## Аналитика
+
+`CONFIG.analytics` в `site/assets/config.js`: `gtm`, `ym`, `ga4`. Пустое значение = счётчик не загружается.
+Цели (уходят в `dataLayer`, Метрику `reachGoal` и GA4 `event`): `lead_submit`, `click_phone`, `click_telegram`,
+`click_viber`, `click_whatsapp`, `calc_used` (первое изменение калькулятора), `calc_send` («Получить точный расчёт»).
+Метки `utm_*`, `gclid`, `yclid`, страница входа и referrer сохраняются в sessionStorage при входе и уходят в заявке.
+
+## Фото машин
+
+`site/data-fixes.mjs`: список машин с чужими фото (показывается заглушка), объёмы двигателей по умолчанию для
+примера расчёта, правила регистра комплектаций. Превью карточки = первое фото галереи этой машины (не миниатюра 150×150).
+`site/static/img/` — `og-default.jpg` (1200×630) и `logo.png` для соцсетей и разметки.
+
 ## Заявки
 
 `CONFIG.leadEndpoint` пустой: формы работают в тестовом режиме и показывают сообщение. Когда будет вебхук amoCRM,
-впишите адрес в `site/assets/config.js` и пересоберите. В заявке передаются `name`, `phone`, `car` и `source` (адрес страницы).
+впишите адрес в `site/assets/config.js` и пересоберите. В заявке передаются `name`, `phone`, `car`, `source` (адрес страницы), метки рекламы, `landing`, `referrer`.
+Галочка согласия по умолчанию снята и обязательна, рядом ссылка на `/privacy-policy/`.
 
 ## TODO
 

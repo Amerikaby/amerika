@@ -8,6 +8,60 @@ var qsa = function(sel, root){return Array.prototype.slice.call((root || documen
 var nowYear = new Date().getFullYear();
 var params = new URLSearchParams(location.search);
 
+/* ---------- Аналитика: счётчики, цели, метки рекламы ---------- */
+var A = CONFIG.analytics || {};
+window.dataLayer = window.dataLayer || [];
+(function(){
+  function load(src){ var s = document.createElement("script"); s.async = true; s.src = src; document.head.appendChild(s); }
+  if (A.gtm) {
+    window.dataLayer.push({"gtm.start": Date.now(), event: "gtm.js"});
+    load("https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(A.gtm));
+  }
+  if (A.ga4) {
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date()); window.gtag("config", A.ga4);
+    load("https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(A.ga4));
+  }
+  if (A.ym) {
+    window.ym = window.ym || function(){ (window.ym.a = window.ym.a || []).push(arguments); };
+    window.ym.l = +new Date();
+    load("https://mc.yandex.ru/metrika/tag.js");
+    window.ym(A.ym, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true});
+  }
+})();
+/* Цель во все подключённые системы. Имена целей: lead_submit, click_phone, click_telegram, click_viber, click_whatsapp, calc_used, calc_send. */
+function track(goal, params){
+  params = params || {};
+  try {
+    window.dataLayer.push(Object.assign({event: goal}, params));
+    if (A.ym && window.ym) window.ym(A.ym, "reachGoal", goal, params);
+    if (A.ga4 && window.gtag) window.gtag("event", goal, params);
+  } catch (e) {}
+}
+window.amzTrack = track;
+/* Метки рекламы: сохраняем при входе на сайт (первая страница сессии) и добавляем в заявку. */
+var ATTR_KEYS = ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","gclid","yclid"];
+var attribution = (function(){
+  var stored = null;
+  try { stored = JSON.parse(sessionStorage.getItem("amz_attr") || "null"); } catch (e) {}
+  var found = {}, has = false;
+  ATTR_KEYS.forEach(function(k){ var v = params.get(k); if (v) { found[k] = v.slice(0, 200); has = true; } });
+  if (!stored || has) {
+    stored = Object.assign({}, has ? found : (stored || {}), {landing: (stored && !has && stored.landing) || location.href, referrer: (stored && !has && stored.referrer) || document.referrer || ""});
+    try { sessionStorage.setItem("amz_attr", JSON.stringify(stored)); } catch (e) {}
+  }
+  return stored;
+})();
+document.addEventListener("click", function(e){
+  var a = e.target.closest && e.target.closest("a[href]");
+  if (!a) return;
+  var h = a.getAttribute("href");
+  if (/^tel:/.test(h)) track("click_phone");
+  else if (/t\.me\//.test(h)) track("click_telegram");
+  else if (/^viber:/.test(h)) track("click_viber");
+  else if (/wa\.me\//.test(h)) track("click_whatsapp");
+});
+
 /* ---------- Меню на телефоне ---------- */
 (function(){
   var btn = $("burger"), panel = $("mnav"), top = document.querySelector(".top");
@@ -31,9 +85,11 @@ qsa("form[data-lead]").forEach(function(form){
     var agree = form.querySelector('[name="agree"]');
     msg.hidden = false;
     if (phoneEl.value.replace(/\D/g, "").length < 9) { msg.textContent = "Укажите телефон, чтобы менеджер мог с вами связаться."; phoneEl.focus(); return; }
-    if (agree && !agree.checked) { msg.textContent = "Отметьте согласие на обработку данных."; return; }
+    if (agree && !agree.checked) { msg.textContent = "Чтобы отправить заявку, отметьте согласие на обработку персональных данных."; agree.focus(); return; }
     var data = {source: location.href};
+    ATTR_KEYS.concat(["landing","referrer"]).forEach(function(k){ if (attribution && attribution[k]) data[k] = attribution[k]; });
     qsa("input[name],textarea[name],select[name]", form).forEach(function(el){ if (el.type !== "checkbox") data[el.name] = el.value; });
+    track("lead_submit", {form: form.getAttribute("data-lead") || "lead"});
     if (!CONFIG.leadEndpoint) {
       msg.textContent = "Это тестовая версия сайта (тестовый режим): заявка никуда не отправлена. После подключения amoCRM она будет сразу приходить менеджеру.";
       return;
@@ -49,32 +105,6 @@ qsa("form[data-lead]").forEach(function(form){
 var fmt = function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ") + " $"};
 var fmtEur = function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ") + " €"};
 var fmtByn = function(n){return Math.round(n).toLocaleString("ru-RU").replace(/,/g," ") + " BYN"};
-/* Пошлина легкового авто в EUR по таблицам CONFIG.duty: возраст = текущий год минус год выпуска. */
-function dutyEur(eur, year, cc){
-  var age = nowYear - year, d = 0, t, i, T = CONFIG.duty;
-  if (age < 3) {
-    t = T.under3;
-    for (i = 0; i < t.length; i++) if (eur <= t[i][0]) { d = Math.max(eur * t[i][1], cc * t[i][2]); break; }
-  } else {
-    t = age <= 5 ? T.from3to5 : T.over5;
-    for (i = 0; i < t.length; i++) if (cc <= t[i][0]) { d = cc * t[i][1]; break; }
-  }
-  return d;
-}
-/* Утильсбор легкового авто, BYN: до 3 лет включительно и старше. */
-function utilByn(year){ return (nowYear - year) <= 3 ? CONFIG.utilByn.upTo3 : CONFIG.utilByn.over3; }
-/* Мотоцикл: пошлина % от таможенной стоимости по объёму, электро отдельно. */
-function motoRate(cc, electric){
-  if (electric) return CONFIG.moto.dutyPctElectric;
-  var t = CONFIG.moto.dutyPct;
-  for (var i = 0; i < t.length; i++) if (cc <= t[i][0]) return t[i][1];
-  return t[t.length - 1][1];
-}
-/* Пошлина + НДС мотоцикла в той же валюте, что и value. */
-function motoDutyVat(value, cc, electric){
-  var duty = value * motoRate(cc, electric), vat = (value + duty) * CONFIG.moto.vat;
-  return {duty:duty, vat:vat};
-}
 function fillYears(sel, def){
   for (var y = nowYear; y >= nowYear - 20; y--) {
     var o = document.createElement("option"); o.value = y; o.textContent = y;
@@ -100,40 +130,12 @@ function fillYears(sel, def){
     if (CONFIG.states.center.indexOf(m[1]) >= 0) return "center";
     return "east";
   }
-  function auctionFee(p){
-    for (var i = 0; i < CONFIG.auctionFee.length; i++) if (p < CONFIG.auctionFee[i][0]) return CONFIG.auctionFee[i][1] + CONFIG.auctionFixed;
-    return p * CONFIG.auctionFeeTopPct + CONFIG.auctionFixed;
-  }
-  function dutyUsd(priceUsd, year, cc, ev){
-    if (ev) return 0;
-    return dutyEur(priceUsd / CONFIG.eurUsd, year, cc) * CONFIG.eurUsd;
-  }
-  /* Полная стоимость для цены лота price при текущих настройках формы. */
-  function cost(price, o){
-    var L = o.moto ? CONFIG.moto : CONFIG;   // у мотоциклов своя логистика и таможня
-    var fee = auctionFee(price);
-    var inland = L.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
-    var sea = L.sea[o.port][o.region], last = L.lastLeg[o.port];
-    var extra = (!o.moto && o.alt) ? CONFIG.altFuelEur * CONFIG.eurUsd : 0;
-    var duty, cust;
-    if (o.moto) {
-      // TODO: уточнить у декларанта базу: сейчас лот + сборы аукциона + доставка до порта ЕАЭС
-      var dv = motoDutyVat(price + fee + inland + sea, o.cc, o.alt);
-      duty = (dv.duty + dv.vat) * (o.benefit ? .5 : 1);
-      cust = (CONFIG.moto.utilByn + CONFIG.customsFeeByn + CONFIG.svhByn) / CONFIG.usdByn;
-    } else {
-      duty = dutyUsd(price, o.year, o.cc, o.ev) * (o.benefit ? .5 : 1);
-      cust = (utilByn(o.year) + CONFIG.customsFeeByn + CONFIG.svhByn) / CONFIG.usdByn;
-    }
-    var ours = CONFIG.serviceByn / CONFIG.usdByn;
-    return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours,
-            total: price + fee + inland + sea + last + extra + duty + cust + ours};
-  }
+  var cost = costOf;
   function options(){
     var moto = val("vtype") === "moto";
     var cc = Math.max(0, +$("volume").value || 0), alt = val("fuel") === "alt";
     var yard = $("yard").value.trim(), region = regionOf(yard) || "east";
-    var autoPort = moto ? CONFIG.moto.autoPort : ((!alt && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti");
+    var autoPort = autoPortFor(moto, alt, cc);
     var port = $("port").value === "auto" ? autoPort : $("port").value;
     return {moto:moto, year:+$("year").value, cc:cc, alt:alt, ev:!moto && alt && cc === 0, region:region, yard:yard,
             port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked};
@@ -229,13 +231,16 @@ function fillYears(sel, def){
   if (params.get("fuel") === "alt") document.querySelector('#calcForm input[name="fuel"][value="alt"]').checked = true;
 
   fillYards();
-  $("calcForm").addEventListener("input", calc);
-  $("calcForm").addEventListener("change", calc);
+  var used = false;
+  function onUse(){ calc(); if (!used) { used = true; track("calc_used", {calc: "turnkey"}); } }
+  $("calcForm").addEventListener("input", onUse);
+  $("calcForm").addEventListener("change", onUse);
   calc();
 
   var send = $("sendCalc");
   if (send) send.addEventListener("click", function(){
     var r = calc(), box = $("lcar");
+    track("calc_send", {total: r.total});
     if (!box) return;
     var f = r.moto ? (r.alt ? "электромотоцикл" : "мотоцикл") : (r.alt ? (r.cc ? "гибрид" : "электро") : "бензин/дизель");
     box.value = "Расчёт с калькулятора: " + (r.budget ? "бюджет " + r.total + " $, ставка до " + r.price + " $" : "лот " + r.price + " $, итого ≈ " + r.total + " $ под ключ")
@@ -286,7 +291,9 @@ function fillYears(sel, def){
     $("cr-total").textContent = fmtByn(totalByn);
     $("cr-total-usd").textContent = "≈ " + fmt(totalByn / CONFIG.usdByn) + " · курс: 1 € = " + CONFIG.eurUsd + " $, 1 $ = " + CONFIG.usdByn + " BYN";
   }
-  form.addEventListener("input", run); form.addEventListener("change", run); run();
+  var used = false;
+  function onUse(){ run(); if (!used) { used = true; track("calc_used", {calc: "customs"}); } }
+  form.addEventListener("input", onUse); form.addEventListener("change", onUse); run();
 })();
 
 /* ---------- Галерея на странице машины ---------- */
@@ -311,10 +318,12 @@ function fillYears(sel, def){
 /* ---------- Каталог: поиск и фильтр по марке ---------- */
 function carCard(c){
   var a = document.createElement("a");
-  a.className = "car"; a.href = BASE + "katalog/" + c.s + "/";
-  var img = c.i ? '<img src="' + c.i + '" alt="" loading="lazy" decoding="async" width="300" height="225">' : "";
-  a.innerHTML = '<div class="ph">' + img + '</div><div class="tx"><h3></h3><div class="meta">' + (c.y ? "<b>" + c.y + "</b>" : "") + "<span></span></div></div>";
+  a.className = "car"; a.href = BASE + "auto-usa/" + c.s + "/";
+  var ph = c.i ? '<div class="ph"><img src="' + c.i + '" alt="" loading="lazy" decoding="async" width="300" height="225"></div>'
+    : '<div class="ph ph-empty"><span class="pb"></span><b class="pm"></b><small>фото по запросу</small></div>';
+  a.innerHTML = ph + '<div class="tx"><h3></h3><div class="meta">' + (c.y ? "<b>" + c.y + "</b>" : "") + "<span></span></div></div>";
   a.querySelector("h3").textContent = c.t; a.querySelector(".meta span").textContent = c.bn || "";
+  if (!c.i) { a.querySelector(".pb").textContent = c.bn || ""; a.querySelector(".pm").textContent = c.m || c.t; }
   return a;
 }
 (function(){
@@ -335,7 +344,7 @@ function carCard(c){
   function apply(){
     var t = q.value.trim().toLowerCase(), b = brand.value;
     if (!t && !b) { location.href = location.pathname; return; }
-    if (b && !t) { location.href = BASE + "katalog/" + b + "/"; return; }
+    if (b && !t) { location.href = BASE + "usa/" + b + "/"; return; }
     var words = t.split(/\s+/).filter(Boolean);
     list = data.filter(function(c){
       if (b && c.b !== b) return false;

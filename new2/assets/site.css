@@ -560,3 +560,18 @@ section{padding-block:80px}
 .box .btn,.cta-card .btn,.soon .btn{white-space:normal;text-align:center;line-height:1.2}
 .cars.six{grid-template-columns:repeat(3,1fr)}
 @media (max-width:760px){.cars.six{grid-template-columns:1fr 1fr}}
+/* Заглушка вместо фото */
+.ph-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:12px;background:linear-gradient(135deg,#eef1f7,#e3e8f2);color:var(--navy)}
+.ph-empty span{font:800 12px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--navy-2)}
+.ph-empty b{font:800 20px/1.15 var(--display)}
+.ph-empty small{font:600 12px/1 var(--body);color:var(--muted);margin-top:4px}
+.ph-empty.big{aspect-ratio:4/3;border-radius:16px}
+.ph-empty.big b{font-size:clamp(26px,4vw,40px)}
+/* Пример расчёта на странице машины */
+.car-desc{display:flex;flex-direction:column;gap:28px;min-width:0}
+.estimate{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.estimate h2{font-size:22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.estimate .tag{font:800 11px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;background:var(--yellow);color:var(--yellow-ink);padding:6px 8px;border-radius:6px}
+.estimate .note{font-size:13.5px;color:var(--muted);line-height:1.5}
+.estimate .tbl td b{font-family:var(--display)}
+.check a{color:var(--navy-2)}

@@ -28,3 +28,20 @@ export async function fetchAll(type, { cacheDir, query = '', refresh = false } =
   await writeFile(file, JSON.stringify(out));
   return out;
 }
+
+/** URL из XML-карт сайта старого WordPress (Yoast), с кешем. Нужны для карты 301-редиректов. */
+export async function fetchOldSitemap({ cacheDir, refresh = false } = {}) {
+  const file = path.join(cacheDir, 'old-sitemap.json');
+  if (!refresh && existsSync(file)) return JSON.parse(await readFile(file, 'utf8'));
+  const locs = async (url) => {
+    const res = await fetch(url, { headers: { 'User-Agent': 'amerika-site-build/1.0' } });
+    if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
+    return [...(await res.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+  };
+  const maps = await locs('https://amerika.by/sitemap_index.xml');
+  const urls = [];
+  for (const m of maps) urls.push(...await locs(m));
+  await mkdir(cacheDir, { recursive: true });
+  await writeFile(file, JSON.stringify(urls));
+  return urls;
+}

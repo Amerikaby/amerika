@@ -1,0 +1,1017 @@
+# 301-редиректы со старого WordPress на новый сайт (для переезда в корень amerika.by).
+# Сгенерировано 2026-10-15 скриптом site/build.mjs из XML-карт старого сайта (1883 адресов).
+# В new2/ НЕ подключается. При переезде вставить в .htaccess корня ПЕРЕД правилами сайта.
+# Адреса, которые на новом сайте сохранены (каталог /auto-usa/, марки /usa/<марка>/, блог, услуги, цены,
+# контакты, отзывы, таможенный калькулятор, политика), здесь не перечислены: они открываются как есть.
+# Всего правил: 501.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# тестовый каталог
+RewriteRule ^auctions/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^auto-canada/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/acura-tlx-a-spec-2020/?$ /usa/acura/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/audi-e-tron-premium-2021/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/audi-e-tron-premium-plus-2022/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/audi-e-tron-prestige-2021/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/audi-q3-premium-plus-2020/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/audi-q5-premium-2020/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/chevrolet-cruze-lt-2018/?$ /usa/chevrolet/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/chevrolet-equinox-lt-2022/?$ /usa/chevrolet/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/chevrolet-equinox-lt-2023/?$ /usa/chevrolet/ [R=301,L,NE]
+# электромобили не из США → электромобили из США
+RewriteRule ^auto-canada/elektromobily-canada/?$ /auto-usa/elektromobily-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/ford-mustang-mach-e-premium-2022/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/honda-odyssey-exl-2019/?$ /usa/honda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/hyundai-kona-sel-2022/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/hyundai-kona-ultimate-2020/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/jeep-grand-cherokee-laredo-2020/?$ /usa/jeep/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/kia-soul-2019/?$ /usa/kia/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/mazda-cx-3-sport-2018/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/mazda-cx-5-touring-2020/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/mercedes-benz-eqs-580-4matic-2022/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/nissan-leaf-s-plus-2022/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/nissan-rogue-sport-s-2019/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/porsche-taycan-4s-2020/?$ /usa/porsche/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/tesla-model-3-2019/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/tesla-model-3-2020/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/toyota-corolla-le-2020/?$ /usa/toyota/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/toyota-yaris-2019/?$ /usa/toyota/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/volkswagen-e-golf-se-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/volkswagen-taos-se-2022/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-canada/volkswagen-tiguan-sel-r-line-2022/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^auto-china/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/audi-q4-e-tron-2023/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/avatr-11-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/byd-dolphin-2023-2/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/byd-dolphin-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/byd-e2-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/changan-cs75-2023/?$ /auto-usa/ [R=301,L,NE]
+# электромобили не из США → электромобили из США
+RewriteRule ^auto-china/elektromobily-china/?$ /auto-usa/elektromobily-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-cool-boyue-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-geometry-e-2023-2/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-geometry-e-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-geometry-g6-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-geometry-m6-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/geely-monjaro-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/honda-e-np1-2023/?$ /usa/honda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/honda-e-ns1-2023/?$ /usa/honda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/honda-m-nv-2023/?$ /usa/honda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/jetour-dashing-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/li-l9-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/nissan-ariya-2023/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/tesla-model-3-2023/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/volkswagen-id-3-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/volkswagen-id-4x-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/voyah-free-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/vw-id-4-2023/?$ /usa/vw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/xpeng-g3i-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/zeekr-001-2023/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-china/zeekr-x-2023/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^auto-europe/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/alfa-romeo-giulia-2019-2/?$ /usa/alfa-romeo/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/alfa-romeo-giulia-2019/?$ /usa/alfa-romeo/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a1-2018/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a1-sportback-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a3-limousine-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a3-sportback-2019-2/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a3-sportback-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-2-0-tdi-2018/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-advanced-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-allroad-2018/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-allroad-2020/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-avant-2018/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a4-lim-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-a6-avant-40-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/audi-rs6-2019/?$ /usa/audi/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-118-1-lim-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-118-2019/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-218-active-tourer-2019/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-218-gran-tourer-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-218-gran-tourer-2019/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-220-gran-tourer-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-316-touring-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-318-baureihe-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-520-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-520-d-xdrive-2019/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-6-seria-2019/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-x1-sdrive-18d-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/bmw-x3-2018/?$ /usa/bmw/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/citroen-c3-aircross-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/citroen-c4-cactus-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/citroen-c4-picasso-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/citroen-grand-c4-picasso-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/citroen-grand-c4-picasso-spacetourer-2018/?$ /auto-usa/ [R=301,L,NE]
+# электромобили не из США → электромобили из США
+RewriteRule ^auto-europe/elektromobily-europe/?$ /auto-usa/elektromobily-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-edge-2018/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-fiesta-2020/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-focus-business-2018/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-focus-turnier-2018/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-focus-turnier-2019-2/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-focus-turnier-2019/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-kuga-2018-2/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-kuga-2018/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-mondeo-tur-2-0-tdci-2018/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-mondeo-turnier-2019/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-mustang-mach-e-2020/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/ford-s-max-2-0-ecoblue-2019/?$ /usa/ford/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-i30-2019/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-i40-2018/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-kona-ev-2020/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-santa-fe-2019/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-tucson-2018/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/hyundai-tucson-2019/?$ /usa/hyundai/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/jeep-compass-2018/?$ /usa/jeep/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/kia-cee-d-ceed-2019/?$ /usa/kia/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/kia-optima-2018/?$ /usa/kia/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/kia-pro-ceed-2019/?$ /usa/kia/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/lexus-rx-450-2020/?$ /usa/lexus/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/lexus-ux-300e-2020/?$ /usa/lexus/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mazda-3-exclusive-line-2018/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mazda-3-s-skyactiv-g-2018/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mazda-6-2019/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mazda-cx-3-2019/?$ /usa/mazda/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mercedes-benz-e-300-2019/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/mini-cooper-2019/?$ /usa/mini/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/nissan-e-nv200-evalia-2019/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/nissan-juke-2020/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/nissan-leaf-2020/?$ /usa/nissan/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-ampera-e-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-astra-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-astra-k-sports-2020/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-crossland-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-insignia-2-0-cdti-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-insignia-gs-2019-2/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-insignia-gs-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/opel-zafira-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/peugeot-308-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/peugeot-308-sw-2-0-bluehdi-gt-line-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/peugeot-508-2019-2/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/peugeot-508-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-megane-e-tech-2022/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-megane-grandtour-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-talisman-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-talisman-2020/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-talisman-grandtour-limited-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/renault-zoe-r110-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/seat-ibiza-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/seat-ibiza-2020/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/seat-leon-st-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/seat-leon-style-navi-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/tesla-model-s-2018/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/tesla-model-x-2018/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/tesla-model-y-2021/?$ /usa/tesla/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/toyota-avensis-2018/?$ /usa/toyota/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/toyota-aygo-2020/?$ /usa/toyota/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-caddy-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-golf-sportsvan-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-golf-var-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-golf-vii-lim-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-golf-vii-lim-comfortline-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-golf-vii-sound-navi-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-id-4-2022/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-r-line-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-var-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-variant-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-variant-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-passat-variant-comfortline-2018/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-polo-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-t-cross-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-touareg-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-touran-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-touran-comfortline-2019-2/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volkswagen-touran-comfortline-2019/?$ /auto-usa/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volvo-v60-2018/?$ /usa/volvo/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volvo-v60-cross-country-2018/?$ /usa/volvo/ [R=301,L,NE]
+# машина не из США → марка или каталог США
+RewriteRule ^auto-europe/volvo-v60-kombi-momentum-2018/?$ /usa/volvo/ [R=301,L,NE]
+# старый калькулятор
+RewriteRule ^calc/?$ /kalkulyator/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/acura/?$ /usa/acura/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/acura/tlx/?$ /usa/acura/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/audi/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/audi/e-tron/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/audi/q3/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/audi/q5/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/chevrolet/?$ /usa/chevrolet/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/chevrolet/cruze/?$ /usa/chevrolet/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/chevrolet/equinox/?$ /usa/chevrolet/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/ford/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/ford/mustang-mach-e/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/honda/?$ /usa/honda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/honda/odyssey/?$ /usa/honda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/hyundai/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/hyundai/kona/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/jeep/?$ /usa/jeep/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/jeep/grand-cherokee/?$ /usa/jeep/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/kia/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/kia/soul/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/mazda/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/mazda/cx-3/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/mazda/cx-5/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/mercedes-benz/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/mercedes-benz/eqs/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/nissan/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/nissan/leaf/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/nissan/rogue-sport/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/porsche/?$ /usa/porsche/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/porsche/taycan/?$ /usa/porsche/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/tesla/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/tesla/model-3/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/toyota/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/toyota/corolla/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/toyota/yaris/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/vw/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/vw/e-golf/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/vw/taos/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^canada/vw/tiguan/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/audi/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/audi/q4-e-tron/?$ /usa/audi/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/avatr/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/avatr/11/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/byd/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/byd/dolphin/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/byd/e2/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/changan/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/changan/cs75/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/cool-boyue/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/geometry-e/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/geometry-g6/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/geometry-m6/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/geely/monjaro/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/honda/?$ /usa/honda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/honda/e-np1/?$ /usa/honda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/honda/e-ns1/?$ /usa/honda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/honda/m-nv/?$ /usa/honda/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/jetour/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/jetour/dashing/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/li/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/li/l9/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/nissan/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/nissan/ariya/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/tesla/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/tesla/model-3/?$ /usa/tesla/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/voyah/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/voyah/free/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/vw/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/vw/id-3/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/vw/id-4-x/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^china/vw/id-4/?$ /usa/vw/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/xpeng/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/xpeng/g3i/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/zeekr/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/zeekr/001/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^china/zeekr/x/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/alfa-romeo/?$ /usa/alfa-romeo/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/alfa-romeo/giulia/?$ /usa/alfa-romeo/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/a1/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/a3/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/a4/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/a6/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/audi/rs6/?$ /usa/audi/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/seria-1/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/seria-2/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/seria-3/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/seria-5/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/seria-6/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/x1/?$ /usa/bmw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/bmw/x3/?$ /usa/bmw/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/citroen/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/citroen/c3/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/citroen/c4-grand-picasso/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/citroen/c4-picasso/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/citroen/c4/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/edge/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/fiesta/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/focus/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/kuga/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/mondeo/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/mustang-mach-e/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/ford/s-max/?$ /usa/ford/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/i30/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/i40/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/kona-ev/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/santa-fe/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/hyundai/tucson/?$ /usa/hyundai/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/jeep/?$ /usa/jeep/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/jeep/compass/?$ /usa/jeep/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/kia/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/kia/ceed/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/kia/optima/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/kia/pro-ceed/?$ /usa/kia/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/lexus/?$ /usa/lexus/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/lexus/rx/?$ /usa/lexus/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/lexus/ux/?$ /usa/lexus/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mazda/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mazda/3/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mazda/6/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mazda/cx-3/?$ /usa/mazda/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mercedes-benz/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mercedes-benz/class-e/?$ /usa/mercedes-benz/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mini/?$ /usa/mini/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/mini/one/?$ /usa/mini/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/nissan/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/nissan/juke/?$ /usa/nissan/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/nissan/leaf/?$ /usa/nissan/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/ampera-e/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/astra/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/crossland/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/insignia/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/opel/zafira/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/peugeot/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/peugeot/308/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/peugeot/508/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/renault/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/renault/megane-e-tech/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/renault/megane/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/renault/talisman/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/renault/zoe/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/seat/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/seat/ibiza/?$ /auto-usa/ [R=301,L,NE]
+# раздел не из США → каталог США
+RewriteRule ^europe/seat/leon/?$ /auto-usa/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/tesla/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/tesla/model-s/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/tesla/model-x/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/tesla/y/?$ /usa/tesla/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/toyota/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/toyota/avensis/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/toyota/aygo/?$ /usa/toyota/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/volvo/?$ /usa/volvo/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/volvo/v60/?$ /usa/volvo/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/caddy/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/golf/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/id-4/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/passat/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/polo/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/t-cross/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/touareg/?$ /usa/vw/ [R=301,L,NE]
+# марка не из США → та же марка из США
+RewriteRule ^europe/vw/touran/?$ /usa/vw/ [R=301,L,NE]
+# страница переименована
+RewriteRule ^faqs/?$ /#faq [R=301,L,NE]
+# служебная страница
+RewriteRule ^instagram/?$ / [R=301,L,NE]
+# старый калькулятор
+RewriteRule ^kalculyator-dostavki/?$ /kalkulyator/ [R=301,L,NE]
+# старый калькулятор
+RewriteRule ^kalkuljator-dostavki-rb/?$ /kalkulyator/ [R=301,L,NE]
+# страница переименована
+RewriteRule ^o-nas/?$ /o-kompanii/ [R=301,L,NE]
+# служебная страница
+RewriteRule ^sitemap/?$ / [R=301,L,NE]
+# фильтр по статусу
+RewriteRule ^situation/in-stock/?$ /auto-usa/ [R=301,L,NE]
+# фильтр по статусу
+RewriteRule ^situation/in-transit/?$ /auto-usa/ [R=301,L,NE]
+# фильтр по статусу
+RewriteRule ^situation/on-order/?$ /auto-usa/ [R=301,L,NE]
+# фильтр по статусу
+RewriteRule ^situation/prodano/?$ /auto-usa/ [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/acura/rdx/?$ /usa/acura/?model=rdx [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/acura/tlx/?$ /usa/acura/?model=tlx [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/alfa-romeo/giulia/?$ /usa/alfa-romeo/?model=giulia [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/alfa-romeo/stelvio/?$ /usa/alfa-romeo/?model=stelvio [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/aston-martin/db11/?$ /usa/aston-martin/?model=db11 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/a3/?$ /usa/audi/?model=a3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/a4/?$ /usa/audi/?model=a4 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/a5/?$ /usa/audi/?model=a5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/a8/?$ /usa/audi/?model=a8 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/q3/?$ /usa/audi/?model=q3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/q5/?$ /usa/audi/?model=q5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/q7/?$ /usa/audi/?model=q7 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/rs-3/?$ /usa/audi/?model=rs-3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/rsq8/?$ /usa/audi/?model=rsq8 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/audi/sq5/?$ /usa/audi/?model=sq5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bentley/bentayga/?$ /usa/bentley/?model=bentayga [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/i3/?$ /usa/bmw/?model=i3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/seria-2/?$ /usa/bmw/?model=seria-2 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/seria-3/?$ /usa/bmw/?model=seria-3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/seria-4/?$ /usa/bmw/?model=seria-4 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/seria-5/?$ /usa/bmw/?model=seria-5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/x1/?$ /usa/bmw/?model=x1 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/x2/?$ /usa/bmw/?model=x2 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/x3/?$ /usa/bmw/?model=x3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/bmw/x3m/?$ /usa/bmw/?model=x3m [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/buick/encore/?$ /usa/buick/?model=encore [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/buick/envision/?$ /usa/buick/?model=envision [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/buick/envista/?$ /usa/buick/?model=envista [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/buick/regal/?$ /usa/buick/?model=regal [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/cadillac/xt4/?$ /usa/cadillac/?model=xt4 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/blazer/?$ /usa/chevrolet/?model=blazer [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/bolt/?$ /usa/chevrolet/?model=bolt [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/camaro/?$ /usa/chevrolet/?model=camaro [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/cruze/?$ /usa/chevrolet/?model=cruze [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/equinox/?$ /usa/chevrolet/?model=equinox [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/malibu/?$ /usa/chevrolet/?model=malibu [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/spark/?$ /usa/chevrolet/?model=spark [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/trailblazer/?$ /usa/chevrolet/?model=trailblazer [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chevrolet/trax/?$ /usa/chevrolet/?model=trax [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/chrysler/pacifica/?$ /usa/chrysler/?model=pacifica [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/dodge/challenger/?$ /usa/dodge/?model=challenger [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/dodge/journey/?$ /usa/dodge/?model=journey [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/fiat/124-spider/?$ /usa/fiat/?model=124-spider [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/fiat/500/?$ /usa/fiat/?model=500 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/fiat/500l/?$ /usa/fiat/?model=500l [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/bronco/?$ /usa/ford/?model=bronco [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/ecosport/?$ /usa/ford/?model=ecosport [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/edge/?$ /usa/ford/?model=edge [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/escape/?$ /usa/ford/?model=escape [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/explorer/?$ /usa/ford/?model=explorer [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/focus/?$ /usa/ford/?model=focus [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/fusion/?$ /usa/ford/?model=fusion [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/ford/mustang/?$ /usa/ford/?model=mustang [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/gmc/acadia/?$ /usa/gmc/?model=acadia [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/gmc/terrain/?$ /usa/gmc/?model=terrain [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/accord/?$ /usa/honda/?model=accord [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/civic/?$ /usa/honda/?model=civic [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/cr-v/?$ /usa/honda/?model=cr-v [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/fit/?$ /usa/honda/?model=fit [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/hr-v/?$ /usa/honda/?model=hr-v [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/honda/insight/?$ /usa/honda/?model=insight [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/accent/?$ /usa/hyundai/?model=accent [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/elantra/?$ /usa/hyundai/?model=elantra [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/ioniq-5/?$ /usa/hyundai/?model=ioniq-5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/kona/?$ /usa/hyundai/?model=kona [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/santa-fe/?$ /usa/hyundai/?model=santa-fe [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/sonata/?$ /usa/hyundai/?model=sonata [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/hyundai/tucson/?$ /usa/hyundai/?model=tucson [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/infiniti/q50/?$ /usa/infiniti/?model=q50 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/infiniti/qx50/?$ /usa/infiniti/?model=qx50 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jaguar/e-pace/?$ /usa/jaguar/?model=e-pace [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jaguar/f-pace/?$ /usa/jaguar/?model=f-pace [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jaguar/xe/?$ /usa/jaguar/?model=xe [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jeep/cherokee/?$ /usa/jeep/?model=cherokee [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jeep/compass/?$ /usa/jeep/?model=compass [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jeep/renegade/?$ /usa/jeep/?model=renegade [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/jeep/wrangler/?$ /usa/jeep/?model=wrangler [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/forte/?$ /usa/kia/?model=forte [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/k5/?$ /usa/kia/?model=k5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/optima/?$ /usa/kia/?model=optima [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/rio/?$ /usa/kia/?model=rio [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/seltos/?$ /usa/kia/?model=seltos [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/sorento/?$ /usa/kia/?model=sorento [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/soul/?$ /usa/kia/?model=soul [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/sportage/?$ /usa/kia/?model=sportage [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/kia/stinger/?$ /usa/kia/?model=stinger [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/lexus/ux/?$ /usa/lexus/?model=ux [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/3/?$ /usa/mazda/?model=3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/6/?$ /usa/mazda/?model=6 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/cx-3/?$ /usa/mazda/?model=cx-3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/cx-30/?$ /usa/mazda/?model=cx-30 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/cx-5/?$ /usa/mazda/?model=cx-5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/cx-50/?$ /usa/mazda/?model=cx-50 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mazda/mx-5/?$ /usa/mazda/?model=mx-5 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mercedes-benz/cla/?$ /usa/mercedes-benz/?model=cla [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mercedes-benz/class-c/?$ /usa/mercedes-benz/?model=class-c [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mercedes-benz/glb/?$ /usa/mercedes-benz/?model=glb [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mini/clubman/?$ /usa/mini/?model=clubman [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mini/cooper/?$ /usa/mini/?model=cooper [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mini/countryman/?$ /usa/mini/?model=countryman [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mitsubishi/eclipse-cross/?$ /usa/mitsubishi/?model=eclipse-cross [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mitsubishi/mirage/?$ /usa/mitsubishi/?model=mirage [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mitsubishi/outlander-sport/?$ /usa/mitsubishi/?model=outlander-sport [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/mitsubishi/outlander/?$ /usa/mitsubishi/?model=outlander [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/altima/?$ /usa/nissan/?model=altima [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/kicks/?$ /usa/nissan/?model=kicks [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/leaf/?$ /usa/nissan/?model=leaf [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/murano/?$ /usa/nissan/?model=murano [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/rogue-sport/?$ /usa/nissan/?model=rogue-sport [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/rogue/?$ /usa/nissan/?model=rogue [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/sentra/?$ /usa/nissan/?model=sentra [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/nissan/versa/?$ /usa/nissan/?model=versa [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/porsche/boxster/?$ /usa/porsche/?model=boxster [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/subaru/crosstrek/?$ /usa/subaru/?model=crosstrek [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/subaru/forester/?$ /usa/subaru/?model=forester [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/subaru/outback/?$ /usa/subaru/?model=outback [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/tesla/model-3/?$ /usa/tesla/?model=model-3 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/tesla/model-s/?$ /usa/tesla/?model=model-s [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/tesla/model-x/?$ /usa/tesla/?model=model-x [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/tesla/model-y/?$ /usa/tesla/?model=model-y [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/4runner/?$ /usa/toyota/?model=4runner [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/c-hr/?$ /usa/toyota/?model=c-hr [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/camry/?$ /usa/toyota/?model=camry [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/corolla/?$ /usa/toyota/?model=corolla [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/highlander/?$ /usa/toyota/?model=highlander [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/prius-c/?$ /usa/toyota/?model=prius-c [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/prius-prime/?$ /usa/toyota/?model=prius-prime [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/prius/?$ /usa/toyota/?model=prius [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/rav4/?$ /usa/toyota/?model=rav4 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/sienna/?$ /usa/toyota/?model=sienna [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/supra/?$ /usa/toyota/?model=supra [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/toyota/yaris/?$ /usa/toyota/?model=yaris [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/s60/?$ /usa/volvo/?model=s60 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/s90/?$ /usa/volvo/?model=s90 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/v60/?$ /usa/volvo/?model=v60 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/v90/?$ /usa/volvo/?model=v90 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/xc40/?$ /usa/volvo/?model=xc40 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/xc60/?$ /usa/volvo/?model=xc60 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/volvo/xc90/?$ /usa/volvo/?model=xc90 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/arteon/?$ /usa/vw/?model=arteon [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/atlas/?$ /usa/vw/?model=atlas [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/golf/?$ /usa/vw/?model=golf [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/id-4/?$ /usa/vw/?model=id-4 [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/jetta/?$ /usa/vw/?model=jetta [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/passat/?$ /usa/vw/?model=passat [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/taos/?$ /usa/vw/?model=taos [R=301,L,NE]
+# страница модели → страница марки
+RewriteRule ^usa/vw/tiguan/?$ /usa/vw/?model=tiguan [R=301,L,NE]
+# вакансий нет
+RewriteRule ^vakansii/?$ /o-kompanii/ [R=301,L,NE]
+
+# Всё, что не попало в список выше
+RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
+RewriteRule ^(europe|canada|china)/.*$ /auto-usa/ [R=301,L]
+RewriteRule ^auto-(europe|canada|china)(/.*)?$ /auto-usa/ [R=301,L]
+RewriteRule ^situation/.*$ /auto-usa/ [R=301,L]
+</IfModule>

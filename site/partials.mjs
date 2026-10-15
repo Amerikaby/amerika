@@ -1,5 +1,5 @@
 // Общие части страниц: <head>, шапка, меню, подвал, хлебные крошки, формы, карточки.
-import { esc } from './lib/html.mjs';
+import { esc, clip } from './lib/html.mjs';
 
 export const SITE = {
   name: 'Amerika.by',
@@ -22,7 +22,7 @@ export const SITE = {
 };
 
 export const NAV = [
-  ['katalog/', 'Каталог'],
+  ['auto-usa/', 'Каталог'],
   ['kalkulyator/', 'Калькулятор'],
   ['uslugi/', 'Услуги'],
   ['ceny/', 'Цены'],
@@ -42,7 +42,7 @@ export const SERVICES = [
 
 export const ICONS = {
   tg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 4.2 18.4 19.6c-.2 1-.9 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-8c.4-.3-.1-.5-.6-.2L6.3 13.3l-4.6-1.5c-1-.3-1-1 .2-1.5L20.3 3c.9-.3 1.6.2 1.3 1.2z"/></svg>',
-  viber: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8c5 0 8.6 2.6 8.6 8.1S17 19 12 19c-.9 0-1.8-.1-2.6-.3L6 21.2v-3.6C3.9 16.2 3.4 13.7 3.4 11 3.4 5.4 7 2.8 12 2.8z"/><path d="M9.2 7.6c.4-.3 1-.2 1.2.3l.6 1.3c.2.4 0 .8-.3 1.1l-.4.3c.4 1 1.3 1.9 2.3 2.3l.3-.4c.3-.3.7-.5 1.1-.3l1.3.6c.5.2.6.8.3 1.2-.6.8-1.6 1.2-2.6.8-2-.8-3.6-2.4-4.4-4.4-.4-1 0-2 .6-2.8z"/></svg>',
+  viber: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2.8h10a4 4 0 0 1 4 4v7.4a4 4 0 0 1-4 4h-5.2L7.5 21.4v-3.2H7a4 4 0 0 1-4-4V6.8a4 4 0 0 1 4-4z"/><path d="M8.6 7.3c.3-.3.8-.3 1 .1l.7 1.3c.2.3.1.7-.2 1l-.4.3c.5 1.1 1.3 1.9 2.4 2.4l.3-.4c.3-.3.7-.4 1-.2l1.3.7c.4.2.4.7.1 1-.6.7-1.5.9-2.3.6-1.8-.7-3.3-2.2-4-4-.3-.8-.1-1.7.6-2.3z"/><path d="M13.2 5.9a3.6 3.6 0 0 1 3.1 3.1M13.3 4.2a5.3 5.3 0 0 1 4.7 4.7"/></svg>',
   wa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.6 8.6 0 1 1 8 19.4z"/><path d="M9 8.3c.3-.3.8-.2 1 .2l.6 1.4c.1.3 0 .7-.3.9l-.4.3c.5 1 1.3 1.8 2.3 2.3l.3-.4c.2-.3.6-.4.9-.3l1.4.6c.4.2.5.7.2 1-.6.6-1.5.9-2.3.6-1.9-.7-3.4-2.2-4.1-4.1-.3-.8 0-1.7.4-2.5z"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
   doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg>',
@@ -53,14 +53,16 @@ export const ICONS = {
   calc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
 };
 
-export function makeLayout(BASE) {
+export function makeLayout(BASE, PUBLIC_URL) {
   const u = (p = '') => BASE + p;
+  /** Абсолютный адрес файла там, где сайт реально лежит сейчас (og:image, логотип в разметке должны открываться). */
+  const assetUrl = (p) => PUBLIC_URL + BASE + p;
 
   function header(path) {
     const navLinks = NAV.map(([p, t]) => `<a href="${u(p)}"${path.startsWith(p) ? ' aria-current="page"' : ''}>${t}</a>`).join('');
     const mobLinks = NAV.map(([p, t]) => `<a class="item" href="${u(p)}"${path.startsWith(p) ? ' aria-current="page"' : ''}>${t}</a>`
       + (p === 'uslugi/' ? `<div class="sub">${SERVICES.map(([sp, st]) => `<a href="${u(sp)}">${st}</a>`).join('')}</div>` : '')
-      + (p === 'kalkulyator/' ? `<div class="sub"><a href="${u('kalkulyator/')}">Цена под ключ</a><a href="${u('tamozhennyj-kalkulyator/')}">Таможенный калькулятор</a></div>` : '')).join('');
+      + (p === 'kalkulyator/' ? `<div class="sub"><a href="${u('kalkulyator/')}">Цена под ключ</a><a href="${u('tamozhennyj-kalkulator/')}">Таможенный калькулятор</a></div>` : '')).join('');
     return `<a class="skip" href="#main">К содержимому</a>
 <header class="top">
   <div class="wrap">
@@ -104,12 +106,13 @@ export function makeLayout(BASE) {
       <div>
         <h2>Разделы</h2>
         <ul>
-          <li><a href="${u('katalog/')}">Каталог авто из США</a></li>
+          <li><a href="${u('auto-usa/')}">Каталог авто из США</a></li>
           <li><a href="${u('kalkulyator/')}">Калькулятор под ключ</a></li>
-          <li><a href="${u('tamozhennyj-kalkulyator/')}">Таможенный калькулятор</a></li>
+          <li><a href="${u('tamozhennyj-kalkulator/')}">Таможенный калькулятор</a></li>
           <li><a href="${u('ceny/')}">Цены</a></li>
           <li><a href="${u('blog/')}">Блог</a></li>
           <li><a href="${u('otzyvy/')}">Отзывы</a></li>
+          <li><a href="${u('privacy-policy/')}">Политика конфиденциальности</a></li>
         </ul>
       </div>
       <div>
@@ -128,7 +131,7 @@ export function makeLayout(BASE) {
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© ${new Date().getFullYear()} AMERIKA.BY · ${SITE.company}, УНП ${SITE.unp}</span>
+      <span>© ${new Date().getFullYear()} AMERIKA.BY · ${SITE.company}, УНП ${SITE.unp} · <a href="${u('privacy-policy/')}">Политика конфиденциальности</a></span>
       <span>Цены и расчёты на сайте ориентировочные и не являются публичной офертой.</span>
     </div>
   </div>
@@ -161,6 +164,9 @@ export function makeLayout(BASE) {
    */
   function page({ path, title, description, body, crumbs: cr, jsonld = [], ogImage, ogType = 'website', noCrumbs }) {
     const canonical = SITE.origin + '/' + path;
+    description = clip(description, 160);
+    if (title.length > 70 && title.endsWith(' | Amerika.by')) title = title.slice(0, -13);
+    ogImage = ogImage || assetUrl('img/og-default.jpg');
     const ld = [...(cr ? [crumbsLd(cr)] : []), ...jsonld];
     return `<!doctype html>
 <html lang="ru" data-base="${esc(BASE)}">
@@ -178,7 +184,9 @@ export function makeLayout(BASE) {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${esc(canonical)}">
-${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">\n` : ''}<meta name="theme-color" content="#13284f">
+<meta property="og:image" content="${esc(ogImage)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#13284f">
 <link rel="icon" href="${u('img/logo.svg')}" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -219,7 +227,7 @@ ${footer()}
       <div class="field"><label for="lname">Имя</label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
       <div class="field"><label for="lcar">${carLabel}</label><textarea id="lcar" name="car" rows="3" placeholder="${esc(placeholder)}">${esc(car)}</textarea></div>
-      <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" checked> Согласен на обработку персональных данных</label>
+      <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" required> <span>Согласен на обработку персональных данных в соответствии с <a href="${u('privacy-policy/')}" target="_blank">политикой конфиденциальности</a></span></label>
       <button class="btn btn-red" type="submit">${button}</button>
       <p class="msg" hidden></p>
     </form>
@@ -242,5 +250,5 @@ ${footer()}
     return `<nav class="pager" aria-label="Страницы" id="catPager">${html}</nav>`;
   }
 
-  return { u, page, leadSection, pager, crumbs };
+  return { u, assetUrl, page, leadSection, pager, crumbs };
 }
