@@ -4,7 +4,7 @@
 /** Двигатель американской версии по году выпуска, см³. Гибриды и редкие моторы (2.0T и т. п.) не берём: считаем самую массовую версию. */
 export const MODEL_PAGES = [
   {
-    key: 'chevrolet/equinox', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Equinox', match: (c) => c.model?.slug === 'equinox',
+    key: 'chevrolet/equinox', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Equinox', ru: 'Шевроле Эквинокс', match: (c) => c.model?.slug === 'equinox',
     cc: () => 1500, gen: 'Третье поколение (2018–2024) и четвёртое (с 2025)',
     about: [
       'Самый массовый кроссовер Chevrolet в США и одна из самых популярных машин из Америки в Беларуси. На аукционах Copart и IAAI Equinox много, поэтому лот под бюджет находится быстро.',
@@ -13,7 +13,7 @@ export const MODEL_PAGES = [
     ],
   },
   {
-    key: 'chevrolet/trailblazer', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Trailblazer', match: (c) => c.model?.slug === 'trailblazer',
+    key: 'chevrolet/trailblazer', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Trailblazer', ru: 'Шевроле Трейлблейзер', match: (c) => c.model?.slug === 'trailblazer',
     cc: () => 1300, gen: 'Компактный кроссовер, выпускается с 2021 модельного года',
     about: [
       'Компактный кроссовер между Trax и Equinox. В США продаётся с 2021 модельного года, на аукционах много машин 2021–2024 годов.',
@@ -22,7 +22,7 @@ export const MODEL_PAGES = [
     ],
   },
   {
-    key: 'chevrolet/trax', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Trax', match: (c) => c.model?.slug === 'trax',
+    key: 'chevrolet/trax', brand: 'chevrolet', brandName: 'Chevrolet', name: 'Trax', ru: 'Шевроле Тракс', match: (c) => c.model?.slug === 'trax',
     cc: (y) => (y >= 2023 ? 1200 : 1400), gen: 'Первое поколение до 2022 года, новое с 2024 модельного года',
     about: [
       'Самый доступный кроссовер Chevrolet. До 2022 года выпускался с мотором 1,4 л турбо, с 2024 модельного года пришло новое поколение: заметно больше по размеру, мотор 1,2 л турбо, только передний привод.',
@@ -31,7 +31,7 @@ export const MODEL_PAGES = [
     ],
   },
   {
-    key: 'nissan/rogue', brand: 'nissan', brandName: 'Nissan', name: 'Rogue', match: (c) => c.model?.slug === 'rogue' && !/rogue sport/i.test(c.title),
+    key: 'nissan/rogue', brand: 'nissan', brandName: 'Nissan', name: 'Rogue', ru: 'Ниссан Рог', match: (c) => c.model?.slug === 'rogue' && !/rogue sport/i.test(c.title),
     cc: (y) => (y >= 2022 ? 1500 : 2500), gen: 'До 2021 года мотор 2,5 л, с 2022 года 1,5 л турбо',
     about: [
       'Американская версия Nissan X-Trail. Главное, что нужно знать при покупке из США: до 2021 модельного года включительно у Rogue мотор 2,5 л, с 2022 года 1,5 л турбо (три цилиндра, переменная степень сжатия).',
@@ -40,7 +40,7 @@ export const MODEL_PAGES = [
     ],
   },
   {
-    key: 'ford/bronco-sport', brand: 'ford', brandName: 'Ford', name: 'Bronco Sport', match: (c) => /bronco sport/i.test(c.title),
+    key: 'ford/bronco-sport', brand: 'ford', brandName: 'Ford', name: 'Bronco Sport', ru: 'Форд Бронко Спорт', match: (c) => /bronco sport/i.test(c.title),
     cc: () => 1500, gen: 'Компактный внедорожник, выпускается с 2021 модельного года',
     about: [
       'Компактный внедорожник на базе Ford Escape, у всех версий полный привод. Не путать с большим рамным Bronco: это разные машины.',
@@ -49,7 +49,7 @@ export const MODEL_PAGES = [
     ],
   },
   {
-    key: 'vw/jetta', brand: 'vw', brandName: 'Volkswagen', name: 'Jetta', match: (c) => c.model?.slug === 'jetta',
+    key: 'vw/jetta', brand: 'vw', brandName: 'Volkswagen', name: 'Jetta', ru: 'Фольксваген Джетта', match: (c) => c.model?.slug === 'jetta',
     cc: (y) => (y >= 2022 ? 1500 : 1400), gen: 'Седан: 1,4 л турбо до 2021 года, 1,5 л турбо с 2022 года',
     about: [
       'Седан, который в Беларуси часто берут для работы в такси: недорогой в обслуживании мотор и большой багажник.',
@@ -141,6 +141,7 @@ export function modelPages(ctx) {
     <div class="prose">
       <h2>Что важно знать про ${esc(full)} из США</h2>
       <p><b>${esc(m.gen)}.</b></p>
+      <p>Пригон ${esc(full)} (${esc(m.ru)}) из Америки под ключ: найдём лот на Copart или IAAI, проверим историю, выиграем торги, доставим в Минск и растаможим. Деньги за машину вы платите аукциону напрямую, нам только за услугу.</p>
       ${m.about.map((p) => `<p>${esc(p)}</p>`).join('')}
       <h2>Что проверим перед ставкой</h2>
       <ul>
