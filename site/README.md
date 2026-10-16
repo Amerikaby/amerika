@@ -72,6 +72,8 @@ OUT=/tmp/site BASE=/ node site/build.mjs   # собрать в другую па
   блок `moto` для мотоциклов, адрес вебхука заявок `leadEndpoint`. Отсюда же строятся таблицы на странице таможенного калькулятора.
 - `assets/site.js` — меню, формы, калькуляторы, фильтр каталога, галерея. При сборке склеивается с `config.js` в `new2/assets/site.js`.
 - `assets/site.css` — общие стили.
+- `pages/models.mjs` — страницы популярных моделей `/usa/<марка>/<модель>/` (Equinox, Trailblazer, Trax, Rogue, Bronco Sport, Jetta) и блок «Популярные модели» на главной и в каталоге.
+  Цены рынка берутся из `data/market-avby.json`; обновить: `python3 site/tools/avby-market.py`, затем пересобрать. Новую модель добавить в `MODEL_PAGES` и в `MODELS` скрипта.
 
 ## Аналитика
 

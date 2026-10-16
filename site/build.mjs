@@ -14,6 +14,7 @@ import { esc, decode, plain, clip, sanitize } from './lib/html.mjs';
 import { makeLayout, SITE, SERVICES, ICONS } from './partials.mjs';
 import { homeBody } from './pages/home.mjs';
 import { staticPages } from './pages/static.mjs';
+import { modelPages, modelsStrip } from './pages/models.mjs';
 import { PHOTO_BLOCK, isStubImage, fixTitleCase, defaultCc, EV_MODELS } from './data-fixes.mjs';
 
 // ---------- Настройки ----------
@@ -279,6 +280,21 @@ const ORG = { '@type': 'Organization', name: 'Amerika.by', url: SITE.origin + '/
 // Общий контекст для статичных страниц
 const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postCard, cars, posts, brandList, fmtDate };
 
+// 0. Страницы популярных моделей /usa/<марка>/<модель>/ (цены рынка: site/data/market-avby.json)
+const market = existsSync(path.join(ROOT, 'data', 'market-avby.json')) ? JSON.parse(await readFile(path.join(ROOT, 'data', 'market-avby.json'), 'utf8')) : null;
+const modelPg = market ? modelPages({ u, esc, money, costOf, autoPortFor, CONFIG, carCard, cars, leadSection, brandPath, market, plural }) : [];
+for (const p of modelPg) await out(p.path, page(p));
+const modelsSection = (cls = '') => modelPg.length ? `<section class="${cls}" id="models">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Популярные модели</p>
+      <h2>Сколько стоят в Минске самые популярные машины из США</h2>
+      <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
+    </div>
+    ${modelsStrip(modelPg, { u, esc, money })}
+  </div>
+</section>` : '';
+
 // 1. Главная
 {
   const extra = `<section class="white" id="services">
@@ -292,7 +308,9 @@ const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postC
   </div>
 </section>
 
-<section id="catalog">
+${modelsSection()}
+
+<section class="white" id="catalog">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Каталог</p>
@@ -304,7 +322,7 @@ const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postC
   </div>
 </section>
 
-<section class="white" id="blog">
+<section id="blog">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Блог</p>
@@ -364,6 +382,7 @@ for (let n = 1; n <= totalCatPages; n++) {
 </div></div>
 <section class="sec tight" style="padding-top:0">
   <div class="wrap">
+    ${n === 1 && modelPg.length ? `<h2 style="font-size:20px;margin-bottom:12px">Популярные модели: цена в Минске</h2>${modelsStrip(modelPg, { u, esc, money })}<div style="height:28px"></div>` : ''}
     <h2 style="font-size:20px;margin-bottom:12px">Марки</h2>
     ${brandChips()}
   </div>
@@ -705,7 +724,8 @@ ErrorDocument 404 ${BASE}404.html
     return `RewriteRule ^${esc301(r.from.replace(/\/$/, ''))}/?$ ${target} [R=301,L,NE]`;
   });
   const generic = `# Всё, что не попало в список выше
-RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
+${modelPg.length ? `RewriteCond %{REQUEST_URI} !^/(${modelPg.map((p) => p.path.replace(/\/$/, '').replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('|')})/?$
+` : ''}RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
 RewriteRule ^(europe|canada|china)/.*$ /${CAT} [R=301,L]
 RewriteRule ^auto-(europe|canada|china)(/.*)?$ /${CAT} [R=301,L]
 RewriteRule ^situation/.*$ /${CAT} [R=301,L]`;

@@ -1,9 +1,9 @@
 # 301-редиректы со старого WordPress на новый сайт (для переезда в корень amerika.by).
-# Сгенерировано 2026-10-15 скриптом site/build.mjs из XML-карт старого сайта (1883 адресов).
+# Сгенерировано 2026-10-16 скриптом site/build.mjs из XML-карт старого сайта (1883 адресов).
 # В new2/ НЕ подключается. При переезде вставить в .htaccess корня ПЕРЕД правилами сайта.
 # Адреса, которые на новом сайте сохранены (каталог /auto-usa/, марки /usa/<марка>/, блог, услуги, цены,
 # контакты, отзывы, таможенный калькулятор, политика), здесь не перечислены: они открываются как есть.
-# Всего правил: 501.
+# Всего правил: 496.
 <IfModule mod_rewrite.c>
 RewriteEngine On
 # тестовый каталог
@@ -781,15 +781,9 @@ RewriteRule ^usa/chevrolet/camaro/?$ /usa/chevrolet/?model=camaro [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/chevrolet/cruze/?$ /usa/chevrolet/?model=cruze [R=301,L,NE]
 # страница модели → страница марки
-RewriteRule ^usa/chevrolet/equinox/?$ /usa/chevrolet/?model=equinox [R=301,L,NE]
-# страница модели → страница марки
 RewriteRule ^usa/chevrolet/malibu/?$ /usa/chevrolet/?model=malibu [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/chevrolet/spark/?$ /usa/chevrolet/?model=spark [R=301,L,NE]
-# страница модели → страница марки
-RewriteRule ^usa/chevrolet/trailblazer/?$ /usa/chevrolet/?model=trailblazer [R=301,L,NE]
-# страница модели → страница марки
-RewriteRule ^usa/chevrolet/trax/?$ /usa/chevrolet/?model=trax [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/chrysler/pacifica/?$ /usa/chrysler/?model=pacifica [R=301,L,NE]
 # страница модели → страница марки
@@ -931,8 +925,6 @@ RewriteRule ^usa/nissan/murano/?$ /usa/nissan/?model=murano [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/nissan/rogue-sport/?$ /usa/nissan/?model=rogue-sport [R=301,L,NE]
 # страница модели → страница марки
-RewriteRule ^usa/nissan/rogue/?$ /usa/nissan/?model=rogue [R=301,L,NE]
-# страница модели → страница марки
 RewriteRule ^usa/nissan/sentra/?$ /usa/nissan/?model=sentra [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/nissan/versa/?$ /usa/nissan/?model=versa [R=301,L,NE]
@@ -999,8 +991,6 @@ RewriteRule ^usa/vw/golf/?$ /usa/vw/?model=golf [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/vw/id-4/?$ /usa/vw/?model=id-4 [R=301,L,NE]
 # страница модели → страница марки
-RewriteRule ^usa/vw/jetta/?$ /usa/vw/?model=jetta [R=301,L,NE]
-# страница модели → страница марки
 RewriteRule ^usa/vw/passat/?$ /usa/vw/?model=passat [R=301,L,NE]
 # страница модели → страница марки
 RewriteRule ^usa/vw/taos/?$ /usa/vw/?model=taos [R=301,L,NE]
@@ -1010,6 +1000,7 @@ RewriteRule ^usa/vw/tiguan/?$ /usa/vw/?model=tiguan [R=301,L,NE]
 RewriteRule ^vakansii/?$ /o-kompanii/ [R=301,L,NE]
 
 # Всё, что не попало в список выше
+RewriteCond %{REQUEST_URI} !^/(usa/chevrolet/equinox|usa/chevrolet/trailblazer|usa/chevrolet/trax|usa/nissan/rogue|usa/ford/bronco-sport|usa/vw/jetta)/?$
 RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
 RewriteRule ^(europe|canada|china)/.*$ /auto-usa/ [R=301,L]
 RewriteRule ^auto-(europe|canada|china)(/.*)?$ /auto-usa/ [R=301,L]

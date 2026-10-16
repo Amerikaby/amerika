@@ -1,55 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Для будущего запуска: адреса указывают на https://amerika.by/. Пока сайт тестовый и закрыт noindex. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://amerika.by/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/kalkulyator/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/tamozhennyj-kalkulator/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/podbor-avto-na-aukcione/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/proverka-istorii-po-bazam/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/rastamozhka-avtomobiley/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/otslezhivanie-konteinerov/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/dostavka-mototehniki/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/uslugi/dostavka-zapchastey/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/ceny/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/o-kompanii/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/kontakty/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/otzyvy/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/privacy-policy/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/auto-usa/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/chevrolet/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/vw/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/honda/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/ford/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/audi/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/bmw/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/toyota/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/buick/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/nissan/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/mazda/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/gmc/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/kia/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/subaru/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/hyundai/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/mitsubishi/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/volvo/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/jeep/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/alfa-romeo/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/mini/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/infiniti/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/mercedes-benz/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/fiat/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/tesla/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/jaguar/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/dodge/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/acura/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/aston-martin/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/bentley/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/cadillac/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/chrysler/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/lexus/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/usa/porsche/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://amerika.by/auto-usa/elektromobily-usa/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://amerika.by/usa/chevrolet/equinox/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/chevrolet/trailblazer/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/chevrolet/trax/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/nissan/rogue/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/ford/bronco-sport/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/vw/jetta/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/kalkulyator/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/tamozhennyj-kalkulator/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/podbor-avto-na-aukcione/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/proverka-istorii-po-bazam/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/rastamozhka-avtomobiley/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/otslezhivanie-konteinerov/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/dostavka-mototehniki/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/uslugi/dostavka-zapchastey/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/ceny/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/o-kompanii/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/kontakty/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/otzyvy/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/privacy-policy/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/auto-usa/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/chevrolet/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/vw/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/honda/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/ford/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/audi/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/bmw/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/toyota/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/buick/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/nissan/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/mazda/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/gmc/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/kia/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/subaru/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/hyundai/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/mitsubishi/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/volvo/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/jeep/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/alfa-romeo/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/mini/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/infiniti/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/mercedes-benz/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/fiat/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/tesla/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/jaguar/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/dodge/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/acura/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/aston-martin/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/bentley/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/cadillac/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/chrysler/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/lexus/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/usa/porsche/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://amerika.by/auto-usa/elektromobily-usa/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://amerika.by/auto-usa/ford-bronco-sport-big-bend-2022-4/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://amerika.by/auto-usa/volkswagen-taos-1-5t-se-2024/</loc><lastmod>2026-09-07</lastmod></url>
   <url><loc>https://amerika.by/auto-usa/hyundai-kona-n-line-2023/</loc><lastmod>2026-09-07</lastmod></url>
@@ -1277,7 +1283,7 @@
   <url><loc>https://amerika.by/auto-usa/mazda-3-2018/</loc><lastmod>2026-04-22</lastmod></url>
   <url><loc>https://amerika.by/auto-usa/tesla-model-s/</loc><lastmod>2026-04-22</lastmod></url>
   <url><loc>https://amerika.by/auto-usa/chevrolet-malibu-lt-2019/</loc><lastmod>2026-04-22</lastmod></url>
-  <url><loc>https://amerika.by/blog/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://amerika.by/blog/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://amerika.by/blog/utilizacionnyj-sbor-belarus-2026/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://amerika.by/blog/avto-posle-zatopleniya-iz-ssha/</loc><lastmod>2026-10-09</lastmod></url>
   <url><loc>https://amerika.by/blog/avto-posle-grada-iz-ssha/</loc><lastmod>2026-10-09</lastmod></url>
