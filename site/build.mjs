@@ -410,12 +410,13 @@ ${leadSection({ eyebrow: 'Подбор под бюджет', title: 'Не наш
 }
 
 // 3a. Страницы марок /usa/<марка>/ и электромобили /auto-usa/elektromobily-usa/
-async function listingPage({ rel, list, name, crumbsName, models = [], title, description, h1, lead, leadCar, chipsCurrent }) {
+async function listingPage({ rel, list, name, crumbsName, models = [], title, description, h1, lead, leadCar, chipsCurrent, modelLinks = [] }) {
   const body = `<div class="page-head"><div class="wrap">
   <p class="eyebrow">Каталог · ${esc(crumbsName)}</p>
   <h1>${esc(h1)}</h1>
   <p class="lead">${lead}</p>
   <div class="cta-row"><a class="btn btn-red" href="#lead">Подобрать ${esc(name)}</a><a class="btn btn-line" href="${u('kalkulyator/')}">Посчитать цену до Минска</a></div>
+  ${modelLinks.length ? `<p class="model-links">Цены в Минске по годам: ${modelLinks.map((p) => `<a href="${u(p.path)}">${esc(p.card.full)} из США</a>`).join(', ')}</p>` : ''}
 </div></div>
 <section class="sec" style="padding-top:0">
   <div class="wrap">
@@ -445,6 +446,7 @@ for (const b of brandList) {
     h1: `${b.name} из США с доставкой в Минск`,
     lead: `${n} ${plural(n, 'пример', 'примера', 'примеров')} ${esc(b.name)} с аукционов Copart и IAAI${range ? `, ${range} годов выпуска` : ''}. Подберём такую же машину под ваш бюджет, проверим историю и доставим в Минск под ключ.`,
     leadCar: `Ищу ${b.name}: `,
+    modelLinks: modelPg.filter((p) => p.brand === b.slug),
   });
 }
 if (evCars.length) {
@@ -506,6 +508,7 @@ for (const c of cars) {
       <div class="prose">
         <h2 style="margin-top:0">Коротко</h2>
         <p>${esc(c.title)}${facts.length ? ': ' + esc(facts.join(', ')) : ''}. Лот с американского аукциона: конкретная машина могла уже уйти с торгов, но похожую мы найдём и проверим. ${esc(routeText)}</p>
+        ${(() => { const mp = modelPg.find((p) => p.brand === c.brand?.slug && p.match(c)); return mp ? `<p>Сколько стоит ${esc(mp.card.full)} из США по годам и до какой ставки выходит дешевле, чем на av.by: <a href="${u(mp.path)}">${esc(mp.card.full)} из США под ключ</a>.</p>` : ''; })()}
       </div>
       <div class="estimate">
         <h2>Сколько будет стоить в Минске <span class="tag">пример</span></h2>
@@ -666,6 +669,28 @@ await out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${written.filter((p) => !/\/page\/\d+\/$/.test(p)).map((p) => `  <url><loc>${SITE.origin}/${p}</loc><lastmod>${(lastmod.get(p) || today).slice(0, 10)}</lastmod></url>`).join('\n')}
 </urlset>
+`, { sitemap: false });
+// llms.txt: краткая карта сайта для ИИ-поисковиков (ChatGPT, Perplexity, Яндекс Нейро). Адреса будущие, как в sitemap.
+await out('llms.txt', `# Amerika.by
+
+> Пригон и доставка авто из США в Беларусь под ключ: подбор на аукционах Copart и IAAI, проверка истории, доставка до Минска через Клайпеду или Поти, растаможка. ООО «МирАвтоИмпорт», Минск, ул. Большое Стиклево, 83. Телефон +375 29 633-28-28.
+
+Деньги за машину клиент платит аукциону напрямую, нам только фиксированную сумму за услугу по договору: 599, 799 или 1999 BYN. Срок от покупки до Минска обычно 40–70 дней. Машины с двигателем до 1,9 л едут через Клайпеду (Литва), остальные, гибриды и электромобили через Поти (Грузия).
+
+## Главное
+- [Калькулятор авто из США под ключ](${SITE.origin}/kalkulyator/): полная цена до Минска по цене лота, году и объёму
+- [Таможенный калькулятор](${SITE.origin}/tamozhennyj-kalkulyator/): пошлина, утильсбор и сборы для физлиц
+- [Цены на услуги](${SITE.origin}/ceny/)
+- [Каталог примеров авто из США](${SITE.origin}/${CAT})
+
+## Популярные модели: цена в Минске по годам
+${modelPg.map((p) => `- [${p.card.full} из США под ключ](${SITE.origin}/${p.path})`).join('\n')}
+
+## Услуги
+${SERVICES.map(([p, t, d]) => `- [${t}](${SITE.origin}/${p}): ${d}`).join('\n')}
+
+## Статьи
+${posts.slice(0, 20).map((p) => `- [${p.title}](${SITE.origin}/blog/${p.slug}/)`).join('\n')}
 `, { sitemap: false });
 await out('robots.txt', `# Тестовая версия сайта: индексация закрыта\nUser-agent: *\nDisallow: /\n`, { sitemap: false });
 await out('.htaccess', `# Тестовая версия: отключаем правила WordPress внутри этой папки и отдаём свою 404.

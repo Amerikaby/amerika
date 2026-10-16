@@ -89,14 +89,16 @@ qsa("form[data-lead]").forEach(function(form){
     var data = {source: location.href};
     ATTR_KEYS.concat(["landing","referrer"]).forEach(function(k){ if (attribution && attribution[k]) data[k] = attribution[k]; });
     qsa("input[name],textarea[name],select[name]", form).forEach(function(el){ if (el.type !== "checkbox") data[el.name] = el.value; });
-    track("lead_submit", {form: form.getAttribute("data-lead") || "lead"});
+    var formName = form.getAttribute("data-lead") || "lead";
+    // Конверсия только после успешной отправки, попытка — отдельным событием (опыт krov.by: клик ≠ заявка)
+    track("lead_attempt", {form: formName});
     if (!CONFIG.leadEndpoint) {
       msg.textContent = "Это тестовая версия сайта (тестовый режим): заявка никуда не отправлена. После подключения amoCRM она будет сразу приходить менеджеру.";
       return;
     }
     msg.textContent = "Отправляем…";
     fetch(CONFIG.leadEndpoint, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data)})
-      .then(function(r){ if (!r.ok) throw 0; msg.textContent = "Заявка принята. Менеджер перезвонит в течение часа в рабочее время."; form.reset(); })
+      .then(function(r){ if (!r.ok) throw 0; track("lead_submit", {form: formName}); msg.textContent = "Заявка принята. Менеджер перезвонит в течение часа в рабочее время."; form.reset(); })
       .catch(function(){ msg.textContent = "Не получилось отправить. Позвоните нам: +375 (29) 633-28-28 или напишите в Telegram."; });
   });
 });

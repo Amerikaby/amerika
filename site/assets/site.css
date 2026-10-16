@@ -595,3 +595,5 @@ section{padding-block:80px}
 .model-tbl th small{font-weight:500}
 .model-tbl td a{color:var(--navy);text-decoration:none;border-bottom:2px solid var(--yellow)}
 .model-tbl .muted{color:var(--muted)}
+.page-head .model-links{font-size:15px;color:var(--muted)}
+.page-head .model-links a{color:var(--navy);font-weight:700}

@@ -174,6 +174,7 @@ ${leadSection({ eyebrow: 'Подбор под бюджет', title: `Подбе�
       ogImage: withPhoto[0]?.gallery[0]?.large,
       body,
       jsonld: [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
+      brand: m.brand, match: m.match,
       card: { rel, full, name: m.name, brandName: m.brandName, best: pick, photo: withPhoto[0]?.gallery[0], from: rows.length ? Math.min(...rows.map((r) => r.year)) : null },
     });
   }
