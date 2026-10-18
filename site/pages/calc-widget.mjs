@@ -106,7 +106,10 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
         <p class="note">Расчёт ориентировочный: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации. Точный расчёт по конкретной машине сделает менеджер.</p>
         <div class="actions">
           <a class="btn btn-red" href="${sendHref}" id="sendCalc">Получить точный расчёт</a>
+          <button class="btn btn-line" type="button" id="shareCalc">Ссылка на этот расчёт</button>
         </div>
+        <p class="note" id="shareCalcStatus" role="status" hidden></p>
+        <div class="field" id="shareCalcFallback" hidden><label for="shareCalcUrl">Скопируйте ссылку</label><input id="shareCalcUrl" type="url" readonly></div>
         </div>
       </div>
       </div>

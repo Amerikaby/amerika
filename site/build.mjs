@@ -478,6 +478,7 @@ for (let n = 1; n <= totalCatPages; n++) {
       <div class="field"><label for="catQ">Поиск по модели или году</label><input id="catQ" type="search" placeholder="Например: RAV4 2021" autocomplete="off"></div>
       <div class="field"><label for="catBrand">Марка</label><select id="catBrand"><option value="">Все марки</option>${brandList.map((b) => `<option value="${esc(b.slug)}">${esc(b.name)} (${b.cars.length})</option>`).join('')}</select></div>
       <p class="count" id="catCount" aria-live="polite">${cars.length} авто · стр. ${n} из ${totalCatPages}</p>
+      <div class="filter-actions"><button class="btn btn-line" id="catReset" type="button" hidden>Сбросить фильтры</button><button class="btn btn-line" id="catRetry" type="button" hidden>Повторить поиск</button></div>
     </form>
     <div class="cars" id="carGrid">${slice.map((c) => carCard(c)).join('')}</div>
     <div class="more"><button class="btn btn-navy" type="button" id="catMore" hidden>Показать ещё</button></div>
@@ -578,7 +579,7 @@ for (const c of cars) {
   const related = (c.brand ? brands.get(c.brand.slug).cars : cars).filter((x) => x !== c && x.title !== c.title)
     .sort((a, b) => (b.model?.slug === c.model?.slug) - (a.model?.slug === c.model?.slug)).slice(0, 4);
   const gallery = g.length ? `<div class="gallery" id="gallery">
-      <div class="main"><img src="${esc(g[0].large)}" alt="${esc(c.title)}, фото 1" width="1024" height="768" fetchpriority="high">${g.length > 1 ? `<button class="nav-btn prev" type="button" aria-label="Предыдущее фото">‹</button><button class="nav-btn next" type="button" aria-label="Следующее фото">›</button><span class="cnt">1 / ${g.length}</span>` : ''}</div>
+      <div class="main"><img src="${esc(g[0].large)}" alt="${esc(c.title)}, фото 1" width="1024" height="768" fetchpriority="high"><button class="photo-zoom" type="button" aria-haspopup="dialog">Увеличить фото ↗</button>${g.length > 1 ? `<button class="nav-btn prev" type="button" aria-label="Предыдущее фото">‹</button><button class="nav-btn next" type="button" aria-label="Следующее фото">›</button><span class="cnt">1 / ${g.length}</span>` : ''}</div>
       ${g.length > 1 ? `<div class="thumbs">${g.map((x, i) => `<button type="button" data-src="${esc(x.large)}" aria-current="${i === 0}" aria-label="Фото ${i + 1}"><img src="${esc(x.small)}" alt="${esc(c.title)}, фото ${i + 1}" loading="lazy" decoding="async" width="300" height="225"></button>`).join('')}</div>` : ''}
     </div>` : `<div class="gallery">${photoStub(c, ' big')}</div>`;
   const desc = c.uniqueText ? sanitize(c.rawContent, mapLink, { shiftHeadings: true }) : '';

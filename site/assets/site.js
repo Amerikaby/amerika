@@ -263,12 +263,26 @@ function fillYears(sel, def){
   if(params.has("repair")) $("repair").value = Math.max(0,Number(params.get("repair"))||0);
   if(CONFIG.servicePrices.includes(Number(params.get("service")))) $("service").value=params.get("service");
   $("benefit").checked=params.get("benefit")==="1";
+  if(params.get("mode")==="budget")document.querySelector('#calcForm input[name="mode"][value="budget"]').checked=true;
+  if(params.get("auction")==="iaai")document.querySelector('#calcForm input[name="auction"][value="iaai"]').checked=true;
+  if(["auto","klaipeda","poti"].includes(params.get("port")))$("port").value=params.get("port");
+  $("yard").value=(params.get("yard")||"").slice(0,120);
+  $("sublot").checked=params.get("sublot")==="1";
   fillYards();
   var used = false;
   function onUse(){ calc(); if (!used) { used = true; track("calc_used", {calc: "turnkey"}); } }
   $("calcForm").addEventListener("input", onUse);
   $("calcForm").addEventListener("change", onUse);
   calc();
+
+  $("shareCalc").addEventListener("click",async function(){
+    if(!calc())return;
+    var query=new URLSearchParams({type:val("vtype"),mode:val("mode"),price:$("price").value,year:$("year").value,cc:$("volume").value,fuel:val("fuel"),repair:$("repair").value,service:$("service").value,benefit:$("benefit").checked?"1":"0",auction:val("auction"),yard:$("yard").value.trim(),port:$("port").value,sublot:$("sublot").checked?"1":"0"});
+    var url=location.origin+BASE+"kalkulyator/?"+query.toString()+"#calc";
+    var status=$("shareCalcStatus");status.hidden=false;
+    try{await navigator.clipboard.writeText(url);$("shareCalcFallback").hidden=true;status.textContent="Ссылка скопирована. В ней сохранены параметры; при изменении ставок итог может измениться.";}
+    catch(e){$("shareCalcFallback").hidden=false;$("shareCalcUrl").value=url;$("shareCalcUrl").focus();$("shareCalcUrl").select();status.textContent="Скопируйте ссылку из поля ниже. Она откроет расчёт с вашими параметрами.";}
+  });
 
   var send = $("sendCalc");
   if (send) send.addEventListener("click", function(e){
@@ -523,11 +537,25 @@ function fillYears(sel, def){
     main.src = b.dataset.src; main.alt = b.querySelector("img").alt;
     btns.forEach(function(x, k){ x.setAttribute("aria-current", k === i); });
     if (cnt) cnt.textContent = (i + 1) + " / " + btns.length;
+    if(dialog.open)updateLarge();
   }
   btns.forEach(function(b, k){ b.addEventListener("click", function(){ show(k); }); });
   var p = g.querySelector(".prev"), n = g.querySelector(".next");
   if (p) p.addEventListener("click", function(){ show(i - 1); });
   if (n) n.addEventListener("click", function(){ show(i + 1); });
+  var dialog=document.createElement("dialog");dialog.className="photo-dialog";dialog.setAttribute("aria-label","Фотографии автомобиля");
+  dialog.innerHTML='<div class="photo-toolbar"><span class="photo-counter" aria-live="polite"></span><button type="button" class="btn btn-line photo-close" autofocus>Закрыть ×</button></div><div class="photo-stage"><img alt=""><button type="button" class="nav-btn prev" aria-label="Предыдущее фото">‹</button><button type="button" class="nav-btn next" aria-label="Следующее фото">›</button></div><p class="photo-caption"></p>';
+  document.body.appendChild(dialog);
+  function updateLarge(){var img=dialog.querySelector("img");img.src=main.src;img.alt=main.alt;dialog.querySelector(".photo-counter").textContent=(i+1)+" / "+Math.max(1,btns.length);dialog.querySelector(".photo-caption").textContent=main.alt;}
+  var zoom=g.querySelector(".photo-zoom");
+  function openLarge(){updateLarge();dialog.showModal();document.body.classList.add("photo-open");}
+  zoom.addEventListener("click",openLarge);
+  main.addEventListener("click",openLarge);
+  dialog.querySelector(".photo-close").addEventListener("click",function(){dialog.close()});
+  dialog.addEventListener("close",function(){document.body.classList.remove("photo-open");zoom.focus()});
+  dialog.addEventListener("click",function(e){if(e.target===dialog){var r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
+  dialog.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();show(i+(e.key==="ArrowLeft"?-1:1))}});
+  ["prev","next"].forEach(function(cls){var b=dialog.querySelector("."+cls);b.hidden=btns.length<2;b.addEventListener("click",function(){show(i+(cls==="prev"?-1:1))})});
 })();
 
 /* ---------- Каталог: поиск и фильтр по марке ---------- */
@@ -545,8 +573,11 @@ function carCard(c){
   var form = $("catFilter");
   if (!form) return;
   var grid = $("carGrid"), pager = $("catPager"), count = $("catCount"), more = $("catMore"), data = null, list = [], shown = 0, STEP = 24;
-  var q = $("catQ"), brand = $("catBrand");
+  var q = $("catQ"), brand = $("catBrand"), reset=$("catReset"), retry=$("catRetry"), loading=null;
+  var original={html:grid.innerHTML,count:count.textContent};
   if (params.get("q")) q.value = params.get("q");
+  if(params.has("brand"))brand.value=params.get("brand");
+  function syncUrl(){var url=new URL(location.href);["q","brand"].forEach(function(k){var value=k==="q"?q.value.trim():brand.value;if(value)url.searchParams.set(k,value);else url.searchParams.delete(k)});history.replaceState(null,"",url);reset.hidden=!q.value&&!brand.value;}
   function render(reset){
     if (reset) { grid.innerHTML = ""; shown = 0; }
     var frag = document.createDocumentFragment();
@@ -554,12 +585,12 @@ function carCard(c){
     shown = Math.min(list.length, shown + STEP);
     grid.appendChild(frag);
     more.hidden = shown >= list.length;
-    if (!list.length) grid.innerHTML = '<p class="empty">Ничего не нашли. Напишите нам, какую машину ищете: подберём на аукционе.</p>';
+    if (!list.length) grid.innerHTML = '<div class="empty"><p>По этим условиям примеров пока нет. Попробуйте другую модель или сбросьте фильтры.</p><a class="btn btn-line" href="#lead">Подобрать похожую машину</a></div>';
   }
   function apply(){
     var t = q.value.trim().toLowerCase(), b = brand.value;
-    if (!t && !b) { location.href = location.pathname; return; }
-    if (b && !t) { location.href = BASE + "usa/" + b + "/"; return; }
+    syncUrl();retry.hidden=true;
+    if (!t && !b) { grid.innerHTML=original.html;count.textContent=original.count;if(pager)pager.hidden=false;more.hidden=true;return; }
     var words = t.split(/\s+/).filter(Boolean);
     list = data.filter(function(c){
       if (b && c.b !== b) return false;
@@ -570,18 +601,24 @@ function carCard(c){
     if (pager) pager.hidden = true;
     render(true);
   }
-  function load(cb){
-    if (data) return cb();
+  function load(){
+    syncUrl();
+    if (data || (!q.value.trim()&&!brand.value)) return apply();
+    if(loading)return;
+    retry.hidden=true;form.setAttribute("aria-busy","true");
     count.textContent = "Загружаем…";
-    fetch(BASE + "assets/cars.json").then(function(r){ return r.json(); }).then(function(d){ data = d; cb(); })
-      .catch(function(){ count.textContent = "Не удалось загрузить список"; });
+    loading=fetch(BASE + "assets/cars.json").then(function(r){if(!r.ok)throw Error();return r.json();}).then(function(d){if(!Array.isArray(d))throw Error();data=d;apply();})
+      .catch(function(){if(!q.value.trim()&&!brand.value)return apply();count.textContent="Поиск недоступен. Ниже исходный список; попробуйте ещё раз.";retry.hidden=false;})
+      .finally(function(){loading=null;form.removeAttribute("aria-busy")});
   }
   var timer;
-  q.addEventListener("input", function(){ clearTimeout(timer); timer = setTimeout(function(){ load(apply); }, 250); });
-  brand.addEventListener("change", function(){ load(apply); });
-  form.addEventListener("submit", function(e){ e.preventDefault(); load(apply); });
+  q.addEventListener("input", function(){ clearTimeout(timer); timer = setTimeout(load, 250); });
+  brand.addEventListener("change", load);
+  form.addEventListener("submit", function(e){ e.preventDefault();clearTimeout(timer);load(); });
+  reset.addEventListener("click",function(){clearTimeout(timer);q.value="";brand.value="";apply();q.focus()});
+  retry.addEventListener("click",load);
   more.addEventListener("click", function(){ render(false); });
-  if (q.value) load(apply);
+  if (q.value||brand.value) load();
 })();
 
 /* ---------- Страница марки: фильтр по модели и «показать ещё» ---------- */
