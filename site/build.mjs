@@ -321,14 +321,41 @@ for (const p of modelPg) await out(p.path, page(p));
   });
   const popular = MODEL_PAGES.map((pg) => modelIndex.findIndex((m) => (MK_ALIAS[m.key] || m.key) === pg.key)).filter((i) => i >= 0);
   const quick = quickIdx.length ? quickCalc({ idx: quickIdx, popular }, { u, esc }) : '';
-  const models = modelPg.length ? `<section id="models">
+  // Популярные машины: средние цены av.by, аукциона, под ключ по Указу 140 и экономия (site/data/home-models.json)
+  const HM = JSON.parse(await readFile(path.join(ROOT, 'data', 'home-models.json'), 'utf8'));
+  const r100 = (n) => Math.round(n / 100) * 100;
+  const hmCards = HM.models.map((m) => {
+    const mk = market?.models?.[m.key]?.[HM.year];
+    if (!mk) return '';
+    const car = cars.find((c) => c.slug === m.photo[0]);
+    const ph = car?.gallery?.[m.photo[1]];
+    const o = { moto: false, year: HM.year, cc: m.cc, alt: false, ev: false, region: 'east', port: autoPortFor(false, false, m.cc), sublot: false, benefit: true };
+    const ben = costOf(m.auction, o).total, full = costOf(m.auction, { ...o, benefit: false }).total;
+    const save = r100(mk.median - ben);
+    const href = m.page ? u(m.page) : '#quick-sec';
+    return `<article class="pm">
+  <a class="ph" href="${href}">${ph ? `<img src="${esc(ph.card)}" srcset="${esc(ph.small)} 300w, ${esc(ph.card)} 768w" sizes="(max-width:560px) 92vw, 380px" alt="${esc(m.brand + ' ' + m.name)} ${HM.year}" loading="lazy" decoding="async" width="380" height="270">` : ''}<span class="tag">${HM.year} · ${(m.cc / 1000).toFixed(1).replace('.', ',')} л · через Клайпеду</span></a>
+  <div class="tx">
+    <span class="br">${esc(m.brand)}</span><h3>${esc(m.name)}</h3>
+    <dl>
+      <div><dt>На av.by в среднем</dt><dd class="num">${money(r100(mk.median))} $</dd></div>
+      <div><dt>На аукционе в среднем<small>не сильно битая</small></dt><dd class="num">${money(r100(m.auction))} $</dd></div>
+      <div class="tk"><dt>Под ключ в Минске<small>с таможней по Указу 140</small></dt><dd class="num">${money(r100(ben))} $</dd></div>
+    </dl>
+    <p class="save">Экономия <b class="num">≈ ${money(save)} $</b></p>
+    <p class="nob">Без льготы под ключ ≈ ${money(r100(full))} $</p>
+  </div>
+</article>`;
+  }).join('');
+  const models = hmCards ? `<section id="models">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Популярные модели</p>
-      <h2>Сколько стоят в Минске самые популярные машины из США</h2>
-      <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
+      <h2>Сколько стоит машина из США и сколько вы сэкономите</h2>
+      <p>Модели, которые чаще всего везут в Беларусь. Все с мотором до 1,9 л: едут через Клайпеду, поэтому доставка дешевле.</p>
     </div>
-    ${modelsTiles(modelPg, { u, esc, money, auction })}
+    <div class="pms">${hmCards}</div>
+    <p class="pm-note">Средние цены на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион: типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга.</p>
     <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';
