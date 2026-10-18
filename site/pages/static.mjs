@@ -198,7 +198,7 @@ ${M.dutyPct.map((r, i) => `<tr><td>ДВС ${lim(M.dutyPct, i, 'см³')}</td><td
   </div>
 </section>
 ${postLinks(['utilizacionnyj-sbor-belarus-2026', 'avto-s-aukciona-ssha-cena-pod-kljuch', 'kvota-na-elektromobili-belarus'])}
-${leadSection({ eyebrow: 'Точный расчёт бесплатно', title: 'Посчитаем растаможку по вашей машине', text: 'Пришлите ссылку на лот или VIN. Посчитаем таможню и полную цену до Минска по курсу на сегодня.', carLabel: 'Ссылка на лот, VIN или модель', placeholder: 'Например: https://www.copart.com/lot/… или Toyota RAV4 2021, 2,5 л' })}`,
+${leadSection({ eyebrow: 'Точный расчёт', title: 'Посчитаем растаможку по вашей машине', text: 'Пришлите ссылку на лот или VIN. Посчитаем таможню и полную цену до Минска по курсу на сегодня.', carLabel: 'Ссылка на лот, VIN или модель', placeholder: 'Например: https://www.copart.com/lot/… или Toyota RAV4 2021, 2,5 л' })}`,
   });
 
   // ---------- Услуги ----------
@@ -523,7 +523,7 @@ ${leadSection()}`,
     title: 'Контакты: офис в Минске, телефон, Telegram | Amerika.by',
     description: `Контакты Amerika.by: ${SITE.city}, ${SITE.address}. Телефон ${SITE.phone}, Telegram, Viber, WhatsApp. ${SITE.hours}.`,
     crumbs: [['kontakty/', 'Контакты']],
-    body: `${head({ eyebrow: 'Контакты', h1: 'Контакты', lead: 'Позвоните, напишите в мессенджер или приезжайте в офис в Минске. Консультация бесплатная.' })}
+    body: `${head({ eyebrow: 'Контакты', h1: 'Контакты', lead: 'Позвоните, напишите в мессенджер или приезжайте в офис в Минске..' })}
 <section class="sec" style="padding-top:0">
   <div class="wrap contacts-grid">
     <div class="box"><h3>Телефон</h3><a class="big num" href="${SITE.phoneHref}">${SITE.phone}</a><p>${SITE.hours}</p></div>

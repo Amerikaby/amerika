@@ -11,7 +11,7 @@ export function homeBody({ u, quick, models, extra }) {
       <h1>Доставка авто из США в Беларусь <mark>под ключ</mark></h1>
       <p class="lead">Найдём машину на аукционе, привезём в Минск и растаможим. Полную цену видите до ставки.</p>
       <div class="cta-row">
-        <a class="btn btn-red btn-xl" href="#lead">Подобрать машину бесплатно</a>
+        <a class="btn btn-red btn-xl" href="#lead">Подобрать машину</a>
         <a class="btn btn-line" href="#quick-sec">Посчитать цену</a>
       </div>
       <p class="cta-sub">Пришлём до 5 вариантов с аукциона и полную цену до Минска. Или напишите: <a href="${SITE.tg}" target="_blank" rel="noopener">Telegram</a>, <a href="${SITE.viber}">Viber</a>, <a href="${SITE.wa}" target="_blank" rel="noopener">WhatsApp</a>.</p>
@@ -75,7 +75,7 @@ ${models}
       <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>В Клайпеду или Поти. Везёт Atlantic Express (с 1995 года).</p></li>
       <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Помогаем с документами и платежами на таможне.</p></li>
     </ol>
-    <div class="mid-cta"><p>Пришлём до 5 вариантов с расчётом до Минска. Бесплатно.</p><a class="btn btn-red" href="#lead">Получить 5 вариантов</a></div>
+    <div class="mid-cta"><p>Пришлём до 5 вариантов с расчётом до Минска.</p><a class="btn btn-red" href="#lead">Получить 5 вариантов</a></div>
   </div>
 </section>
 
