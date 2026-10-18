@@ -738,3 +738,4 @@ section{padding-block:80px}
   .hb-chips a{flex:0 0 auto}
   .hb-stats{display:grid;grid-template-columns:1fr 1fr;font-size:14px}
 }
+.hero-q h1 .h1-tail{display:block;font-size:.62em;font-weight:700;line-height:1.2;margin-top:.3em;color:var(--navy-2)}
