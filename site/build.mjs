@@ -299,6 +299,8 @@ const ORG = { '@type': 'Organization', name: 'Amerika.by', url: SITE.origin + '/
 const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postCard, cars, posts, brandList, fmtDate };
 
 // 0. Страницы популярных моделей /usa/<марка>/<модель>/ (цены рынка: site/data/market-avby.json)
+// Средние цены продажи на аукционе (лёгкие повреждения): site/data/auction-avg.json, заполняется вручную или из AuctionsAPI
+const auction = existsSync(path.join(ROOT, 'data', 'auction-avg.json')) ? JSON.parse(await readFile(path.join(ROOT, 'data', 'auction-avg.json'), 'utf8')).models : {};
 const market = existsSync(path.join(ROOT, 'data', 'market-avby.json')) ? JSON.parse(await readFile(path.join(ROOT, 'data', 'market-avby.json'), 'utf8')) : null;
 const modelPg = market ? modelPages({ u, esc, money, costOf, autoPortFor, CONFIG, carCard, cars, leadSection, brandPath, market, plural }) : [];
 for (const p of modelPg) await out(p.path, page(p));
@@ -326,7 +328,7 @@ for (const p of modelPg) await out(p.path, page(p));
       <h2>Сколько стоят в Минске самые популярные машины из США</h2>
       <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
     </div>
-    ${modelsTiles(modelPg, { u, esc, money })}
+    ${modelsTiles(modelPg, { u, esc, money, auction })}
     <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';
