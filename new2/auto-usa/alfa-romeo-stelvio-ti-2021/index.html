@@ -38,6 +38,7 @@
         <a href="viber://chat?number=%2B375296332828" aria-label="Viber" title="Viber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2.8h10a4 4 0 0 1 4 4v7.4a4 4 0 0 1-4 4h-5.2L7.5 21.4v-3.2H7a4 4 0 0 1-4-4V6.8a4 4 0 0 1 4-4z"/><path d="M8.6 7.3c.3-.3.8-.3 1 .1l.7 1.3c.2.3.1.7-.2 1l-.4.3c.5 1.1 1.3 1.9 2.4 2.4l.3-.4c.3-.3.7-.4 1-.2l1.3.7c.4.2.4.7.1 1-.6.7-1.5.9-2.3.6-1.8-.7-3.3-2.2-4-4-.3-.8-.1-1.7.6-2.3z"/><path d="M13.2 5.9a3.6 3.6 0 0 1 3.1 3.1M13.3 4.2a5.3 5.3 0 0 1 4.7 4.7"/></svg></a>
         <a href="https://wa.me/375296332828" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.6 8.6 0 1 1 8 19.4z"/><path d="M9 8.3c.3-.3.8-.2 1 .2l.6 1.4c.1.3 0 .7-.3.9l-.4.3c.5 1 1.3 1.8 2.3 2.3l.3-.4c.2-.3.6-.4.9-.3l1.4.6c.4.2.5.7.2 1-.6.6-1.5.9-2.3.6-1.9-.7-3.4-2.2-4.1-4.1-.3-.8 0-1.7.4-2.5z"/></svg></a>
       </div>
+      <a class="btn btn-red hdr-cta" href="#lead">Подобрать авто</a>
     </div>
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Меню">
       <svg class="bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -121,8 +122,8 @@
       <p class="addr">Офис: Минск, ул. Большое Стиклево, 83, 3 этаж · <span style="white-space:nowrap">Пн–Пт 10:00–19:00</span></p>
     </div>
     <form class="lead-form" id="leadForm" data-lead novalidate>
-      <div class="field"><label for="lname">Имя</label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
+      <div class="field"><label for="lname">Имя <small>(необязательно)</small></label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lcar">Какую машину ищете</label><textarea id="lcar" name="car" rows="3" placeholder="Например: Toyota RAV4 2021, бюджет до 25 000 $ под ключ">Хочу такую же: Alfa Romeo Stelvio TI 2021</textarea></div>
       <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" required> <span>Согласен на обработку персональных данных в соответствии с <a href="/new2/privacy-policy/" target="_blank">политикой конфиденциальности</a></span></label>
       <button class="btn btn-red" type="submit">Хочу такую же</button>

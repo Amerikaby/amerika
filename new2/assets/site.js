@@ -710,3 +710,16 @@ function carCard(c){
   function f(){ bar.classList.toggle("on", window.scrollY > window.innerHeight * 0.6); }
   window.addEventListener("scroll", f, {passive: true}); f();
 })();
+
+// Кнопка «Подобрать авто» в шапке: ведёт к форме на странице, а если формы нет, на главную к форме
+(function(){
+  var b = document.querySelector(".hdr-cta"); if (!b) return;
+  if (!document.getElementById("lead")) { var logo = document.querySelector(".logo"); b.href = (logo ? logo.getAttribute("href") : "/") + "#lead"; }
+  b.addEventListener("click", function(){ if (typeof track === "function") track("cta_header"); });
+})();
+// Кнопка бюджета показывает введённую сумму
+(function(){
+  var i = document.getElementById("qBudget"), b = document.getElementById("qSendB"); if (!i || !b) return;
+  function f(){ var v = +i.value || 0; b.textContent = v >= 3000 ? "Подобрать машины до " + v.toLocaleString("ru-RU") + " $" : "Подобрать машины под бюджет"; }
+  i.addEventListener("input", f); f();
+})();

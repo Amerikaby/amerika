@@ -1,4 +1,5 @@
 // Главная (18.10.2026): первый экран с гарантиями, сразу под ним быстрый расчёт по любой модели, затем «кому уходят деньги»,
+import { SITE } from "../partials.mjs";
 // плитки моделей со сравнением с av.by, шаги, логистика, тарифы одной строкой, статьи, вопросы, заявка.
 
 export function homeBody({ u, quick, models, extra }) {
@@ -10,9 +11,10 @@ export function homeBody({ u, quick, models, extra }) {
       <h1>Доставка авто из США в Беларусь <mark>под ключ</mark></h1>
       <p class="lead">Найдём машину на аукционе, привезём в Минск и растаможим. Полную цену видите до ставки.</p>
       <div class="cta-row">
-        <a class="btn btn-red" href="#quick">Посчитать цену до Минска</a>
-        <a class="btn btn-line" href="#lead">Подобрать машину</a>
+        <a class="btn btn-red btn-xl" href="#lead">Подобрать машину бесплатно</a>
+        <a class="btn btn-line" href="#quick-sec">Посчитать цену</a>
       </div>
+      <p class="cta-sub">Пришлём до 5 вариантов с аукциона и полную цену до Минска. Или напишите: <a href="${SITE.tg}" target="_blank" rel="noopener">Telegram</a>, <a href="${SITE.viber}">Viber</a>, <a href="${SITE.wa}" target="_blank" rel="noopener">WhatsApp</a>.</p>
       <div class="facts">
         <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
         <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
@@ -73,7 +75,7 @@ ${models}
       <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>В Клайпеду или Поти. Везёт Atlantic Express (с 1995 года).</p></li>
       <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Помогаем с документами и платежами на таможне.</p></li>
     </ol>
-    <div class="mid-cta"><p>Пришлём до 5 вариантов с расчётом до Минска. Бесплатно.</p><a class="btn btn-red" href="#lead">Получить варианты</a></div>
+    <div class="mid-cta"><p>Пришлём до 5 вариантов с расчётом до Минска. Бесплатно.</p><a class="btn btn-red" href="#lead">Получить 5 вариантов</a></div>
   </div>
 </section>
 
@@ -129,7 +131,7 @@ export function quickCalc(data, { u, esc }) {
     <p class="qc-hint" id="qHint"></p>
     <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
     <div class="qc-actions">
-      <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
+      <a class="btn btn-red" href="#lead" id="qSend">Прислать мне этот расчёт</a>
       <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
     </div>
     <div class="qc-out">
@@ -145,7 +147,7 @@ export function quickCalc(data, { u, esc }) {
     <p class="qc-hint">С доставкой и растаможкой. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
     <ul class="qc-fit" id="qFit"></ul>
     <div class="qc-actions">
-      <a class="btn btn-red" href="#lead" id="qSendB">Подобрать под мой бюджет</a>
+      <a class="btn btn-red" href="#lead" id="qSendB">Подобрать машины под бюджет</a>
     </div>
   </div>
   <p class="qc-note">Предварительный расчёт. av.by: средняя цена объявлений.</p>

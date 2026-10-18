@@ -839,3 +839,11 @@ section{padding-block:80px}
   .quick-wrap .payees{order:2;margin-top:8px}
   .quick-wrap .payees-note{order:3}
 }
+/* Призывы к действию */
+.btn-xl{padding:18px 30px;font-size:17.5px}
+.cta-sub{margin-top:12px;font-size:15px;color:var(--muted);max-width:52ch}
+.cta-sub a{color:var(--navy);font-weight:700}
+.hdr-cta{padding:11px 18px;font-size:14.5px;margin-left:6px;white-space:nowrap}
+@media (max-width:1439px){.top .msgr{display:none}}
+@media (max-width:1100px){.hdr-cta{display:none}}
+.field label small{font-weight:400;color:var(--muted)}

@@ -75,6 +75,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
         <a href="${SITE.viber}" aria-label="Viber" title="Viber">${ICONS.viber}</a>
         <a href="${SITE.wa}" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">${ICONS.wa}</a>
       </div>
+      <a class="btn btn-red hdr-cta" href="#lead">Подобрать авто</a>
     </div>
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Меню">
       <svg class="bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -208,7 +209,7 @@ ${footer()}
   }
 
   /** Блок заявки (один на страницу: id полей фиксированы, к ним обращается калькулятор). */
-  function leadSection({ title = 'Пришлём до 5 вариантов с аукциона и расчёт под ключ', text = 'Оставьте телефон и напишите, какую машину ищете. Менеджер подберёт лоты и посчитает полную цену до Минска. Подборка ни к чему не обязывает.', eyebrow = 'Бесплатно и без обязательств', car = '', carLabel = 'Какую машину ищете', button = 'Получить подборку и расчёт', placeholder = 'Например: Toyota RAV4 2021, бюджет до 25 000 $ под ключ' } = {}) {
+  function leadSection({ title = 'Пришлём до 5 вариантов с аукциона и расчёт под ключ', text = 'Оставьте телефон и напишите, какую машину ищете. Менеджер подберёт лоты и посчитает полную цену до Минска. Подборка ни к чему не обязывает.', eyebrow = 'Бесплатно и без обязательств', car = '', carLabel = 'Какую машину ищете', button = 'Получить подборку бесплатно', placeholder = 'Например: Toyota RAV4 2021, бюджет до 25 000 $ под ключ' } = {}) {
     return `<section class="lead-sec" id="lead">
   <div class="wrap">
     <div class="sec-head" style="margin:0">
@@ -224,8 +225,8 @@ ${footer()}
       <p class="addr">Офис: ${SITE.city}, ${SITE.address} · <span style="white-space:nowrap">${SITE.hours}</span></p>
     </div>
     <form class="lead-form" id="leadForm" data-lead novalidate>
-      <div class="field"><label for="lname">Имя</label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
+      <div class="field"><label for="lname">Имя <small>(необязательно)</small></label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lcar">${carLabel}</label><textarea id="lcar" name="car" rows="3" placeholder="${esc(placeholder)}">${esc(car)}</textarea></div>
       <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" required> <span>Согласен на обработку персональных данных в соответствии с <a href="${u('privacy-policy/')}" target="_blank">политикой конфиденциальности</a></span></label>
       <button class="btn btn-red" type="submit">${button}</button>
