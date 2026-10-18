@@ -812,3 +812,30 @@ section{padding-block:80px}
 .quick-wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;align-items:start}
 .quick-wrap .sec-head{position:sticky;top:96px;margin:0}
 @media (max-width:900px){.quick-wrap{grid-template-columns:1fr;gap:20px}.quick-wrap .sec-head{position:static}}
+/* Кому уходят деньги: слева от калькулятора */
+.payees{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.payees li{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15.5px;color:var(--muted)}
+.payees li b{font:700 16px/1.3 var(--display);color:var(--ink)}
+.payees li.ours{background:var(--yellow-soft);margin:0 -12px;padding:12px;border-radius:10px;border-bottom:0}
+.payees a{color:var(--navy);font-weight:700}
+.quick-sec .sec-head .payees-note{margin-top:12px;font-size:14.5px;color:var(--muted)}
+.mid-cta{margin-top:34px;display:flex;align-items:center;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;padding:20px 24px;border-radius:var(--r);background:var(--yellow-soft);border:1px solid #f0d88a}
+.mid-cta p{font:700 18px/1.35 var(--display);color:var(--ink);margin:0}
+.guar-head{justify-content:flex-start}
+@media (max-width:900px){
+  .guar li{grid-template-columns:36px 1fr;gap:12px;padding:12px 0}
+  .guar li p{display:none}
+  .guar h3{margin:6px 0 0}
+  .payees li{grid-template-columns:100px 1fr}
+}
+@media (max-width:760px){
+  .mbar{transform:translateY(110%);transition:transform .25s}
+  .mbar.on{transform:none}
+}
+@media (max-width:900px){
+  .quick-wrap{display:flex;flex-direction:column}
+  .quick-wrap .sec-head{display:contents}
+  .quick-wrap .qc{order:1;margin-top:4px}
+  .quick-wrap .payees{order:2;margin-top:8px}
+  .quick-wrap .payees-note{order:3}
+}

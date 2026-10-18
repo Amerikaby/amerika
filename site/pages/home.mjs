@@ -6,9 +6,9 @@ export function homeBody({ u, quick, models, extra }) {
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy">
-      <p class="eyebrow">Copart, IAAI и Manheim · доставка до Минска</p>
+      <p class="eyebrow">Copart · IAAI · Manheim</p>
       <h1>Доставка авто из США в Беларусь <mark>под ключ</mark></h1>
-      <p class="lead">Пригон авто из Америки: покупка на Copart, IAAI и Manheim, доставка до Минска и растаможка. Работаем по договору, полную цену до Минска видите до ставки.</p>
+      <p class="lead">Найдём машину на аукционе, привезём в Минск и растаможим. Полную цену видите до ставки.</p>
       <div class="cta-row">
         <a class="btn btn-red" href="#quick">Посчитать цену до Минска</a>
         <a class="btn btn-line" href="#lead">Подобрать машину</a>
@@ -21,19 +21,19 @@ export function homeBody({ u, quick, models, extra }) {
     </div>
 
     <aside class="guar" aria-label="Три гарантии">
-      <div class="guar-head"><p>Три гарантии</p><span>прописаны в договоре</span></div>
+      <div class="guar-head"><p>Прописано в договоре</p></div>
       <ol>
         <li>
           <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span>
-          <div><h3>Официальный договор</h3><p>Офис в Минске, юрлицо в Беларуси. Что мы делаем и сколько это стоит, записано на бумаге.</p></div>
+          <div><h3>Договор и офис в Минске</h3><p>Что делаем и сколько стоит, записано на бумаге.</p></div>
         </li>
         <li>
           <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span>
-          <div><h3>За машину платите аукциону сами</h3><p>Деньги за лот уходят банковским переводом напрямую аукциону. Нам вы платите только за услугу.</p></div>
+          <div><h3>Деньги идут аукциону</h3><p>За лот платите сами, нам только за услугу.</p></div>
         </li>
         <li>
           <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-          <div><h3>Полная цена до Минска заранее</h3><p>Лот, сборы, доставка, пошлина, утильсбор и наша услуга. Считаем всё до ставки, а не после покупки.</p></div>
+          <div><h3>Цена известна заранее</h3><p>Лот, доставка, пошлина и услуга до ставки.</p></div>
         </li>
       </ol>
     </aside>
@@ -46,60 +46,34 @@ export function homeBody({ u, quick, models, extra }) {
       <p class="eyebrow">Быстрый расчёт</p>
       <h2>Сколько будет стоить ваша машина в Минске</h2>
       <p>Выберите модель или введите бюджет. Сравним с ценами на av.by.</p>
+      <ul class="payees" aria-label="Кому уходят деньги">
+        <li><b>Аукциону</b><span>лот и сборы</span></li>
+        <li><b>Перевозчику</b><span>доставка по США, море, порт → Минск</span></li>
+        <li><b>Таможне</b><span>пошлина, утильсбор, СВХ, декларант</span></li>
+        <li class="ours"><b>Нам</b><span>услуга <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b>. <a href="${u('ceny/')}">Тарифы →</a></span></li>
+      </ul>
+      <p class="payees-note">Деньги за машину не проходят через нас: каждому платите напрямую.</p>
     </div>
     ${quick}
   </div>
 </section>
-<section class="white" id="price-inside">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Что входит в цену</p>
-      <h2>Каждый платёж видно. И видно, кому он уходит</h2>
-      <p>Деньги за машину не проходят через нас. Каждому участнику вы платите напрямую.</p>
-    </div>
-    <div class="inc inc-short">
-      <article><p class="to"><b>1</b>Аукциону</p><ul><li>Цена лота</li><li>Сборы аукциона</li></ul></article>
-      <article><p class="to"><b>2</b>Перевозчику</p><ul><li>Доставка по США</li><li>Море до Клайпеды или Поти</li><li>Порт → Минск</li></ul></article>
-      <article><p class="to"><b>3</b>Таможне</p><ul><li>Пошлина</li><li>Утильсбор, СВХ, декларант</li></ul></article>
-      <article class="ours"><p class="to"><b>4</b>Нам</p><ul><li>Услуга по договору: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b></li><li>Без процента от цены машины</li></ul><a href="${u('ceny/')}">Что входит в тарифы →</a></article>
-    </div>
-  </div>
-</section>
-
 ${models}
 
 <section class="white" id="how">
   <div class="wrap">
     <div class="sec-head">
-      <p class="eyebrow">Шаги и сроки</p>
-      <h2>Где ваша машина и что будет дальше</h2>
-      <p>Обычно 40–70 дней от оплаты лота до Минска. На каждом шаге вы знаете, где машина.</p>
+      <p class="eyebrow">40–70 дней</p>
+      <h2>От договора до Минска</h2>
+      <p>На каждом шаге вы знаете, где машина.</p>
     </div>
     <ol class="timeline">
       <li><span class="dot"><b>1</b></span><span class="when">День 1</span><h3>Договор и подбор</h3><p>Подписываем договор и присылаем до 5 лотов с расчётом.</p></li>
       <li><span class="dot"><b>2</b></span><span class="when">До ставки</span><h3>Проверка и торги</h3><p>Проверяем историю и ставим за вас. Лот оплачиваете аукциону.</p></li>
       <li><span class="dot"><b>3</b></span><span class="when">1–2 недели</span><h3>Доставка по США</h3><p>Везём с площадки в порт, присылаем фото и номер контейнера.</p></li>
-      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>Контейнер идёт в Клайпеду или Поти.</p></li>
+      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>В Клайпеду или Поти. Везёт Atlantic Express (с 1995 года).</p></li>
       <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Помогаем с документами и платежами на таможне.</p></li>
     </ol>
-  </div>
-</section>
-
-<section id="logistics">
-  <div class="wrap atl">
-    <div class="sec-head" style="margin:0">
-      <p class="eyebrow">Логистика</p>
-      <h2>Логистика: Atlantic Express Corporation</h2>
-      <p>Везёт машины из США с 1995 года. За доставку вы платите перевозчику напрямую.</p>
-    </div>
-    <div class="atl-card">
-      <div class="since"><b class="num">1995</b><span>с этого года работает<br>Atlantic Express Corporation</span></div>
-      <div class="path" aria-label="Маршрут"><span>Аукцион в США</span><i>→</i><span>Порт США</span><i>→</i><span>Клайпеда / Поти</span><i>→</i><span>Минск</span></div>
-      <div class="routes">
-        <div><b>Через Клайпеду</b><span>Литва, через ЕС. Для машин с двигателем до 1,9 л.</span></div>
-        <div><b>Через Поти</b><span>Грузия, в обход ЕС. Для машин больше 1,9 л, гибридов и электро.</span></div>
-      </div>
-    </div>
+    <div class="mid-cta"><p>Пришлём до 5 вариантов с расчётом до Минска. Бесплатно.</p><a class="btn btn-red" href="#lead">Получить варианты</a></div>
   </div>
 </section>
 
@@ -115,9 +89,9 @@ ${extra}
       <details open><summary>Как я могу быть уверен, что деньги не пропадут?</summary><p>За машину вы платите аукциону напрямую, банковским переводом со своего счёта. За доставку платите перевозчику, пошлину таможне. Нам только фиксированную сумму за услугу по договору. У нас офис в Минске: ул. Большое Стиклево, 83, 3 этаж.</p></details>
       <details><summary>Сколько идёт машина из США в Минск?</summary><p>Обычно 40–70 дней после оплаты лота: около 1–2 недель по США до порта, 4–6 недель морем, затем доставка в Минск. Через Поти путь дольше, чем через Клайпеду.</p></details>
       <details><summary>Почему одни машины едут через Клайпеду, а другие через Поти?</summary><p>Через Евросоюз сейчас можно везти в Беларусь легковые машины с двигателем не больше 1,9 литра. Машины с большим объёмом мы везём через грузинский порт Поти. Электромобили и гибриды обычно тоже идут через Поти. Точный маршрут подтвердим при расчёте.</p></details>
-      <details><summary>Могут ли появиться платежи, которых нет в расчёте?</summary><p>В калькуляторе все обязательные статьи: лот, сборы аукциона, доставка, пошлина, утильсбор, СВХ, декларант и наша услуга. Отдельно идёт ремонт повреждений, его мы оцениваем до ставки. Курс валют на день оплаты может немного изменить сумму.</p></details>
+      <details><summary>Могут ли появиться платежи, которых нет в расчёте?</summary><p>В расчёте все обязательные платежи до Минска: лот, сборы аукциона, доставка, пошлина, утильсбор, СВХ, декларант и наша услуга. Сумма может немного измениться из-за курса валют на день оплаты.</p></details>
       <details><summary>Можно ли купить машину, которую я нашёл сам?</summary><p>Да. Пришлите ссылку на лот или VIN, мы проверим историю и повреждения и посчитаем полную стоимость до ставки. Это тариф «Проверка лота».</p></details>
-      <details><summary>Что если машина окажется хуже, чем на фото?</summary><p>Перед ставкой мы проверяем историю по Carfax и AutoCheck, смотрим все фото и отчёт аукциона и оцениваем ремонт. Если риск высокий, честно отговорим от покупки.</p></details>
+      <details><summary>Что если машина окажется хуже, чем на фото?</summary><p>Перед ставкой проверяем историю по Carfax и AutoCheck и все фото лота. Если машина не стоит своих денег, скажем об этом прямо.</p></details>
       <details><summary>Есть ли льготы на растаможку?</summary><p>По Указу № 140 многодетные семьи и инвалиды I и II группы платят 50% таможенных платежей: для легковых авто половину пошлины, для мотоциклов половину пошлины и НДС. Таможенный сбор платится полностью. Для электромобилей действуют отдельные условия и квота, их уточним при расчёте.</p></details>
     </div>
   </div>
@@ -160,7 +134,7 @@ export function quickCalc(data, { u, esc }) {
     </div>
     <div class="qc-out">
       <div class="qc-bars" id="qBars">
-        <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
+        <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
         <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
       </div>
       <p class="qc-verdict" id="qVerdict"></p>

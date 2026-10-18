@@ -296,7 +296,7 @@ function fillYears(sel, def){
       var bid = maxBid(c.mk, o), max = Math.max(r.total, c.mk), diff = c.mk - r.total;
       $("qBars").hidden = false;
       $("qMk").textContent = fmt(c.mk);
-      $("qBarUs").style.width = (r.total / max * 100) + "%"; $("qBarMk").style.width = (c.mk / max * 100) + "%";
+      $("qUs").textContent = fmt(r.total); $("qBarUs").style.width = (r.total / max * 100) + "%"; $("qBarMk").style.width = (c.mk / max * 100) + "%";
       v.className = "qc-verdict " + (diff > 0 ? "good" : "bad");
       v.innerHTML = diff > 0 ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(bid) + "."
         : (bid ? "При такой ставке дороже рынка. Выгодно брать при ставке до <b>" + fmt(bid) + "</b>." : "Такая машина из США выходит не дешевле рынка. Посмотрите другой год.");
@@ -585,4 +585,11 @@ function carCard(c){
     try { if (navigator.clipboard) navigator.clipboard.writeText(vin).catch(function(){}); } catch (err) {}
   });
 })();
+})();
+
+// Нижняя панель на телефоне: показываем после первого экрана, чтобы не закрывала hero
+(function(){
+  var bar = document.querySelector(".mbar"); if (!bar) return;
+  function f(){ bar.classList.toggle("on", window.scrollY > window.innerHeight * 0.6); }
+  window.addEventListener("scroll", f, {passive: true}); f();
 })();

@@ -336,7 +336,7 @@ for (const p of modelPg) await out(p.path, page(p));
       <p class="eyebrow">Блог</p>
       <h2>Разбираемся в аукционах, таможне и доставке</h2>
     </div>
-    <div class="posts">${posts.slice(0, 3).map((p) => postCard(p)).join('')}</div>
+    <div class="posts">${posts.filter((p) => !/ремонт|утоп|затоп|град|бит(ая|ые|ый)|поврежд/i.test(p.title)).slice(0, 3).map((p) => postCard(p)).join('')}</div>
     <div class="sec-foot"><a class="btn btn-line" href="${u('blog/')}">Все статьи</a></div>
   </div>
 </section>`;
