@@ -7,8 +7,8 @@ export function homeBody({ u, quick, models, extra }) {
   <div class="wrap">
     <div class="hq-head">
       <p class="eyebrow">Аукционы Copart и IAAI</p>
-      <h1>Авто из США в Беларусь <mark>под ключ</mark> <span class="h1-tail">от ставки на аукционе до вашего двора</span></h1>
-      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Полную цену знаете до ставки. Выберите модель в расчёте и сравните с ценами на av.by.</p>
+      <h1>Доставка авто из США в Беларусь <mark>под ключ</mark> <span class="h1-tail">покупка на аукционе, доставка и растаможка</span></h1>
+      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Полную цену до Минска знаете до ставки. Ремонт в неё не входит: машины на аукционах обычно после ДТП, стоимость ремонта оценим по фото заранее.</p>
     </div>
     ${quick}
     <ul class="hq-trust" aria-label="Гарантии">
@@ -143,7 +143,7 @@ ${extra}
 export function quickCalc(data, { u, esc }) {
   const first = data[0];
   return `<div class="qc" id="quick">
-  <div class="qc-head"><b>Цена в Минске под ключ</b><span>сравнение с av.by</span></div>
+  <div class="qc-head"><b>Цена в Минске с растаможкой</b><span>сравнение с av.by</span></div>
   <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<a href="${u('kalkulyator/')}#calc">Другая машина</a></div>
   <div class="qc-fields">
     <div class="field"><label for="qYear">Год выпуска</label><select id="qYear">${first.y.map(([y]) => `<option value="${y}"${y === first.def ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
@@ -152,7 +152,7 @@ export function quickCalc(data, { u, esc }) {
   <div class="qc-out" aria-live="polite">
     <div class="qc-total"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
     <div class="qc-bars">
-      <div class="qc-bar"><span>Из США под ключ</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
+      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
       <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
     </div>
     <p class="qc-verdict" id="qVerdict"></p>
@@ -161,7 +161,7 @@ export function quickCalc(data, { u, esc }) {
     <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
     <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
   </div>
-  <p class="qc-note">Предварительно, без ремонта,. Цены av.by: медиана объявлений по году выпуска.</p>
+  <p class="qc-note">Предварительно, без ремонта. Цены av.by: медиана объявлений по году выпуска.</p>
   <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
 }
