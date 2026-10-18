@@ -331,7 +331,7 @@ for (const p of modelPg) await out(p.path, page(p));
     const ph = car?.gallery?.[m.photo[1]];
     const o = { moto: false, year: HM.year, cc: m.cc, alt: false, ev: false, region: 'east', port: autoPortFor(false, false, m.cc), sublot: false, benefit: true };
     const ben = costOf(m.auction, o).total, full = costOf(m.auction, { ...o, benefit: false }).total;
-    const save = r100(mk.median - ben);
+    const total = ben + m.repair, save = r100(mk.median - total);
     const href = m.page ? u(m.page) : '#quick-sec';
     return `<article class="pm">
   <a class="ph" href="${href}">${ph ? `<img src="${esc(ph.card)}" srcset="${esc(ph.small)} 300w, ${esc(ph.card)} 768w" sizes="(max-width:560px) 92vw, 380px" alt="${esc(m.brand + ' ' + m.name)} ${HM.year}" loading="lazy" decoding="async" width="380" height="270">` : ''}<span class="tag">${HM.year} · ${(m.cc / 1000).toFixed(1).replace('.', ',')} л · через Клайпеду</span></a>
@@ -340,10 +340,12 @@ for (const p of modelPg) await out(p.path, page(p));
     <dl>
       <div><dt>На av.by в среднем</dt><dd class="num">${money(r100(mk.median))} $</dd></div>
       <div><dt>На аукционе в среднем<small>не сильно битая</small></dt><dd class="num">${money(r100(m.auction))} $</dd></div>
-      <div class="tk"><dt>Под ключ в Минске<small>с таможней по Указу 140</small></dt><dd class="num">${money(r100(ben))} $</dd></div>
+      <div><dt>Под ключ в Минске<small>с таможней по Указу 140</small></dt><dd class="num">${money(r100(ben))} $</dd></div>
+      <div><dt>Восстановление в среднем</dt><dd class="num">${money(r100(m.repair))} $</dd></div>
+      <div class="tk"><dt>Итого готовая машина</dt><dd class="num">${money(r100(total))} $</dd></div>
     </dl>
     <p class="save">Экономия <b class="num">≈ ${money(save)} $</b></p>
-    <p class="nob">Без льготы под ключ ≈ ${money(r100(full))} $</p>
+    <p class="nob">Без льготы по Указу 140 итого ≈ ${money(r100(full + m.repair))} $</p>
   </div>
 </article>`;
   }).join('');
@@ -355,7 +357,7 @@ for (const p of modelPg) await out(p.path, page(p));
       <p>Модели, которые чаще всего везут в Беларусь. Все с мотором до 1,9 л: едут через Клайпеду, поэтому доставка дешевле.</p>
     </div>
     <div class="pms">${hmCards}</div>
-    <p class="pm-note">Средние цены на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион: типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга.</p>
+    <p class="pm-note">Средние цены на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион: типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга. Восстановление: средняя стоимость работ и запчастей для машины с небольшими повреждениями. Экономия: разница между ценой на av.by и итогом.</p>
     <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';

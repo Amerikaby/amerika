@@ -1,13 +1,83 @@
 {
-  "_note": "Карточки «Популярные машины» на главной. auction — средняя цена лота с небольшими повреждениями, $ (ЧЕРНОВИК, ждёт подтверждения Леонида). photo — машина из каталога (slug) и номер фото, выбраны вручную: без сильных повреждений на снимке.",
-  "date": "2026-10-18",
-  "year": 2022,
-  "models": [
-    { "key": "chevrolet/equinox", "brand": "Chevrolet", "name": "Equinox", "cc": 1500, "auction": 9000, "photo": ["chevrolet-equinox-awd-ls-2022", 0], "page": "usa/chevrolet/equinox/" },
-    { "key": "gmc/terrain", "brand": "GMC", "name": "Terrain", "cc": 1500, "auction": 9500, "photo": ["gmc-terrain-awd-denali-2022", 0] },
-    { "key": "vw/jetta", "brand": "Volkswagen", "name": "Jetta", "cc": 1500, "auction": 8500, "photo": ["volkswagen-jetta-s-2022", 0], "page": "usa/vw/jetta/" },
-    { "key": "chevrolet/trailblazer", "brand": "Chevrolet", "name": "Trailblazer", "cc": 1300, "auction": 8000, "photo": ["chevrolet-trailblazer-rs-2023-2", 0], "page": "usa/chevrolet/trailblazer/" },
-    { "key": "ford/bronco-sport", "brand": "Ford", "name": "Bronco Sport", "cc": 1500, "auction": 10000, "photo": ["ford-bronco-sport-big-bend-2022-3", 0], "page": "usa/ford/bronco-sport/" },
-    { "key": "ford/escape", "brand": "Ford", "name": "Escape", "cc": 1500, "auction": 8500, "photo": ["ford-escape-se-2022-2", 0] }
-  ]
+ "_note": "Карточки «Популярные машины» на главной. auction — средняя цена лота с небольшими повреждениями, $ (ЧЕРНОВИК, ждёт подтверждения Леонида). repair — средняя стоимость восстановления не сильно битой машины в Минске, $ (ЧЕРНОВИК). photo — машина из каталога (slug) и номер фото, выбраны вручную: без сильных повреждений на снимке.",
+ "date": "2026-10-18",
+ "year": 2022,
+ "models": [
+  {
+   "key": "chevrolet/equinox",
+   "brand": "Chevrolet",
+   "name": "Equinox",
+   "cc": 1500,
+   "auction": 9000,
+   "photo": [
+    "chevrolet-equinox-awd-ls-2022",
+    0
+   ],
+   "page": "usa/chevrolet/equinox/",
+   "repair": 1500
+  },
+  {
+   "key": "gmc/terrain",
+   "brand": "GMC",
+   "name": "Terrain",
+   "cc": 1500,
+   "auction": 9500,
+   "photo": [
+    "gmc-terrain-awd-denali-2022",
+    0
+   ],
+   "repair": 1500
+  },
+  {
+   "key": "vw/jetta",
+   "brand": "Volkswagen",
+   "name": "Jetta",
+   "cc": 1500,
+   "auction": 8500,
+   "photo": [
+    "volkswagen-jetta-s-2022",
+    0
+   ],
+   "page": "usa/vw/jetta/",
+   "repair": 1500
+  },
+  {
+   "key": "chevrolet/trailblazer",
+   "brand": "Chevrolet",
+   "name": "Trailblazer",
+   "cc": 1300,
+   "auction": 8000,
+   "photo": [
+    "chevrolet-trailblazer-rs-2023-2",
+    0
+   ],
+   "page": "usa/chevrolet/trailblazer/",
+   "repair": 1500
+  },
+  {
+   "key": "ford/bronco-sport",
+   "brand": "Ford",
+   "name": "Bronco Sport",
+   "cc": 1500,
+   "auction": 10000,
+   "photo": [
+    "ford-bronco-sport-big-bend-2022-3",
+    0
+   ],
+   "page": "usa/ford/bronco-sport/",
+   "repair": 1500
+  },
+  {
+   "key": "ford/escape",
+   "brand": "Ford",
+   "name": "Escape",
+   "cc": 1500,
+   "auction": 8500,
+   "photo": [
+    "ford-escape-se-2022-2",
+    0
+   ],
+   "repair": 1500
+  }
+ ]
 }
