@@ -12,9 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { fetchAll, fetchOldSitemap } from './fetch.mjs';
 import { esc, decode, plain, clip, sanitize } from './lib/html.mjs';
 import { makeLayout, SITE, SERVICES, ICONS } from './partials.mjs';
-import { homeBody } from './pages/home.mjs';
+import { homeBody, quickCalc } from './pages/home.mjs';
 import { staticPages } from './pages/static.mjs';
-import { modelPages, modelsStrip } from './pages/models.mjs';
+import { modelPages, modelsStrip, modelsTiles, modelRows, MODEL_PAGES } from './pages/models.mjs';
 import { PHOTO_BLOCK, isStubImage, fixTitleCase, defaultCc, EV_MODELS } from './data-fixes.mjs';
 
 // ---------- Настройки ----------
@@ -284,45 +284,28 @@ const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postC
 const market = existsSync(path.join(ROOT, 'data', 'market-avby.json')) ? JSON.parse(await readFile(path.join(ROOT, 'data', 'market-avby.json'), 'utf8')) : null;
 const modelPg = market ? modelPages({ u, esc, money, costOf, autoPortFor, CONFIG, carCard, cars, leadSection, brandPath, market, plural }) : [];
 for (const p of modelPg) await out(p.path, page(p));
-const modelsSection = (cls = '') => modelPg.length ? `<section class="${cls}" id="models">
+
+// 1. Главная
+{
+  // Быстрый расчёт: годы 2019+ с ценами av.by, по умолчанию год из карточки модели
+  const quickData = MODEL_PAGES.map((m) => {
+    const card = modelPg.find((p) => p.card.name === m.name)?.card;
+    const y = modelRows(m, market, { costOf, autoPortFor }).filter((r) => r.year >= 2019).map((r) => [r.year, r.cc, r.mk.median, r.bid || 0]);
+    return card && y.length ? { n: m.name, b: m.brandName, rel: u(card.rel), def: card.best?.year || y[0][0], y } : null;
+  }).filter(Boolean);
+  const quick = quickData.length ? quickCalc(quickData, { u, esc }) : '';
+  const models = modelPg.length ? `<section id="models">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Популярные модели</p>
       <h2>Сколько стоят в Минске самые популярные машины из США</h2>
       <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
     </div>
-    ${modelsStrip(modelPg, { u, esc, money })}
+    ${modelsTiles(modelPg, { u, esc, money })}
+    <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';
-
-// 1. Главная
-{
-  const extra = `<section class="white" id="services">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Услуги</p>
-      <h2>Что мы делаем, кроме подбора</h2>
-      <p>Можно заказать всё под ключ или только нужную часть: проверку лота, растаможку, доставку мотоцикла.</p>
-    </div>
-    <div class="svc">${SERVICES.map(([p, t, d, ic], i) => `<a href="${u(p)}"${i === 0 ? ' class="main"' : ''}><span class="ico" aria-hidden="true">${ICONS[ic]}</span><h3>${t}</h3><p>${d}</p><span class="go">Подробнее →</span></a>`).join('')}</div>
-  </div>
-</section>
-
-${modelsSection()}
-
-<section class="white" id="catalog">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Каталог</p>
-      <h2>Примеры авто из США</h2>
-      <p>Лоты с Copart и IAAI, которые можно заказать с доставкой в Минск. Похожую машину подберём под ваш бюджет.</p>
-    </div>
-    <div class="cars six">${cars.filter((c) => c.gallery.length).slice(0, 6).map((c) => carCard(c)).join('')}</div>
-    <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Весь каталог: ${cars.length} авто</a></div>
-  </div>
-</section>
-
-<section id="blog">
+  const extra = `<section class="white" id="blog">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Блог</p>
@@ -332,7 +315,7 @@ ${modelsSection()}
     <div class="sec-foot"><a class="btn btn-line" href="${u('blog/')}">Все статьи</a></div>
   </div>
 </section>`;
-  const body = homeBody({ u, extra }) + leadSection();
+  const body = homeBody({ u, quick, models, extra }) + leadSection();
   const faq = [...body.matchAll(/<details[^>]*><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)]
     .map((m) => ({ '@type': 'Question', name: plain(m[1]), acceptedAnswer: { '@type': 'Answer', text: plain(m[2]) } }));
   await out('', page({

@@ -190,3 +190,12 @@ export function modelsStrip(pages, { u, esc, money: m }) {
   <div class="tx"><span>${esc(c.brandName)}</span><h3>${esc(c.name)}</h3>${c.best ? `<p>${c.best.year} г.: выгоднее рынка при ставке до <b>${money(c.best.bid)} $</b></p>` : '<p>Цена в Минске по годам</p>'}</div>
 </a>`).join('')}</div>`;
 }
+
+/** Крупные плитки моделей для главной: цена на av.by и до какой ставки из США дешевле. */
+export function modelsTiles(pages, { u, esc, money: m }) {
+  const money = (n) => m(n).replace(/ /g, '\u00a0');
+  return `<div class="mtiles">${pages.map(({ card: c }) => `<a class="mtile" href="${u(c.rel)}">
+  <div class="ph">${c.photo ? `<img src="${esc(c.photo.small)}" srcset="${esc(c.photo.small)} 300w, ${esc(c.photo.card)} 768w" sizes="(max-width:560px) 50vw, 380px" alt="${esc(c.full)}" loading="lazy" decoding="async" width="380" height="285">` : ''}${c.best ? `<span class="yr">${c.best.year}</span>` : ''}</div>
+  <div class="tx"><span>${esc(c.brandName)}</span><h3>${esc(c.name)}</h3>${c.best ? `<dl><div><dt>На av.by</dt><dd class="num">${money(c.best.mk.median)} $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">${money(c.best.bid)} $</dd></div></dl>` : '<p>Цена в Минске по годам</p>'}<span class="go">Цены по всем годам →</span></div>
+</a>`).join('')}</div>`;
+}

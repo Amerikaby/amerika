@@ -1,53 +1,26 @@
-// Главная: дизайн и тексты из new2 + блоки услуг, каталога и блога.
-import { calcWidget } from './calc-widget.mjs';
+// Главная (вариант A, 18.10.2026): первый экран = быстрый расчёт по популярным моделям, затем «кому уходят деньги»,
+// плитки моделей со сравнением с av.by, шаги, логистика, тарифы одной строкой, статьи, вопросы, заявка.
 
-export function homeBody({ u, extra }) {
+export function homeBody({ u, quick, models, extra }) {
   return `
-<section class="hero">
+<section class="hero hero-q">
   <div class="wrap">
-    <div class="hero-copy">
+    <div class="hq-head">
       <p class="eyebrow">Copart и IAAI · доставка до Минска</p>
       <h1>Авто из США в Беларусь <mark>под ключ</mark></h1>
-      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Работаем по договору, за машину платите аукциону напрямую, а полную цену до Минска видите до ставки.</p>
-      <div class="cta-row">
-        <a class="btn btn-red" href="#calc">Посчитать цену до Минска</a>
-        <a class="btn btn-line" href="#lead">Подобрать машину</a>
-      </div>
-      <div class="facts">
-        <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
-        <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
-        <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
-      </div>
+      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Выберите модель в расчёте и сразу увидите полную цену в Минске и сравнение с av.by.</p>
     </div>
-
-    <aside class="guar" aria-label="Три гарантии">
-      <div class="guar-head"><p>Три гарантии</p><span>прописаны в договоре</span></div>
-      <ol>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span>
-          <div><h3>Официальный договор</h3><p>Офис в Минске, юрлицо в Беларуси. Что мы делаем и сколько это стоит, записано на бумаге.</p></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span>
-          <div><h3>За машину платите аукциону сами</h3><p>Деньги за лот уходят банковским переводом напрямую Copart или IAAI. Нам вы платите только за услугу.</p></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-          <div><h3>Полная цена до Минска заранее</h3><p>Лот, сборы, доставка, пошлина, утильсбор и наша услуга. Считаем всё до ставки, а не после покупки.</p></div>
-        </li>
-      </ol>
-    </aside>
-  </div>
-</section>
-
-<section class="calc-sec" id="calc">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Калькулятор</p>
-      <h2>Сколько стоит машина в Минске. Все статьи, без звёздочек</h2>
-      <p>Введите цену лота, год и объём. Или укажите свой бюджет, и калькулятор скажет, до какой суммы можно ставить на аукционе.</p>
+    ${quick}
+    <ul class="hq-trust" aria-label="Гарантии">
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><div><b>Официальный договор</b><span>офис и юрлицо в Минске</span></div></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><div><b>За машину платите аукциону</b><span>деньги за лот не идут через нас</span></div></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h13l3-5h2"/><path d="M5 17l-1-6h12l2 6"/><circle cx="8" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span><div><b>Atlantic Express с 1995</b><span>логистика из США до Минска</span></div></li>
+    </ul>
+    <div class="facts hq-facts">
+      <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
+      <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
+      <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
     </div>
-    ${calcWidget()}
   </div>
 </section>
 <section class="white" id="price-inside">
@@ -94,77 +67,9 @@ export function homeBody({ u, extra }) {
   </div>
 </section>
 
-<section id="check">
-  <div class="wrap check-grid">
-    <div class="photos">
-      <figure><img src="${u('img/')}nissan-rogue.jpg" alt="Nissan Rogue с повреждением передней части на площадке аукциона" loading="lazy" width="640" height="480"><figcaption>Nissan Rogue · удар спереди</figcaption></figure>
-      <figure><img src="${u('img/')}chevrolet-equinox.jpg" alt="Chevrolet Equinox на площадке IAAI" loading="lazy" width="640" height="480"><figcaption>Chevrolet Equinox</figcaption></figure>
-      <figure><img src="${u('img/')}alfa-romeo-giulia.jpg" alt="Alfa Romeo Giulia с повреждением двери" loading="lazy" width="640" height="480"><figcaption>Alfa Romeo Giulia · дверь</figcaption></figure>
-    </div>
-    <div>
-      <div class="sec-head" style="margin-bottom:28px">
-        <p class="eyebrow">Проверка до ставки</p>
-        <h2>Честно о том, что продаётся на аукционе</h2>
-        <p>На Copart и IAAI машины чаще всего после страховых случаев, то есть это битые авто из Америки разной степени повреждений. Поэтому мы проверяем лот до того, как вы потратите хоть доллар.</p>
-      </div>
-      <ul class="ticks">
-        <li><div><h3>История по Carfax и AutoCheck</h3><p>Пробег, ДТП, владельцы, сервис. Если история плохая, говорим об этом прямо.</p></div></li>
-        <li><div><h3>Фото и отчёт аукциона</h3><p>Смотрим все фото лота и описание повреждений, разбираем, что скрыто за формулировками.</p></div></li>
-        <li><div><h3>Оценка ремонта</h3><p>Прикидываем стоимость ремонта с партнёрским СТО и добавляем её к цене до Минска. Если риск высокий, отговорим от покупки.</p></div></li>
-        <li><div><h3>Доступ к аукционам без VPN</h3><p>Ставим за вас на Copart и IAAI. Вы видите лот и следите за торгами.</p></div></li>
-      </ul>
-    </div>
-  </div>
-</section>
+${models}
 
-<section class="white" id="compare">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Сравнение</p>
-      <h2>Под ключ из США или покупка в Беларуси</h2>
-      <p>У каждого пути свои плюсы. Вот в чём разница, без рекламных обещаний.</p>
-    </div>
-    <div class="cmp" role="table" aria-label="Сравнение способов покупки">
-      <div class="cmp-row cmp-h" role="row">
-        <div class="k" role="columnheader"></div>
-        <div class="us" role="columnheader">Под ключ из США<small>с Amerika.by</small></div>
-        <div class="them" role="columnheader">Готовая машина в Беларуси<small>объявления на рынке</small></div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Из чего цена</div>
-        <div class="us" role="cell">Цена с аукциона плюс доставка, таможня и услуга. Каждую строку видно в калькуляторе.</div>
-        <div class="them" role="cell">Рыночная цена, в которую уже заложены расходы и доход продавца.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">История машины</div>
-        <div class="us" role="cell">Отчёт Carfax и AutoCheck по VIN и фото с аукциона до покупки.</div>
-        <div class="them" role="cell">Часто со слов продавца. Историю в США нужно проверять самому.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Выбор</div>
-        <div class="us" role="cell">Лоты Copart и IAAI по всем США, новые каждый день. Подбираем под бюджет.</div>
-        <div class="them" role="cell">Только то, что сейчас продаётся в Беларуси.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Состояние</div>
-        <div class="us" role="cell">Обычно после страхового случая. Ремонт оцениваем заранее и включаем в бюджет.</div>
-        <div class="them" role="cell">Уже на ходу, но как и где ремонтировали, известно не всегда.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Срок</div>
-        <div class="us" role="cell">40–70 дней от покупки до Минска.</div>
-        <div class="them" role="cell">Можно забрать сразу.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Защита</div>
-        <div class="us" role="cell">Договор с компанией в Минске. За лот платите аукциону напрямую.</div>
-        <div class="them" role="cell">Договор купли-продажи с продавцом, часто с частным лицом.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="how">
+<section class="white" id="how">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Шаги и сроки</p>
@@ -185,7 +90,7 @@ export function homeBody({ u, extra }) {
   </div>
 </section>
 
-<section class="white" id="logistics">
+<section id="logistics">
   <div class="wrap atl">
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Логистика</p>
@@ -203,38 +108,13 @@ export function homeBody({ u, extra }) {
   </div>
 </section>
 
-<section id="prices">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Тарифы</p>
-      <h2>Сколько стоит наша работа</h2>
-      <p>Фиксированная цена в договоре, оплатить можно через ЕРИП. Выберите по тому, сколько хотите делать сами.</p>
+<section class="price-band">
+  <div class="wrap pb-in">
+    <div>
+      <p class="eyebrow">Сколько стоит наша работа</p>
+      <p class="pb-text">Фиксированная сумма в договоре, без процента от цены машины: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b> по тарифу. Оплата через ЕРИП.</p>
     </div>
-    <div class="plans">
-      <div class="plan">
-        <h3>Проверка лота</h3>
-        <p class="for">Для тех, кто уже нашёл машину сам</p>
-        <div class="price num">599 <small>BYN</small></div>
-        <ul><li>Проверка по Carfax и AutoCheck</li><li>Оценка повреждений и расчёт всех расходов</li><li>Торги на аукционе</li><li>Организация доставки до Минска</li></ul>
-        <a class="btn btn-line" href="#lead">Проверить мой лот</a>
-      </div>
-      <div class="plan hit">
-        <span class="tag">Чаще выбирают</span>
-        <h3>Подбор</h3>
-        <p class="for">Для тех, кто знает бюджет и хочет, чтобы машину нашли</p>
-        <div class="price num">799 <small>BYN</small></div>
-        <ul><li>Ищем лоты под ваш бюджет</li><li>Консультация эксперта</li><li>Проверка, торги, доставка</li><li>Помощь с запчастями, ремонтом и таможней</li></ul>
-        <a class="btn btn-red" href="#lead">Подобрать машину</a>
-      </div>
-      <div class="plan">
-        <h3>Премиум</h3>
-        <p class="for">Для тех, кто хочет получить ключи и не заниматься бумагами</p>
-        <div class="price num">1999 <small>BYN</small></div>
-        <ul><li>Всё из тарифа «Подбор»</li><li>Дополнительный отчёт с аукциона</li><li>Живые торги в любое время</li><li>Оформление на таможне за вас</li></ul>
-        <a class="btn btn-line" href="#lead">Выбрать Премиум</a>
-      </div>
-    </div>
-    <p class="plans-note">Доставка, пошлина и сборы в тариф не входят: вы платите их напрямую, суммы видно в калькуляторе.</p>
+    <a class="btn btn-line" href="${u('ceny/')}">Что входит в тарифы</a>
   </div>
 </section>
 ${extra}
@@ -257,4 +137,31 @@ ${extra}
   </div>
 </section>
 `;
+}
+
+/** Быстрый расчёт на первом экране. data: [{n, b, rel, def, y: [[год, см³, медиана av.by, ставить до], ...]}] */
+export function quickCalc(data, { u, esc }) {
+  const first = data[0];
+  return `<div class="qc" id="quick">
+  <div class="qc-head"><b>Цена в Минске под ключ</b><span>сравнение с av.by</span></div>
+  <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<a href="${u('kalkulyator/')}#calc">Другая машина</a></div>
+  <div class="qc-fields">
+    <div class="field"><label for="qYear">Год выпуска</label><select id="qYear">${first.y.map(([y]) => `<option value="${y}"${y === first.def ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
+    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
+  </div>
+  <div class="qc-out" aria-live="polite">
+    <div class="qc-total"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    <div class="qc-bars">
+      <div class="qc-bar"><span>Из США под ключ</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
+      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+    </div>
+    <p class="qc-verdict" id="qVerdict"></p>
+  </div>
+  <div class="qc-actions">
+    <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
+    <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
+  </div>
+  <p class="qc-note">Предварительно, без ремонта. Цены av.by: медиана объявлений по году выпуска.</p>
+  <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
 }

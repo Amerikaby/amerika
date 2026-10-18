@@ -53,153 +53,44 @@
 <main id="main">
 
 
-<section class="hero">
+<section class="hero hero-q">
   <div class="wrap">
-    <div class="hero-copy">
+    <div class="hq-head">
       <p class="eyebrow">Copart и IAAI · доставка до Минска</p>
       <h1>Авто из США в Беларусь <mark>под ключ</mark></h1>
-      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Работаем по договору, за машину платите аукциону напрямую, а полную цену до Минска видите до ставки.</p>
-      <div class="cta-row">
-        <a class="btn btn-red" href="#calc">Посчитать цену до Минска</a>
-        <a class="btn btn-line" href="#lead">Подобрать машину</a>
-      </div>
-      <div class="facts">
-        <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
-        <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
-        <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
-      </div>
+      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Выберите модель в расчёте и сразу увидите полную цену в Минске и сравнение с av.by.</p>
     </div>
-
-    <aside class="guar" aria-label="Три гарантии">
-      <div class="guar-head"><p>Три гарантии</p><span>прописаны в договоре</span></div>
-      <ol>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span>
-          <div><h3>Официальный договор</h3><p>Офис в Минске, юрлицо в Беларуси. Что мы делаем и сколько это стоит, записано на бумаге.</p></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span>
-          <div><h3>За машину платите аукциону сами</h3><p>Деньги за лот уходят банковским переводом напрямую Copart или IAAI. Нам вы платите только за услугу.</p></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-          <div><h3>Полная цена до Минска заранее</h3><p>Лот, сборы, доставка, пошлина, утильсбор и наша услуга. Считаем всё до ставки, а не после покупки.</p></div>
-        </li>
-      </ol>
-    </aside>
+    <div class="qc" id="quick">
+  <div class="qc-head"><b>Цена в Минске под ключ</b><span>сравнение с av.by</span></div>
+  <div class="qc-models" role="radiogroup" aria-label="Модель"><label><input type="radio" name="qm" value="0" checked><span>Equinox</span></label><label><input type="radio" name="qm" value="1"><span>Trailblazer</span></label><label><input type="radio" name="qm" value="2"><span>Trax</span></label><label><input type="radio" name="qm" value="3"><span>Rogue</span></label><label><input type="radio" name="qm" value="4"><span>Bronco Sport</span></label><label><input type="radio" name="qm" value="5"><span>Jetta</span></label><a href="/new2/kalkulyator/#calc">Другая машина</a></div>
+  <div class="qc-fields">
+    <div class="field"><label for="qYear">Год выпуска</label><select id="qYear"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022" selected>2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option></select></div>
+    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
   </div>
-</section>
-
-<section class="calc-sec" id="calc">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Калькулятор</p>
-      <h2>Сколько стоит машина в Минске. Все статьи, без звёздочек</h2>
-      <p>Введите цену лота, год и объём. Или укажите свой бюджет, и калькулятор скажет, до какой суммы можно ставить на аукционе.</p>
+  <div class="qc-out" aria-live="polite">
+    <div class="qc-total"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    <div class="qc-bars">
+      <div class="qc-bar"><span>Из США под ключ</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
+      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
     </div>
-    <div class="calc">
-      <div class="calc-body">
-      <form id="calcForm" autocomplete="off">
-        <div class="field wide">
-          <label id="vtypeLabel">Что везём</label>
-          <div class="seg" role="radiogroup" aria-labelledby="vtypeLabel">
-            <label><input type="radio" name="vtype" value="car" checked><span>Автомобиль</span></label>
-            <label><input type="radio" name="vtype" value="moto"><span>Мотоцикл</span></label>
-          </div>
-        </div>
-        <div class="tabs wide" role="radiogroup" aria-label="Что считаем">
-          <label><input type="radio" name="mode" value="price" checked><span>Цена лота → итого</span></label>
-          <label><input type="radio" name="mode" value="budget"><span>Бюджет → до какой ставки</span></label>
-        </div>
-        <div class="field wide" id="carOnly">
-          <label id="pickLabel">Популярные машины: нажмите, чтобы подставить</label>
-          <div class="picks" role="group" aria-labelledby="pickLabel">
-            <button type="button" data-p="9000,2021,1500,ice">Chevrolet Equinox</button>
-            <button type="button" data-p="8000,2021,1300,ice">Chevrolet Trailblazer</button>
-            <button type="button" data-p="11000,2021,2500,ice">Nissan Rogue</button>
-            <button type="button" data-p="12000,2021,1500,ice">Ford Bronco Sport</button>
-            <button type="button" data-p="9000,2024,1200,ice">Chevrolet Trax</button>
-            <button type="button" data-p="9000,2022,1400,ice">VW Jetta</button>
-          </div>
-        </div>
-        <div class="field">
-          <label for="price" id="priceLabel">Цена лота, $</label>
-          <input id="price" type="number" inputmode="numeric" min="100" step="100" value="12000">
-        </div>
-        <div class="field">
-          <label for="year">Год выпуска</label>
-          <select id="year"></select>
-        </div>
-        <div class="field">
-          <label for="volume">Объём двигателя, см³</label>
-          <input id="volume" type="number" inputmode="numeric" min="0" step="100" value="2000">
-        </div>
-        <div class="field" id="fuelField">
-          <label id="fuelLabel">Двигатель</label>
-          <div class="seg" role="radiogroup" aria-labelledby="fuelLabel">
-            <label><input type="radio" name="fuel" value="ice" checked><span>Бензин / дизель</span></label>
-            <label><input type="radio" name="fuel" value="alt"><span id="fuelAlt">Гибрид / электро</span></label>
-          </div>
-        </div>
-        <p class="hint wide" id="evHint" hidden>Для электромобиля укажите объём 0.</p>
-
-        <button type="button" class="adv-toggle wide" id="advToggle" aria-expanded="false" aria-controls="adv">Точнее: аукцион, площадка, порт <span aria-hidden="true">▾</span></button>
-        <div class="adv wide" id="adv" hidden>
-          <p class="adv-title">Если лот уже выбран</p>
-          <div class="field">
-            <label id="aucLabel">Аукцион</label>
-            <div class="seg" role="radiogroup" aria-labelledby="aucLabel">
-              <label><input type="radio" name="auction" value="copart" checked><span>Copart</span></label>
-              <label><input type="radio" name="auction" value="iaai"><span>IAAI</span></label>
-            </div>
-          </div>
-          <div class="field">
-            <label for="yard">Площадка</label>
-            <input id="yard" list="yardList" placeholder="Начните вводить: Alb…" autocomplete="off">
-            <datalist id="yardList"></datalist>
-          </div>
-          <div class="field">
-            <label for="port">Порт прибытия</label>
-            <select id="port">
-              <option value="auto">Подобрать автоматически</option>
-              <option value="klaipeda">Клайпеда (Литва)</option>
-              <option value="poti">Поти (Грузия)</option>
-            </select>
-          </div>
-          <div class="field checks">
-            <label for="sublot" class="check"><input id="sublot" type="checkbox"> Машина не на площадке аукциона (Sublot / Offsite), +100 $</label>
-            <label for="benefit" class="check" id="benefitWrap"><input id="benefit" type="checkbox"> Льгота 50% по Указу № 140</label>
-          </div>
-        </div>
-        <p class="route" id="route"></p>
-      </form>
-      <div class="bill" aria-live="polite">
-        <div class="bill-in">
-        <div class="bill-head"><b>Ваш расчёт до Минска</b><span>предварительный</span></div>
-        <div class="maxbid" id="maxbid" hidden><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
-        <div class="grp">Аукцион <i>платите аукциону</i></div>
-        <div class="row"><span>Лот на аукционе</span><span class="num" id="r-lot"></span></div>
-        <div class="row"><span>Сборы аукциона</span><span class="num" id="r-fee"></span></div>
-        <div class="grp">Доставка <i>платите перевозчику</i></div>
-        <div class="row"><span id="r-inland-l">Доставка по США до порта</span><span class="num" id="r-inland"></span></div>
-        <div class="row" id="r-extra-row" hidden><span id="r-extra-l"></span><span class="num" id="r-extra"></span></div>
-        <div class="row"><span id="r-sea-l">Море</span><span class="num" id="r-sea"></span></div>
-        <div class="row"><span id="r-last-l">Доставка в Минск</span><span class="num" id="r-last"></span></div>
-        <div class="grp">Таможня <i>платите государству</i></div>
-        <div class="row"><span id="r-duty-l">Таможенная пошлина</span><span class="num" id="r-duty"></span></div>
-        <div class="row"><span id="r-cust-l">Утильсбор, СВХ, декларант</span><span class="num" id="r-cust"></span></div>
-        <div class="grp">Мы <i>по договору</i></div>
-        <div class="row ours"><span>Наша услуга</span><span class="num" id="r-ours"></span></div>
-        <div class="total"><span>Итого в Минске</span><b class="num" id="r-total"></b></div>
-        <small class="num" id="r-byn"></small>
-        <p class="note warn-note" id="motoNote" hidden><b>Расчёт для мотоциклов ориентировочный.</b> Доставку мотоцикла считаем по вашему лоту: стоимость места в контейнере зависит от размеров техники.</p>
-        <p class="note">Расчёт ориентировочный: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации. Точный расчёт по конкретной машине менеджер сделает бесплатно.</p>
-        <div class="actions">
-          <a class="btn btn-red" href="#lead" id="sendCalc">Получить точный расчёт</a>
-        </div>
-        </div>
-      </div>
-      </div>
+    <p class="qc-verdict" id="qVerdict"></p>
+  </div>
+  <div class="qc-actions">
+    <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
+    <a class="qc-more" href="/new2/kalkulyator/#calc" id="qMore">Все статьи расчёта →</a>
+  </div>
+  <p class="qc-note">Предварительно, без ремонта. Цены av.by: медиана объявлений по году выпуска.</p>
+  <script type="application/json" id="quickData">[{"n":"Equinox","b":"Chevrolet","rel":"/new2/usa/chevrolet/equinox/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,25000,14000],[2023,1500,19970,12800],[2022,1500,19200,11800],[2021,1500,17900,10500],[2020,1500,17000,7300],[2019,1500,16800,7100]]},{"n":"Trailblazer","b":"Chevrolet","rel":"/new2/usa/chevrolet/trailblazer/","def":2022,"y":[[2025,1300,20600,11000],[2024,1300,19990,10500],[2023,1300,19475,12700],[2022,1300,17925,10900],[2021,1300,17000,10000],[2020,1300,17400,8300]]},{"n":"Trax","b":"Chevrolet","rel":"/new2/usa/chevrolet/trax/","def":2022,"y":[[2025,1200,21500,11700],[2024,1200,20100,10700],[2023,1200,19950,13400],[2022,1400,14950,7900],[2021,1400,13950,7000],[2020,1400,14225,5000],[2019,1400,13424,4200]]},{"n":"Rogue","b":"Nissan","rel":"/new2/usa/nissan/rogue/","def":2022,"y":[[2025,1500,24772,13900],[2024,1500,23670,13100],[2023,1500,21099,13900],[2022,1500,21000,13600],[2019,2500,18869,0]]},{"n":"Bronco Sport","b":"Ford","rel":"/new2/usa/ford/bronco-sport/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,23050,12700],[2023,1500,19950,12800],[2022,1500,19950,12600],[2021,1500,18900,11500],[2020,1500,22930,13000]]},{"n":"Jetta","b":"Volkswagen","rel":"/new2/usa/vw/jetta/","def":2022,"y":[[2025,1500,22950,12600],[2024,1500,21999,11700],[2023,1500,19000,11800],[2022,1500,18374,11000],[2021,1400,18750,11600],[2020,1400,18180,8700],[2019,1400,16800,7400]]}]</script>
+</div>
+    <ul class="hq-trust" aria-label="Гарантии">
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><div><b>Официальный договор</b><span>офис и юрлицо в Минске</span></div></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><div><b>За машину платите аукциону</b><span>деньги за лот не идут через нас</span></div></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h13l3-5h2"/><path d="M5 17l-1-6h12l2 6"/><circle cx="8" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span><div><b>Atlantic Express с 1995</b><span>логистика из США до Минска</span></div></li>
+    </ul>
+    <div class="facts hq-facts">
+      <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
+      <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
+      <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
     </div>
   </div>
 </section>
@@ -247,77 +138,37 @@
   </div>
 </section>
 
-<section id="check">
-  <div class="wrap check-grid">
-    <div class="photos">
-      <figure><img src="/new2/img/nissan-rogue.jpg" alt="Nissan Rogue с повреждением передней части на площадке аукциона" loading="lazy" width="640" height="480"><figcaption>Nissan Rogue · удар спереди</figcaption></figure>
-      <figure><img src="/new2/img/chevrolet-equinox.jpg" alt="Chevrolet Equinox на площадке IAAI" loading="lazy" width="640" height="480"><figcaption>Chevrolet Equinox</figcaption></figure>
-      <figure><img src="/new2/img/alfa-romeo-giulia.jpg" alt="Alfa Romeo Giulia с повреждением двери" loading="lazy" width="640" height="480"><figcaption>Alfa Romeo Giulia · дверь</figcaption></figure>
-    </div>
-    <div>
-      <div class="sec-head" style="margin-bottom:28px">
-        <p class="eyebrow">Проверка до ставки</p>
-        <h2>Честно о том, что продаётся на аукционе</h2>
-        <p>На Copart и IAAI машины чаще всего после страховых случаев, то есть это битые авто из Америки разной степени повреждений. Поэтому мы проверяем лот до того, как вы потратите хоть доллар.</p>
-      </div>
-      <ul class="ticks">
-        <li><div><h3>История по Carfax и AutoCheck</h3><p>Пробег, ДТП, владельцы, сервис. Если история плохая, говорим об этом прямо.</p></div></li>
-        <li><div><h3>Фото и отчёт аукциона</h3><p>Смотрим все фото лота и описание повреждений, разбираем, что скрыто за формулировками.</p></div></li>
-        <li><div><h3>Оценка ремонта</h3><p>Прикидываем стоимость ремонта с партнёрским СТО и добавляем её к цене до Минска. Если риск высокий, отговорим от покупки.</p></div></li>
-        <li><div><h3>Доступ к аукционам без VPN</h3><p>Ставим за вас на Copart и IAAI. Вы видите лот и следите за торгами.</p></div></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="white" id="compare">
+<section id="models">
   <div class="wrap">
     <div class="sec-head">
-      <p class="eyebrow">Сравнение</p>
-      <h2>Под ключ из США или покупка в Беларуси</h2>
-      <p>У каждого пути свои плюсы. Вот в чём разница, без рекламных обещаний.</p>
+      <p class="eyebrow">Популярные модели</p>
+      <h2>Сколько стоят в Минске самые популярные машины из США</h2>
+      <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
     </div>
-    <div class="cmp" role="table" aria-label="Сравнение способов покупки">
-      <div class="cmp-row cmp-h" role="row">
-        <div class="k" role="columnheader"></div>
-        <div class="us" role="columnheader">Под ключ из США<small>с Amerika.by</small></div>
-        <div class="them" role="columnheader">Готовая машина в Беларуси<small>объявления на рынке</small></div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Из чего цена</div>
-        <div class="us" role="cell">Цена с аукциона плюс доставка, таможня и услуга. Каждую строку видно в калькуляторе.</div>
-        <div class="them" role="cell">Рыночная цена, в которую уже заложены расходы и доход продавца.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">История машины</div>
-        <div class="us" role="cell">Отчёт Carfax и AutoCheck по VIN и фото с аукциона до покупки.</div>
-        <div class="them" role="cell">Часто со слов продавца. Историю в США нужно проверять самому.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Выбор</div>
-        <div class="us" role="cell">Лоты Copart и IAAI по всем США, новые каждый день. Подбираем под бюджет.</div>
-        <div class="them" role="cell">Только то, что сейчас продаётся в Беларуси.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Состояние</div>
-        <div class="us" role="cell">Обычно после страхового случая. Ремонт оцениваем заранее и включаем в бюджет.</div>
-        <div class="them" role="cell">Уже на ходу, но как и где ремонтировали, известно не всегда.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Срок</div>
-        <div class="us" role="cell">40–70 дней от покупки до Минска.</div>
-        <div class="them" role="cell">Можно забрать сразу.</div>
-      </div>
-      <div class="cmp-row" role="row">
-        <div class="k" role="rowheader">Защита</div>
-        <div class="us" role="cell">Договор с компанией в Минске. За лот платите аукциону напрямую.</div>
-        <div class="them" role="cell">Договор купли-продажи с продавцом, часто с частным лицом.</div>
-      </div>
-    </div>
+    <div class="mtiles"><a class="mtile" href="/new2/usa/chevrolet/equinox/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Equinox" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Equinox</h3><dl><div><dt>На av.by</dt><dd class="num">19 200 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">11 800 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a><a class="mtile" href="/new2/usa/chevrolet/trailblazer/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Trailblazer" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Trailblazer</h3><dl><div><dt>На av.by</dt><dd class="num">17 925 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">10 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a><a class="mtile" href="/new2/usa/chevrolet/trax/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Trax" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Trax</h3><dl><div><dt>На av.by</dt><dd class="num">14 950 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">7 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a><a class="mtile" href="/new2/usa/nissan/rogue/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Nissan Rogue" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Nissan</span><h3>Rogue</h3><dl><div><dt>На av.by</dt><dd class="num">21 000 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">13 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a><a class="mtile" href="/new2/usa/ford/bronco-sport/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Ford Bronco Sport" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Ford</span><h3>Bronco Sport</h3><dl><div><dt>На av.by</dt><dd class="num">19 950 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">12 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a><a class="mtile" href="/new2/usa/vw/jetta/">
+  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Volkswagen Jetta" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
+  <div class="tx"><span>Volkswagen</span><h3>Jetta</h3><dl><div><dt>На av.by</dt><dd class="num">18 374 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">11 000 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+</a></div>
+    <div class="sec-foot"><a class="btn btn-navy" href="/new2/auto-usa/">Каталог: 1227 авто из США</a></div>
   </div>
 </section>
 
-<section id="how">
+<section class="white" id="how">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Шаги и сроки</p>
@@ -338,7 +189,7 @@
   </div>
 </section>
 
-<section class="white" id="logistics">
+<section id="logistics">
   <div class="wrap atl">
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Логистика</p>
@@ -356,93 +207,16 @@
   </div>
 </section>
 
-<section id="prices">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Тарифы</p>
-      <h2>Сколько стоит наша работа</h2>
-      <p>Фиксированная цена в договоре, оплатить можно через ЕРИП. Выберите по тому, сколько хотите делать сами.</p>
+<section class="price-band">
+  <div class="wrap pb-in">
+    <div>
+      <p class="eyebrow">Сколько стоит наша работа</p>
+      <p class="pb-text">Фиксированная сумма в договоре, без процента от цены машины: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b> по тарифу. Оплата через ЕРИП.</p>
     </div>
-    <div class="plans">
-      <div class="plan">
-        <h3>Проверка лота</h3>
-        <p class="for">Для тех, кто уже нашёл машину сам</p>
-        <div class="price num">599 <small>BYN</small></div>
-        <ul><li>Проверка по Carfax и AutoCheck</li><li>Оценка повреждений и расчёт всех расходов</li><li>Торги на аукционе</li><li>Организация доставки до Минска</li></ul>
-        <a class="btn btn-line" href="#lead">Проверить мой лот</a>
-      </div>
-      <div class="plan hit">
-        <span class="tag">Чаще выбирают</span>
-        <h3>Подбор</h3>
-        <p class="for">Для тех, кто знает бюджет и хочет, чтобы машину нашли</p>
-        <div class="price num">799 <small>BYN</small></div>
-        <ul><li>Ищем лоты под ваш бюджет</li><li>Консультация эксперта</li><li>Проверка, торги, доставка</li><li>Помощь с запчастями, ремонтом и таможней</li></ul>
-        <a class="btn btn-red" href="#lead">Подобрать машину</a>
-      </div>
-      <div class="plan">
-        <h3>Премиум</h3>
-        <p class="for">Для тех, кто хочет получить ключи и не заниматься бумагами</p>
-        <div class="price num">1999 <small>BYN</small></div>
-        <ul><li>Всё из тарифа «Подбор»</li><li>Дополнительный отчёт с аукциона</li><li>Живые торги в любое время</li><li>Оформление на таможне за вас</li></ul>
-        <a class="btn btn-line" href="#lead">Выбрать Премиум</a>
-      </div>
-    </div>
-    <p class="plans-note">Доставка, пошлина и сборы в тариф не входят: вы платите их напрямую, суммы видно в калькуляторе.</p>
+    <a class="btn btn-line" href="/new2/ceny/">Что входит в тарифы</a>
   </div>
 </section>
-<section class="white" id="services">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Услуги</p>
-      <h2>Что мы делаем, кроме подбора</h2>
-      <p>Можно заказать всё под ключ или только нужную часть: проверку лота, растаможку, доставку мотоцикла.</p>
-    </div>
-    <div class="svc"><a href="/new2/uslugi/podbor-avto-na-aukcione/" class="main"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><h3>Подбор авто на аукционе</h3><p>Ищем машину на Copart и IAAI под бюджет, проверяем и ведём торги.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/proverka-istorii-po-bazam/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><h3>Проверка истории по базам</h3><p>Carfax и AutoCheck по VIN: ДТП, владельцы, пробег до ставки.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/rastamozhka-avtomobiley/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 17h12v-3a2 2 0 0 0-2-2h-2.5V9a3 3 0 1 0-3 0v3H8a2 2 0 0 0-2 2z"/></svg></span><h3>Растаможка автомобилей</h3><p>Считаем платежи заранее, помогаем с декларантом и СВХ в Минске.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/otslezhivanie-konteinerov/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l2 5h14l2-5H3z"/><path d="M5 15V9h14v6M9 9V5h6v4"/></svg></span><h3>Отслеживание контейнеров</h3><p>Где сейчас машина: по VIN после погрузки в контейнер.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/dostavka-mototehniki/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5l4-6h5l4 6M14 6h3l1.5 4.5"/></svg></span><h3>Доставка мототехники</h3><p>Мотоциклы, квадроциклы и гидроциклы с аукционов США.</p><span class="go">Подробнее →</span></a><a href="/new2/uslugi/dostavka-zapchastey/"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></span><h3>Доставка запчастей</h3><p>Подскажем, где выгоднее купить запчасти под ремонт машины из США.</p><span class="go">Подробнее →</span></a></div>
-  </div>
-</section>
-
-<section class="" id="models">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Популярные модели</p>
-      <h2>Сколько стоят в Минске самые популярные машины из США</h2>
-      <p>Сравнили с ценами на av.by: до какой ставки на аукционе машина из США выходит дешевле, чем в Беларуси.</p>
-    </div>
-    <div class="models"><a class="model" href="/new2/usa/chevrolet/equinox/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Chevrolet Equinox" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Chevrolet</span><h3>Equinox</h3><p>2022 г.: выгоднее рынка при ставке до <b>11 800 $</b></p></div>
-</a><a class="model" href="/new2/usa/chevrolet/trailblazer/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Chevrolet Trailblazer" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Chevrolet</span><h3>Trailblazer</h3><p>2022 г.: выгоднее рынка при ставке до <b>10 900 $</b></p></div>
-</a><a class="model" href="/new2/usa/chevrolet/trax/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Chevrolet Trax" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Chevrolet</span><h3>Trax</h3><p>2022 г.: выгоднее рынка при ставке до <b>7 900 $</b></p></div>
-</a><a class="model" href="/new2/usa/nissan/rogue/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Nissan Rogue" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Nissan</span><h3>Rogue</h3><p>2022 г.: выгоднее рынка при ставке до <b>13 600 $</b></p></div>
-</a><a class="model" href="/new2/usa/ford/bronco-sport/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Ford Bronco Sport" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Ford</span><h3>Bronco Sport</h3><p>2022 г.: выгоднее рынка при ставке до <b>12 600 $</b></p></div>
-</a><a class="model" href="/new2/usa/vw/jetta/">
-  <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Volkswagen Jetta" loading="lazy" decoding="async" width="300" height="225"></div>
-  <div class="tx"><span>Volkswagen</span><h3>Jetta</h3><p>2022 г.: выгоднее рынка при ставке до <b>11 000 $</b></p></div>
-</a></div>
-  </div>
-</section>
-
-<section class="white" id="catalog">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">Каталог</p>
-      <h2>Примеры авто из США</h2>
-      <p>Лоты с Copart и IAAI, которые можно заказать с доставкой в Минск. Похожую машину подберём под ваш бюджет.</p>
-    </div>
-    <div class="cars six"><a class="car" href="/new2/auto-usa/ford-bronco-sport-big-bend-2022-4/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Ford Bronco Sport, Big Bend 2022" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Ford Bronco Sport, Big Bend 2022</h3><div class="meta"><b>2022</b><span>Ford</span></div></div></a><a class="car" href="/new2/auto-usa/volkswagen-taos-1-5t-se-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Volkswagen-Taos-3VVEX7B28RM005466-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Volkswagen Taos, 1.5T SE 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Volkswagen Taos, 1.5T SE 2024</h3><div class="meta"><b>2024</b><span>VW</span></div></div></a><a class="car" href="/new2/auto-usa/hyundai-kona-n-line-2023/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2023-Hyundai-Kona-KM8K3CA35PU948127-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Hyundai Kona, N Line 2023" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Hyundai Kona, N Line 2023</h3><div class="meta"><b>2023</b><span>Hyundai</span></div></div></a><a class="car" href="/new2/auto-usa/gmc-terrain-sle-2023/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2023-GMC-Terrain-3GKALMEG4PL169786-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="GMC Terrain, SLE 2023" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>GMC Terrain, SLE 2023</h3><div class="meta"><b>2023</b><span>GMC</span></div></div></a><a class="car" href="/new2/auto-usa/buick-encore-preferred-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Buick-Encore-KL4AMBS25RB029153-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Buick Encore, Preferred 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Buick Encore, Preferred 2024</h3><div class="meta"><b>2024</b><span>Buick</span></div></div></a><a class="car" href="/new2/auto-usa/chevrolet-equinox-awd-ls-2024/"><div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 300px" alt="Chevrolet Equinox, AWD LS 2024" loading="lazy" decoding="async" width="300" height="225"></div><div class="tx"><h3>Chevrolet Equinox, AWD LS 2024</h3><div class="meta"><b>2024</b><span>Chevrolet</span></div></div></a></div>
-    <div class="sec-foot"><a class="btn btn-navy" href="/new2/auto-usa/">Весь каталог: 1227 авто</a></div>
-  </div>
-</section>
-
-<section id="blog">
+<section class="white" id="blog">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Блог</p>

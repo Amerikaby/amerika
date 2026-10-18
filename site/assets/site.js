@@ -250,6 +250,50 @@ function fillYears(sel, def){
   });
 })();
 
+/* ---------- Быстрый расчёт на главной ---------- */
+(function(){
+  var box = $("quick"), dataEl = $("quickData");
+  if (!box || !dataEl) return;
+  var D = JSON.parse(dataEl.textContent), lotTouched = false, used = false;
+  function model(){ return D[+box.querySelector('input[name="qm"]:checked').value]; }
+  function row(m){ var y = +$("qYear").value; for (var i = 0; i < m.y.length; i++) if (m.y[i][0] === y) return m.y[i]; return m.y[0]; }
+  /* Ставка по умолчанию: заметно ниже границы выгоды, круглая */
+  function defLot(r){ return r[3] ? Math.max(1000, Math.floor(r[3] * 0.75 / 500) * 500) : 5000; }
+  function fillYears(m){
+    var sel = $("qYear"); sel.innerHTML = "";
+    m.y.forEach(function(r){ var o = document.createElement("option"); o.value = r[0]; o.textContent = r[0]; if (r[0] === m.def) o.selected = true; sel.appendChild(o); });
+  }
+  function opts(r){ var cc = r[1]; return {moto:false, year:r[0], cc:cc, alt:false, ev:false, region:"east", port:autoPortFor(false, false, cc), sublot:false, benefit:false}; }
+  function run(){
+    var m = model(), r = row(m);
+    if (!lotTouched) $("qLot").value = defLot(r);
+    var lot = Math.max(0, +$("qLot").value || 0), o = opts(r), c = costOf(lot, o), mk = r[2];
+    var max = Math.max(c.total, mk);
+    $("qTotal").textContent = fmt(c.total);
+    $("qByn").textContent = "≈ " + Math.round(c.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
+    $("qUs").textContent = fmt(c.total); $("qMk").textContent = fmt(mk);
+    $("qBarUs").style.width = (c.total / max * 100) + "%"; $("qBarMk").style.width = (mk / max * 100) + "%";
+    var diff = mk - c.total, v = $("qVerdict");
+    v.className = "qc-verdict " + (diff > 0 ? "good" : "bad");
+    v.innerHTML = diff > 0
+      ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(r[3]) + "."
+      : (r[3] ? "При такой ставке дороже рынка. " + m.n + " " + r[0] + " выгодно брать при ставке до <b>" + fmt(r[3]) + "</b>."
+              : m.n + " " + r[0] + " из США выходит не дешевле рынка. Посмотрите другой год.");
+    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(r[0]), cc: String(r[1])}).toString() + "#calc";
+    return {m:m, r:r, lot:lot, total:Math.round(c.total), port:o.port};
+  }
+  qsa('input[name="qm"]', box).forEach(function(i){ i.addEventListener("change", function(){ lotTouched = false; fillYears(model()); run(); }); });
+  $("qYear").addEventListener("change", function(){ lotTouched = false; run(); });
+  $("qLot").addEventListener("input", function(){ lotTouched = true; run(); });
+  box.addEventListener("change", function(){ if (!used) { used = true; track("calc_used", {calc: "quick"}); } });
+  run();
+  $("qSend").addEventListener("click", function(){
+    var x = run(), lc = $("lcar");
+    track("calc_send", {total: x.total, calc: "quick"});
+    if (lc) lc.value = "Быстрый расчёт: " + x.m.b + " " + x.m.n + " " + x.r[0] + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ под ключ, через " + PORTS[x.port].name + ".";
+  });
+})();
+
 /* ---------- Таможенный калькулятор ---------- */
 (function(){
   var form = $("ccForm");
