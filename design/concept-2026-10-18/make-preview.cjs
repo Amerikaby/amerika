@@ -7,9 +7,9 @@ const app=fs.readFileSync(path.join(dir,'app.js'),'utf8');
 const bridge=`document.addEventListener('click',function(e){const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';if(/^(index|prices)\\.html/.test(h)){e.preventDefault();const u=new URL(h,'https://preview.local/');parent.postMessage({kind:'concept-page',page:h.startsWith('prices')?'prices':'home',hash:u.hash,tariff:u.searchParams.get('tariff')},'*');}});`;
 const pages={};
 for(const [key,file] of [['home','index.html'],['prices','prices.html']]){
- let html=fs.readFileSync(path.join(dir,file),'utf8').replace('<link rel="stylesheet" href="style.css">',()=>'<style>'+css+'\n.review{display:none}</style>').replace('<script src="app.js" defer></script>','');
+ let html=fs.readFileSync(path.join(dir,file),'utf8').replace(/<link rel="stylesheet" href="style\.css(?:\?[^"]*)?">/,()=>'<style>'+css+'\n.review{display:none}</style>').replace('<script src="app.js" defer></script>','');
  html=html.replace(/src="assets\/([^"]+)"/g,(_,name)=>{
-  const type=name.endsWith('.svg')?'image/svg+xml':'image/jpeg';
+  const type=name.endsWith('.svg')?'image/svg+xml':name.endsWith('.webp')?'image/webp':'image/jpeg';
   return 'src="data:'+type+';base64,'+fs.readFileSync(path.join(dir,'assets',name)).toString('base64')+'"';
  });
  html=html.replace('</body>',()=>'<script>'+app+'\n'+bridge+'</script></body>');
