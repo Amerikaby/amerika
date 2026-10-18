@@ -111,6 +111,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
           <li><a href="${u('kalkulyator/')}">Калькулятор под ключ</a></li>
           <li><a href="${u('tamozhennyj-kalkulator/')}">Таможенный калькулятор</a></li>
           <li><a href="${u('ceny/')}">Цены</a></li>
+          <li><a href="${u('dileram/')}">Дилерам</a></li>
           <li><a href="${u('blog/')}">Блог</a></li>
           <li><a href="${u('otzyvy/')}">Отзывы</a></li>
           <li><a href="${u('privacy-policy/')}">Политика конфиденциальности</a></li>
@@ -137,6 +138,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
     </div>
   </div>
 </footer>
+<a class="totop" href="#main" aria-label="Наверх" title="Наверх"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
 <div class="mbar">
   <a class="btn btn-red" href="${SITE.phoneHref}">Позвонить</a>
   <a class="btn btn-line" href="${SITE.tg}" target="_blank" rel="noopener">Telegram</a>

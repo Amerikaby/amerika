@@ -847,3 +847,21 @@ section{padding-block:80px}
 @media (max-width:1439px){.top .msgr{display:none}}
 @media (max-width:1100px){.hdr-cta{display:none}}
 .field label small{font-weight:400;color:var(--muted)}
+/* Скидки и дилеры */
+.perks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}
+.perks.perks-4{grid-template-columns:repeat(4,1fr);margin-top:0}
+.perks>div{display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:var(--r);background:var(--yellow-soft);border:1px solid #f0d88a}
+.perks b{font:800 17px/1.25 var(--display);color:var(--ink)}
+.perks span{font-size:15px;color:var(--muted)}
+.perks a{color:var(--navy);font-weight:700}
+@media (max-width:900px){.perks,.perks.perks-4{grid-template-columns:1fr}}
+.dealer-band{padding-block:28px;background:var(--paper);border-top:1px solid var(--line)}
+.dealer-band .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
+.dealer-band h2{font-size:clamp(20px,2.2vw,26px);margin:0 0 6px}
+.dealer-band p{color:var(--muted);max-width:68ch;margin:0}
+/* Кнопка «наверх» */
+.totop{position:fixed;right:20px;bottom:24px;z-index:30;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);border:1px solid var(--line);color:var(--navy);box-shadow:0 8px 24px -12px rgba(15,31,61,.45);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .25s,transform .25s,visibility .25s}
+.totop svg{width:20px;height:20px}
+.totop:hover{border-color:var(--navy);background:#fff}
+.totop.on{opacity:1;visibility:visible;transform:none}
+@media (max-width:760px){.totop{right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:42px;height:42px}}

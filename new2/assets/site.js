@@ -3,7 +3,7 @@
 var CONFIG = {
   usdByn: 2.95,          // курс USD/BYN
   eurUsd: 1.15,          // курс EUR/USD
-  serviceByn: 599,       // наша услуга (минимальный тариф)
+  serviceByn: 590,       // наша услуга (минимальный тариф)
   leadEndpoint: "",      // сюда подставим вебхук amoCRM; пусто = тестовый режим
   // Счётчики. Пусто = не загружаются. Пример: gtm "GTM-XXXXXXX", ym 12345678, ga4 "G-XXXXXXXXXX".
   // Если подключён GTM, GA4 и Метрику лучше ставить внутри GTM, а здесь оставить пустыми.
@@ -722,4 +722,12 @@ function carCard(c){
   var i = document.getElementById("qBudget"), b = document.getElementById("qSendB"); if (!i || !b) return;
   function f(){ var v = +i.value || 0; b.textContent = v >= 3000 ? "Подобрать машины до " + v.toLocaleString("ru-RU") + " $" : "Подобрать машины под бюджет"; }
   i.addEventListener("input", f); f();
+})();
+
+// Кнопка «наверх»: появляется, когда пролистали больше полутора экранов
+(function(){
+  var t = document.querySelector(".totop"); if (!t) return;
+  function f(){ t.classList.toggle("on", window.scrollY > window.innerHeight * 1.5); }
+  window.addEventListener("scroll", f, {passive: true}); f();
+  t.addEventListener("click", function(e){ e.preventDefault(); window.scrollTo({top: 0, behavior: "smooth"}); });
 })();

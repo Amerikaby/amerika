@@ -606,3 +606,11 @@ function carCard(c){
   function f(){ var v = +i.value || 0; b.textContent = v >= 3000 ? "Подобрать машины до " + v.toLocaleString("ru-RU") + " $" : "Подобрать машины под бюджет"; }
   i.addEventListener("input", f); f();
 })();
+
+// Кнопка «наверх»: появляется, когда пролистали больше полутора экранов
+(function(){
+  var t = document.querySelector(".totop"); if (!t) return;
+  function f(){ t.classList.toggle("on", window.scrollY > window.innerHeight * 1.5); }
+  window.addEventListener("scroll", f, {passive: true}); f();
+  t.addEventListener("click", function(e){ e.preventDefault(); window.scrollTo({top: 0, behavior: "smooth"}); });
+})();
