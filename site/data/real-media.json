@@ -1,0 +1,19 @@
+{
+  "sourcePage": "https://amerika.by/",
+  "section": "Мы в автоспорте!",
+  "checkedAt": "2026-10-18",
+  "assets": [
+    {
+      "file": "site/static/img/team-mini.jpg",
+      "source": "https://amerika.by/wp-content/uploads/wp-vertical-image-slider/imgonline-com-ua-resize-ma3owlzxo764d1175744268.jpg",
+      "caption": "Mini Cooper S · Time-Attack",
+      "use": "Hero and team section; original bytes, not retouched; not an inventory listing"
+    },
+    {
+      "file": "site/static/img/team-lexus.jpg",
+      "source": "https://amerika.by/wp-content/uploads/wp-vertical-image-slider/164cf72559c206.jpg",
+      "caption": "Lexus IS 200 · дрифт PRO2",
+      "use": "Team section; original bytes including photographer credit"
+    }
+  ]
+}

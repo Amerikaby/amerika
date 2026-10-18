@@ -3,7 +3,7 @@
 # В new2/ НЕ подключается. При переезде вставить в .htaccess корня ПЕРЕД правилами сайта.
 # Адреса, которые на новом сайте сохранены (каталог /auto-usa/, марки /usa/<марка>/, блог, услуги, цены,
 # контакты, отзывы, таможенный калькулятор, политика), здесь не перечислены: они открываются как есть.
-# Всего правил: 496.
+# Всего правил: 489.
 <IfModule mod_rewrite.c>
 RewriteEngine On
 # тестовый каталог
@@ -24,10 +24,6 @@ RewriteRule ^auto-canada/audi-q3-premium-plus-2020/?$ /usa/audi/ [R=301,L,NE]
 RewriteRule ^auto-canada/audi-q5-premium-2020/?$ /usa/audi/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-canada/chevrolet-cruze-lt-2018/?$ /usa/chevrolet/ [R=301,L,NE]
-# машина не из США → марка или каталог США
-RewriteRule ^auto-canada/chevrolet-equinox-lt-2022/?$ /usa/chevrolet/ [R=301,L,NE]
-# машина не из США → марка или каталог США
-RewriteRule ^auto-canada/chevrolet-equinox-lt-2023/?$ /usa/chevrolet/ [R=301,L,NE]
 # электромобили не из США → электромобили из США
 RewriteRule ^auto-canada/elektromobily-canada/?$ /auto-usa/elektromobily-usa/ [R=301,L,NE]
 # машина не из США → марка или каталог США
@@ -145,8 +141,6 @@ RewriteRule ^auto-europe/audi-a4-2-0-tdi-2018/?$ /usa/audi/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/audi-a4-advanced-2019/?$ /usa/audi/ [R=301,L,NE]
 # машина не из США → марка или каталог США
-RewriteRule ^auto-europe/audi-a4-allroad-2018/?$ /usa/audi/ [R=301,L,NE]
-# машина не из США → марка или каталог США
 RewriteRule ^auto-europe/audi-a4-allroad-2020/?$ /usa/audi/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/audi-a4-avant-2018/?$ /usa/audi/ [R=301,L,NE]
@@ -206,8 +200,6 @@ RewriteRule ^auto-europe/ford-focus-turnier-2018/?$ /usa/ford/ [R=301,L,NE]
 RewriteRule ^auto-europe/ford-focus-turnier-2019-2/?$ /usa/ford/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/ford-focus-turnier-2019/?$ /usa/ford/ [R=301,L,NE]
-# машина не из США → марка или каталог США
-RewriteRule ^auto-europe/ford-kuga-2018-2/?$ /usa/ford/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/ford-kuga-2018/?$ /usa/ford/ [R=301,L,NE]
 # машина не из США → марка или каталог США
@@ -286,8 +278,6 @@ RewriteRule ^auto-europe/peugeot-508-2019-2/?$ /auto-usa/ [R=301,L,NE]
 RewriteRule ^auto-europe/peugeot-508-2019/?$ /auto-usa/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/renault-megane-e-tech-2022/?$ /auto-usa/ [R=301,L,NE]
-# машина не из США → марка или каталог США
-RewriteRule ^auto-europe/renault-megane-grandtour-2019/?$ /auto-usa/ [R=301,L,NE]
 # машина не из США → марка или каталог США
 RewriteRule ^auto-europe/renault-talisman-2019/?$ /auto-usa/ [R=301,L,NE]
 # машина не из США → марка или каталог США
@@ -705,10 +695,6 @@ RewriteRule ^o-nas/?$ /o-kompanii/ [R=301,L,NE]
 # служебная страница
 RewriteRule ^sitemap/?$ / [R=301,L,NE]
 # фильтр по статусу
-RewriteRule ^situation/in-stock/?$ /auto-usa/ [R=301,L,NE]
-# фильтр по статусу
-RewriteRule ^situation/in-transit/?$ /auto-usa/ [R=301,L,NE]
-# фильтр по статусу
 RewriteRule ^situation/on-order/?$ /auto-usa/ [R=301,L,NE]
 # фильтр по статусу
 RewriteRule ^situation/prodano/?$ /auto-usa/ [R=301,L,NE]
@@ -1003,6 +989,7 @@ RewriteRule ^vakansii/?$ /o-kompanii/ [R=301,L,NE]
 RewriteCond %{REQUEST_URI} !^/(usa/chevrolet/equinox|usa/chevrolet/trailblazer|usa/chevrolet/trax|usa/nissan/rogue|usa/ford/bronco-sport|usa/vw/jetta)/?$
 RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
 RewriteRule ^(europe|canada|china)/.*$ /auto-usa/ [R=301,L]
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^auto-(europe|canada|china)(/.*)?$ /auto-usa/ [R=301,L]
-RewriteRule ^situation/.*$ /auto-usa/ [R=301,L]
+RewriteRule ^situation/(?!(in-stock|in-transit)/?$).*$ /auto-usa/ [R=301,L]
 </IfModule>

@@ -23,6 +23,7 @@ export const SITE = {
 
 export const NAV = [
   ['auto-usa/', 'Каталог'],
+  ['situation/in-stock/', 'В наличии'],
   ['kalkulyator/', 'Калькулятор'],
   ['uslugi/', 'Услуги'],
   ['ceny/', 'Цены'],
@@ -190,7 +191,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f8f6f0">
 <link rel="icon" href="${u('img/logo.svg')}" type="image/svg+xml">
-<link rel="stylesheet" href="${u('assets/site.css')}?v=ready-20261018-v3">
+<link rel="stylesheet" href="${u('assets/site.css')}?v=real-20261018-v1">
 ${ld.map((x) => `<script type="application/ld+json">${JSON.stringify(x).replace(/</g, '\\u003c')}</script>`).join('\n')}
 </head>
 <body>
@@ -201,7 +202,7 @@ ${cr && !noCrumbs ? crumbs(cr) : ''}
 ${body}
 </main>
 ${footer()}
-<script src="${u('assets/site.js')}?v=ready-20261018-v3" defer></script>
+<script src="${u('assets/site.js')}?v=real-20261018-v1" defer></script>
 </body>
 </html>
 `;

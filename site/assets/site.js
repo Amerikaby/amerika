@@ -328,9 +328,10 @@ function fillYears(sel, def){
     var c = cur(), o = c.o;
     $("qCc").disabled=o.ev;$("qFuelRow").hidden=false;
     var valid=validFields([["qCc",1,10000,"Укажите объём двигателя больше нуля."],["qLot",1,10000000,"Укажите положительную ставку."],["qRepair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $."]],$("qInputError"));
-    [".qc-total",".qc-actions",".qc-out"].forEach(function(s){$("qPanelModel").querySelector(s).hidden=!valid});if(!valid)return null;
+    [".qc-total",".qc-actions",".qc-out"].forEach(function(s){$("qPanelModel").querySelector(s).hidden=!valid});if(!valid){$("qSettings").open=true;$("qAssumptions").textContent="Проверьте параметры расчёта ниже.";return null;}
     if (!lotTouched) { var lim = c.mk ? maxBid(c.mk, o) : 0; $("qLot").value = lim ? Math.max(1000, Math.floor(lim * 0.75 / 500) * 500) : 10000; }
     var lot = Math.max(0, +$("qLot").value || 0), r = costOf(lot, o);
+    $("qAssumptions").textContent = (o.ev ? "Электро" : (o.cc / 1000).toLocaleString("ru-RU") + " л" + (o.alt ? ", гибрид" : ", бензин / дизель")) + " · ставка " + fmt(lot) + " · резерв ремонта " + fmt(o.repair) + " · услуга " + o.serviceByn + " BYN · " + (o.benefit ? "льгота 50%" : "без льготы") + ". Параметры для примера — измените под свой лот.";
     $("qTotal").textContent = fmt(r.total);
     $("qByn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
     $("qFuelRow").hidden = false;

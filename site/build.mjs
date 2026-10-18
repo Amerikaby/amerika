@@ -13,6 +13,7 @@ import { fetchAll, fetchOldSitemap } from './fetch.mjs';
 import { esc, decode, plain, clip, sanitize } from './lib/html.mjs';
 import { makeLayout, SITE, SERVICES, ICONS } from './partials.mjs';
 import { homeBody, quickCalc } from './pages/home.mjs';
+import { inventoryViews, realTeam } from './pages/availability.mjs';
 import { staticPages } from './pages/static.mjs';
 import { modelPages, modelsStrip, modelsTiles, modelRows, MODEL_PAGES } from './pages/models.mjs';
 import { PHOTO_BLOCK, isStubImage, fixTitleCase, defaultCc, EV_MODELS } from './data-fixes.mjs';
@@ -150,6 +151,8 @@ const cars = rawCars.map((x, idx) => {
     uniqueText: shares[idx] < 0.5,
   };
 }).sort((a, b) => b.date.localeCompare(a.date));
+const availability = JSON.parse(await readFile(path.join(ROOT, 'data', 'availability.json'), 'utf8'));
+const inventory = inventoryViews(availability, {u, leadSection});
 const carBySlug = new Map(cars.map((c) => [c.slug, c]));
 // Одинаковые названия (дубли лотов на старом сайте): различаем в <title> пробегом или номером варианта
 {
@@ -297,7 +300,7 @@ await out('assets/cars.json', JSON.stringify(cars.map((c) => ({ s: c.slug, t: c.
 const ORG = { '@type': 'Organization', name: 'Amerika.by', url: SITE.origin + '/', logo: { '@type': 'ImageObject', url: assetUrl('img/logo.png'), width: 512, height: 512 } };
 
 // Общий контекст для статичных страниц
-const ctx = { u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postCard, cars, posts, brandList, fmtDate };
+const ctx = { realTeam: realTeam({u}), u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, carCard, postCard, cars, posts, brandList, fmtDate };
 
 // 0. Страницы популярных моделей /usa/<марка>/<модель>/ (цены рынка: site/data/market-avby.json)
 // Средние цены продажи на аукционе (лёгкие повреждения): site/data/auction-avg.json, заполняется вручную или из AuctionsAPI
@@ -356,7 +359,7 @@ for (const p of modelPg) await out(p.path, page(p));
     <div class="sec-foot"><a class="btn btn-line" href="${u('blog/')}">Все статьи</a></div>
   </div>
 </section>`;
-  const body = homeBody({ u, quick, models, extra }) + leadSection({ title: 'Пришлём до 5 вариантов с аукциона и расчёт до Минска' });
+  const body = homeBody({ u, quick, models, extra, inventory: inventory.home, team: realTeam({u}) }) + leadSection({ title: 'Пришлём до 5 вариантов с аукциона и расчёт до Минска' });
   // Вариант B «Витрина» (как bid.cars) для сравнения: /glavnaya-b/, не в sitemap
   {
     const pick = (id) => (body.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`)) || [''])[0];
@@ -474,6 +477,7 @@ for (let n = 1; n <= totalCatPages; n++) {
 </section>
 <section class="sec" style="padding-top:0">
   <div class="wrap">
+    ${inventory.tabs('order')}
     <form class="filters" id="catFilter" role="search">
       <div class="field"><label for="catQ">Поиск по модели или году</label><input id="catQ" type="search" placeholder="Например: RAV4 2021" autocomplete="off"></div>
       <div class="field"><label for="catBrand">Марка</label><select id="catBrand"><option value="">Все марки</option>${brandList.map((b) => `<option value="${esc(b.slug)}">${esc(b.name)} (${b.cars.length})</option>`).join('')}</select></div>
@@ -548,7 +552,9 @@ if (evCars.length) {
 
 // 3b. Страницы машин /auto-usa/<slug>/
 const PORT_NAME = { klaipeda: 'Клайпеду (Литва)', poti: 'Поти (Грузия)' };
+for (const p of [...inventory.listings, ...inventory.details]) await out(p.path, page(p));
 for (const c of cars) {
+  if (inventory.byId.has(c.id)) continue;
   const rel = carPath(c.slug);
   const g = c.gallery;
   const ev = c.spec.fuel === 'электро', hybrid = c.spec.fuel === 'гибрид';
@@ -841,8 +847,9 @@ ErrorDocument 404 ${BASE}404.html
 ${modelPg.length ? `RewriteCond %{REQUEST_URI} !^/(${modelPg.map((p) => p.path.replace(/\/$/, '').replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('|')})/?$
 ` : ''}RewriteRule ^usa/([^/]+)/[^/]+/?$ /usa/$1/ [R=301,L]
 RewriteRule ^(europe|canada|china)/.*$ /${CAT} [R=301,L]
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^auto-(europe|canada|china)(/.*)?$ /${CAT} [R=301,L]
-RewriteRule ^situation/.*$ /${CAT} [R=301,L]`;
+RewriteRule ^situation/(?!(in-stock|in-transit)/?$).*$ /${CAT} [R=301,L]`;
   const file = `# 301-редиректы со старого WordPress на новый сайт (для переезда в корень amerika.by).
 # Сгенерировано ${today} скриптом site/build.mjs из XML-карт старого сайта (${oldUrls.length} адресов).
 # В new2/ НЕ подключается. При переезде вставить в .htaccess корня ПЕРЕД правилами сайта.

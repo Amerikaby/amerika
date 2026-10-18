@@ -1,7 +1,7 @@
 // Страницы с ручным текстом: калькуляторы, услуги, цены, о компании, контакты, отзывы.
 import { calcWidget } from './calc-widget.mjs';
 
-export function staticPages({ u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, postCard, posts }) {
+export function staticPages({ u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection, postCard, posts, realTeam }) {
   const pages = [];
   const add = (p) => pages.push(p);
   const num = (n, d = 0) => Number(n).toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/ /g, ' ');
@@ -565,6 +565,7 @@ ${leadSection({ eyebrow: 'Сотрудничество', title: 'Обсудим 
     </div>
   </div>
 </section>
+${realTeam}
 ${leadSection()}`,
     jsonld: [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: 'О компании Amerika.by', url: SITE.origin + '/o-kompanii/' }],
   });

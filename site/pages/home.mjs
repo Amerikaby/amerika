@@ -2,7 +2,7 @@
 import { SITE } from "../partials.mjs";
 // плитки моделей со сравнением с av.by, шаги, логистика, тарифы одной строкой, статьи, вопросы, заявка.
 
-export function homeBody({ u, quick, models, extra }) {
+export function homeBody({ u, quick, models, extra, inventory, team }) {
   return `
 <section class="hero">
   <div class="wrap">
@@ -22,18 +22,19 @@ export function homeBody({ u, quick, models, extra }) {
       </div>
     </div>
 
-    <figure class="hero-visual"><img src="${u('img/hero-light-suv.webp')}" alt="Иллюстрация серебристо-голубого кроссовера на светлом фоне" width="1448" height="1086" fetchpriority="high"><span class="image-label">ИЛЛЮСТРАЦИЯ · AI</span><figcaption><div><small>ПОД ВАШ БЮДЖЕТ И ЗАДАЧУ</small><strong>Ваша следующая машина</strong><p>Начнём с того, что важно именно вам.</p></div><a href="#models" aria-label="Посмотреть модели">↗</a></figcaption></figure>
+    <figure class="hero-visual real-hero"><img src="${u('img/team-mini.jpg')}" alt="Mini Cooper S и команда Amerika.by на автодроме" width="800" height="533" fetchpriority="high"><span class="image-label">НАША КОМАНДА · РЕАЛЬНОЕ ФОТО</span><figcaption><div><small>AMERIKA.BY · TIME-ATTACK</small><strong>Сами живём автомобилями</strong><p>Mini Cooper S из истории нашей команды.</p></div><a href="#team" aria-label="Узнать о команде">↗</a></figcaption></figure>
   </div>
 </section>
 
 <div class="wrap trust-strip"><div><b>Вы платите аукциону</b><span>Нам — за услугу по договору</span></div><div><b>Считаете до ставки</b><span>Лот, доставка, таможня и восстановление</span></div><div><b>Общаетесь с нами в Минске</b><span>Офис, договор и ваш менеджер</span></div></div>
+${inventory}
 <section class="calc-sec quick-sec" id="quick-sec">
   <div class="wrap quick-wrap">
     <div class="sec-head">
       <p class="eyebrow">Быстрый расчёт</p>
-      <h2>Посчитаем весь бюджет.
-      Без скрытых строк.</h2>
-      <p>Выберите модель или бюджет. Восстановление и наша услуга входят в итог отдельными строками.</p>
+      <h2>Начните с модели.
+      Или с бюджета.</h2>
+      <p>Достаточно выбрать модель и год — покажем предварительный бюджет. Ставку, двигатель и резерв ремонта можно уточнить в настройках.</p>
       <ul class="payees" aria-label="Кому уходят деньги">
         <li><b>Аукциону</b><span>лот и сборы</span></li>
         <li><b>Перевозчику</b><span>доставка по США, море, порт → Минск</span></li>
@@ -65,6 +66,7 @@ ${models}
   </div>
 </section>
 
+${team}
 ${extra}
 <section class="dealer-band">
   <div class="wrap">
@@ -108,8 +110,10 @@ export function quickCalc(data, { u, esc }) {
       <ul class="qc-list" id="qList" role="listbox" hidden></ul>
     </div>
     <div class="qc-pop" aria-label="Популярные">${data.popular.map((i) => `<button type="button" data-i="${i}">${esc(data.idx[i][1])}</button>`).join('')}</div>
-    <div class="qc-fields three">
-      <div class="field"><label for="qYear">Год</label><select id="qYear"></select></div>
+    <div class="field qc-year"><label for="qYear">Год выпуска</label><select id="qYear"></select></div>
+    <p class="qc-assumptions" id="qAssumptions"></p>
+    <details class="qc-settings" id="qSettings"><summary>Настроить двигатель, ставку и расходы</summary>
+    <div class="qc-fields two">
       <div class="field"><label for="qCc">Объём, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="1500"></div>
       <div class="field"><label for="qLot">Ставка, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
     </div>
@@ -124,7 +128,8 @@ export function quickCalc(data, { u, esc }) {
     <div class="qc-fields two"><div class="field"><label for="qRepair">Бюджет восстановления, $</label><input id="qRepair" type="number" min="0" max="100000" step="100" value="1500"></div><div class="field"><label for="qService">Наша услуга, BYN</label><select id="qService"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div></div>
     <label class="check qc-benefit"><input type="checkbox" id="qBenefit"> У меня есть право на льготу 50%</label>
     <p class="qc-hint">1 500 $ на восстановление — условный пример. Измените сумму под свой лот; оценку подтвердит менеджер.</p>
-    <p class="calc-error" id="qInputError" role="status" hidden></p><div class="qc-total" aria-live="polite"><span>Итого с восстановлением</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    </details>
+    <p class="calc-error" id="qInputError" role="status" hidden></p><div class="qc-total" aria-live="polite"><span>Предварительно, с восстановлением</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
     <div class="qc-actions">
       <a class="btn btn-red" href="#lead" id="qSend">Прислать мне этот расчёт</a>
       <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
