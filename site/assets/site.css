@@ -804,3 +804,11 @@ section{padding-block:80px}
 .inc-short li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--yellow)}
 .inc-short .ours a{margin-top:auto;font:700 14.5px/1.2 var(--display);color:var(--navy);text-decoration:none;border-bottom:2px solid var(--yellow);align-self:flex-start}
 .inc-note{margin-top:16px;color:var(--muted);font-size:15.5px}
+/* Быстрый расчёт под первым экраном */
+.quick-sec{background:#fff;border-top:1px solid var(--line)}
+.quick-sec h2{color:var(--ink)}
+.quick-sec .sec-head p{color:var(--muted)}
+.quick-sec .eyebrow{color:var(--navy-2)}
+.quick-wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;align-items:start}
+.quick-wrap .sec-head{position:sticky;top:96px;margin:0}
+@media (max-width:900px){.quick-wrap{grid-template-columns:1fr;gap:20px}.quick-wrap .sec-head{position:static}}

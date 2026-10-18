@@ -1,25 +1,53 @@
-// Главная (вариант A, 18.10.2026): первый экран = быстрый расчёт по популярным моделям, затем «кому уходят деньги»,
+// Главная (18.10.2026): первый экран с гарантиями, сразу под ним быстрый расчёт по любой модели, затем «кому уходят деньги»,
 // плитки моделей со сравнением с av.by, шаги, логистика, тарифы одной строкой, статьи, вопросы, заявка.
 
 export function homeBody({ u, quick, models, extra }) {
   return `
-<section class="hero hero-q">
+<section class="hero">
   <div class="wrap">
-    <div class="hq-head">
+    <div class="hero-copy">
+      <p class="eyebrow">Copart, IAAI и Manheim · доставка до Минска</p>
       <h1>Доставка авто из США в Беларусь <mark>под ключ</mark></h1>
-      <p class="lead">Пригон авто из Америки: покупка на Copart и IAAI, доставка и растаможка. Ремонт не входит, его оценим по фото до ставки.</p>
+      <p class="lead">Пригон авто из Америки: покупка на Copart, IAAI и Manheim, доставка до Минска и растаможка. Работаем по договору, полную цену до Минска видите до ставки.</p>
+      <div class="cta-row">
+        <a class="btn btn-red" href="#quick">Посчитать цену до Минска</a>
+        <a class="btn btn-line" href="#lead">Подобрать машину</a>
+      </div>
+      <div class="facts">
+        <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
+        <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
+        <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
+      </div>
+    </div>
+
+    <aside class="guar" aria-label="Три гарантии">
+      <div class="guar-head"><p>Три гарантии</p><span>прописаны в договоре</span></div>
+      <ol>
+        <li>
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span>
+          <div><h3>Официальный договор</h3><p>Офис в Минске, юрлицо в Беларуси. Что мы делаем и сколько это стоит, записано на бумаге.</p></div>
+        </li>
+        <li>
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span>
+          <div><h3>За машину платите аукциону сами</h3><p>Деньги за лот уходят банковским переводом напрямую аукциону. Нам вы платите только за услугу.</p></div>
+        </li>
+        <li>
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
+          <div><h3>Полная цена до Минска заранее</h3><p>Лот, сборы, доставка, пошлина, утильсбор и наша услуга. Считаем всё до ставки, а не после покупки.</p></div>
+        </li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<section class="calc-sec quick-sec" id="quick-sec">
+  <div class="wrap quick-wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Быстрый расчёт</p>
+      <h2>Сколько будет стоить ваша машина в Минске</h2>
+      <p>Выберите модель или введите бюджет. Сравним с ценами на av.by.</p>
     </div>
     ${quick}
-    <ul class="hq-trust" aria-label="Гарантии">
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><b>Договор с офисом в Минске</b></li>
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><b>За машину платите аукциону напрямую</b></li>
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h13l3-5h2"/><path d="M5 17l-1-6h12l2 6"/><circle cx="8" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span><b>Логистика Atlantic Express с 1995 года</b></li>
-    </ul>
-    <div class="facts hq-facts">
-      <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
-      <div><b class="num">40–70 дней</b><span>от оплаты лота до Минска</span></div>
-      <div><b class="num">от 599 BYN</b><span>услуга по договору</span></div>
-    </div>
   </div>
 </section>
 <section class="white" id="price-inside">
@@ -35,7 +63,6 @@ export function homeBody({ u, quick, models, extra }) {
       <article><p class="to"><b>3</b>Таможне</p><ul><li>Пошлина</li><li>Утильсбор, СВХ, декларант</li></ul></article>
       <article class="ours"><p class="to"><b>4</b>Нам</p><ul><li>Услуга по договору: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b></li><li>Без процента от цены машины</li></ul><a href="${u('ceny/')}">Что входит в тарифы →</a></article>
     </div>
-    <p class="inc-note">Ремонт в расчёт не входит. Его стоимость оценим по фото и отчёту аукциона до ставки.</p>
   </div>
 </section>
 
@@ -141,13 +168,13 @@ export function quickCalc(data, { u, esc }) {
   </div>
   <div id="qPanelBudget" role="tabpanel" aria-labelledby="qTabBudget" class="qc-panel" hidden>
     <div class="field"><label for="qBudget">Бюджет до Минска, $</label><input id="qBudget" type="number" inputmode="numeric" min="3000" step="1000" value="20000"></div>
-    <p class="qc-hint">Под ключ с растаможкой, без ремонта. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
+    <p class="qc-hint">С доставкой и растаможкой. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
     <ul class="qc-fit" id="qFit"></ul>
     <div class="qc-actions">
       <a class="btn btn-red" href="#lead" id="qSendB">Подобрать под мой бюджет</a>
     </div>
   </div>
-  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
+  <p class="qc-note">Предварительный расчёт. av.by: средняя цена объявлений.</p>
   <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
 }
