@@ -255,42 +255,69 @@ function fillYears(sel, def){
   var box = $("quick"), dataEl = $("quickData");
   if (!box || !dataEl) return;
   var D = JSON.parse(dataEl.textContent), lotTouched = false, used = false;
-  function model(){ return D[+box.querySelector('input[name="qm"]:checked').value]; }
+  function sel(){ return box.querySelector('input[name="qm"]:checked').value; }
+  function model(){ var v = sel(); return v === "other" ? null : D[+v]; }
+  /* Строка модели: [год, см³, медиана av.by, ставить до] */
   function row(m){ var y = +$("qYear").value; for (var i = 0; i < m.y.length; i++) if (m.y[i][0] === y) return m.y[i]; return m.y[0]; }
   /* Ставка по умолчанию: заметно ниже границы выгоды, круглая */
-  function defLot(r){ return r[3] ? Math.max(1000, Math.floor(r[3] * 0.75 / 500) * 500) : 5000; }
-  function fillYears(m){
-    var sel = $("qYear"); sel.innerHTML = "";
-    m.y.forEach(function(r){ var o = document.createElement("option"); o.value = r[0]; o.textContent = r[0]; if (r[0] === m.def) o.selected = true; sel.appendChild(o); });
+  function defLot(r){ return r && r[3] ? Math.max(1000, Math.floor(r[3] * 0.75 / 500) * 500) : 10000; }
+  function setYears(list, def){
+    var s = $("qYear"), keep = +s.value; s.innerHTML = "";
+    list.forEach(function(y){ var o = document.createElement("option"); o.value = y; o.textContent = y; s.appendChild(o); });
+    s.value = list.indexOf(keep) >= 0 && def == null ? keep : (def || list[0]);
   }
-  function opts(r){ var cc = r[1]; return {moto:false, year:r[0], cc:cc, alt:false, ev:false, region:"east", port:autoPortFor(false, false, cc), sublot:false, benefit:false}; }
+  function refill(){
+    var m = model(), years = [];
+    if (m) { setYears(m.y.map(function(r){ return r[0]; }), m.def); }
+    else { for (var y = nowYear; y >= nowYear - 15; y--) years.push(y); setYears(years, years.indexOf(+$("qYear").value) >= 0 ? null : nowYear - 4); }
+    $("qOther").hidden = !!m;
+  }
   function run(){
-    var m = model(), r = row(m);
+    var m = model(), r = m ? row(m) : null, o;
     if (!lotTouched) $("qLot").value = defLot(r);
-    var lot = Math.max(0, +$("qLot").value || 0), o = opts(r), c = costOf(lot, o), mk = r[2];
-    var max = Math.max(c.total, mk);
+    var lot = Math.max(0, +$("qLot").value || 0), year = +$("qYear").value;
+    if (m) {
+      o = {moto:false, year:year, cc:r[1], alt:false, ev:false, region:"east", port:autoPortFor(false, false, r[1]), sublot:false, benefit:false};
+    } else {
+      var fuel = $("qFuel").value, cc = fuel === "ev" ? 0 : Math.max(0, +$("qCc").value || 0), alt = fuel !== "ice";
+      o = {moto:false, year:year, cc:cc, alt:alt, ev:fuel === "ev", region:"east", port:autoPortFor(false, alt, cc), sublot:false, benefit:false};
+    }
+    var c = costOf(lot, o);
     $("qTotal").textContent = fmt(c.total);
     $("qByn").textContent = "≈ " + Math.round(c.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
-    $("qUs").textContent = fmt(c.total); $("qMk").textContent = fmt(mk);
-    $("qBarUs").style.width = (c.total / max * 100) + "%"; $("qBarMk").style.width = (mk / max * 100) + "%";
-    var diff = mk - c.total, v = $("qVerdict");
-    v.className = "qc-verdict " + (diff > 0 ? "good" : "bad");
-    v.innerHTML = diff > 0
-      ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(r[3]) + "."
-      : (r[3] ? "При такой ставке дороже рынка. " + m.n + " " + r[0] + " выгодно брать при ставке до <b>" + fmt(r[3]) + "</b>."
-              : m.n + " " + r[0] + " из США выходит не дешевле рынка. Посмотрите другой год.");
-    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(r[0]), cc: String(r[1])}).toString() + "#calc";
-    return {m:m, r:r, lot:lot, total:Math.round(c.total), port:o.port};
+    $("qLotHint").hidden = lotTouched;
+    $("qCc").disabled = !m && $("qFuel").value === "ev";
+    var v = $("qVerdict");
+    if (m) {
+      var mk = r[2], max = Math.max(c.total, mk), diff = mk - c.total;
+      $("qBars").hidden = false;
+      $("qMk").textContent = fmt(mk);
+      $("qBarUs").style.width = (c.total / max * 100) + "%"; $("qBarMk").style.width = (mk / max * 100) + "%";
+      v.className = "qc-verdict " + (diff > 0 ? "good" : "bad");
+      v.innerHTML = diff > 0
+        ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(r[3]) + "."
+        : (r[3] ? "При такой ставке дороже рынка. " + m.n + " " + r[0] + " выгодно брать при ставке до <b>" + fmt(r[3]) + "</b>."
+                : m.n + " " + r[0] + " из США выходит не дешевле рынка. Посмотрите другой год.");
+    } else {
+      $("qBars").hidden = true;
+      v.className = "qc-verdict";
+      v.innerHTML = "Маршрут через <b>" + PORTS[o.port].name + "</b>" + (o.port === "poti" ? ": машины больше 1,9 л, гибриды и электро везём в обход ЕС." : ".")
+        + " Сравнение с рынком Беларуси для этой машины пришлём вместе с точным расчётом.";
+    }
+    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(year), cc: String(o.cc)}).toString() + (o.alt ? "&fuel=alt" : "") + "#calc";
+    return {m:m, o:o, lot:lot, year:year, total:Math.round(c.total)};
   }
-  qsa('input[name="qm"]', box).forEach(function(i){ i.addEventListener("change", function(){ lotTouched = false; fillYears(model()); run(); }); });
-  $("qYear").addEventListener("change", function(){ lotTouched = false; run(); });
+  qsa('input[name="qm"]', box).forEach(function(i){ i.addEventListener("change", function(){ lotTouched = false; refill(); run(); }); });
+  $("qYear").addEventListener("change", function(){ if (model()) lotTouched = false; run(); });
   $("qLot").addEventListener("input", function(){ lotTouched = true; run(); });
+  ["qCc", "qFuel"].forEach(function(id){ $(id).addEventListener("input", run); $(id).addEventListener("change", run); });
   box.addEventListener("change", function(){ if (!used) { used = true; track("calc_used", {calc: "quick"}); } });
   run();
   $("qSend").addEventListener("click", function(){
     var x = run(), lc = $("lcar");
+    var name = x.m ? x.m.b + " " + x.m.n : ($("qName").value.trim() || "машина") + ", " + (x.o.ev ? "электро" : x.o.cc + " см³" + (x.o.alt ? ", гибрид" : ""));
     track("calc_send", {total: x.total, calc: "quick"});
-    if (lc) lc.value = "Быстрый расчёт: " + x.m.b + " " + x.m.n + " " + x.r[0] + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ под ключ, через " + PORTS[x.port].name + ".";
+    if (lc) lc.value = "Быстрый расчёт: " + name + ", " + x.year + " г., ставка " + x.lot + " $, итого ≈ " + x.total + " $ с растаможкой, через " + PORTS[x.o.port].name + ".";
   });
 })();
 

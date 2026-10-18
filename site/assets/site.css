@@ -745,3 +745,18 @@ section{padding-block:80px}
 .hq-trust .ico svg{width:18px;height:18px}
 .hq-trust b{font-size:16px;font-weight:700}
 .hero-q .lead{max-width:30em}
+/* Быстрый расчёт: правки после разбора 18.10 */
+.qc-models label.other span{border-style:dashed;color:var(--navy-muted)}
+.qc-models label.other input:checked+span{border-style:solid}
+.qc-other{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qc-other .wide{grid-column:1/-1}
+.qc-hint{font-size:12.5px;color:#c9d3ea}
+.qc-out{gap:10px;padding:14px 16px}
+.qc-note{font-size:13.5px;color:#c9d3ea}
+.qc input:disabled{opacity:.5}
+@media (max-width:600px){.qc-total b{font-size:34px}}
+.qc-models label.other input:checked+span{color:var(--navy)}
+@media (max-width:600px){
+  .qc-models{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0;gap:6px}
+  .qc-models span{min-height:36px;padding:0 11px;font-size:13.5px}
+}

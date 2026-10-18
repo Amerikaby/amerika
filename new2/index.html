@@ -61,24 +61,29 @@
     </div>
     <div class="qc" id="quick">
   <div class="qc-head"><b>Цена в Минске с растаможкой</b></div>
-  <div class="qc-models" role="radiogroup" aria-label="Модель"><label><input type="radio" name="qm" value="0" checked><span>Equinox</span></label><label><input type="radio" name="qm" value="1"><span>Trailblazer</span></label><label><input type="radio" name="qm" value="2"><span>Trax</span></label><label><input type="radio" name="qm" value="3"><span>Rogue</span></label><label><input type="radio" name="qm" value="4"><span>Bronco Sport</span></label><label><input type="radio" name="qm" value="5"><span>Jetta</span></label><a href="/new2/kalkulyator/#calc">Другая машина</a></div>
+  <div class="qc-models" role="radiogroup" aria-label="Модель"><label><input type="radio" name="qm" value="0" checked><span>Equinox</span></label><label><input type="radio" name="qm" value="1"><span>Trailblazer</span></label><label><input type="radio" name="qm" value="2"><span>Trax</span></label><label><input type="radio" name="qm" value="3"><span>Rogue</span></label><label><input type="radio" name="qm" value="4"><span>Bronco Sport</span></label><label><input type="radio" name="qm" value="5"><span>Jetta</span></label><label class="other"><input type="radio" name="qm" value="other"><span>Другая машина</span></label></div>
+  <div class="qc-other" id="qOther" hidden>
+    <div class="field wide"><label for="qName">Марка и модель</label><input id="qName" type="text" placeholder="Например: Mercedes S500" autocomplete="off"></div>
+    <div class="field"><label for="qCc">Объём двигателя, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="2000"></div>
+    <div class="field"><label for="qFuel">Двигатель</label><select id="qFuel"><option value="ice">Бензин, дизель</option><option value="hybrid">Гибрид</option><option value="ev">Электро</option></select></div>
+  </div>
   <div class="qc-fields">
     <div class="field"><label for="qYear">Год выпуска</label><select id="qYear"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022" selected>2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option></select></div>
-    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
+    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"><small class="qc-hint" id="qLotHint">Пример, введите свою</small></div>
   </div>
-  <div class="qc-out" aria-live="polite">
-    <div class="qc-total"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
-    <div class="qc-bars">
-      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
-      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
-    </div>
-    <p class="qc-verdict" id="qVerdict"></p>
-  </div>
+  <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
   <div class="qc-actions">
     <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
     <a class="qc-more" href="/new2/kalkulyator/#calc" id="qMore">Все статьи расчёта →</a>
   </div>
-  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
+  <div class="qc-out" id="qCompare">
+    <div class="qc-bars" id="qBars">
+      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
+      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+    </div>
+    <p class="qc-verdict" id="qVerdict"></p>
+  </div>
+  <p class="qc-note" id="qNote">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
   <script type="application/json" id="quickData">[{"n":"Equinox","b":"Chevrolet","rel":"/new2/usa/chevrolet/equinox/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,25000,14000],[2023,1500,19970,12800],[2022,1500,19200,11800],[2021,1500,17900,10500],[2020,1500,17000,7300],[2019,1500,16800,7100]]},{"n":"Trailblazer","b":"Chevrolet","rel":"/new2/usa/chevrolet/trailblazer/","def":2022,"y":[[2025,1300,20600,11000],[2024,1300,19990,10500],[2023,1300,19475,12700],[2022,1300,17925,10900],[2021,1300,17000,10000],[2020,1300,17400,8300]]},{"n":"Trax","b":"Chevrolet","rel":"/new2/usa/chevrolet/trax/","def":2022,"y":[[2025,1200,21500,11700],[2024,1200,20100,10700],[2023,1200,19950,13400],[2022,1400,14950,7900],[2021,1400,13950,7000],[2020,1400,14225,5000],[2019,1400,13424,4200]]},{"n":"Rogue","b":"Nissan","rel":"/new2/usa/nissan/rogue/","def":2022,"y":[[2025,1500,24772,13900],[2024,1500,23670,13100],[2023,1500,21099,13900],[2022,1500,21000,13600],[2019,2500,18869,0]]},{"n":"Bronco Sport","b":"Ford","rel":"/new2/usa/ford/bronco-sport/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,23050,12700],[2023,1500,19950,12800],[2022,1500,19950,12600],[2021,1500,18900,11500],[2020,1500,22930,13000]]},{"n":"Jetta","b":"Volkswagen","rel":"/new2/usa/vw/jetta/","def":2022,"y":[[2025,1500,22950,12600],[2024,1500,21999,11700],[2023,1500,19000,11800],[2022,1500,18374,11000],[2021,1400,18750,11600],[2020,1400,18180,8700],[2019,1400,16800,7400]]}]</script>
 </div>
     <ul class="hq-trust" aria-label="Гарантии">

@@ -143,24 +143,29 @@ export function quickCalc(data, { u, esc }) {
   const first = data[0];
   return `<div class="qc" id="quick">
   <div class="qc-head"><b>Цена в Минске с растаможкой</b></div>
-  <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<a href="${u('kalkulyator/')}#calc">Другая машина</a></div>
+  <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<label class="other"><input type="radio" name="qm" value="other"><span>Другая машина</span></label></div>
+  <div class="qc-other" id="qOther" hidden>
+    <div class="field wide"><label for="qName">Марка и модель</label><input id="qName" type="text" placeholder="Например: Mercedes S500" autocomplete="off"></div>
+    <div class="field"><label for="qCc">Объём двигателя, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="2000"></div>
+    <div class="field"><label for="qFuel">Двигатель</label><select id="qFuel"><option value="ice">Бензин, дизель</option><option value="hybrid">Гибрид</option><option value="ev">Электро</option></select></div>
+  </div>
   <div class="qc-fields">
     <div class="field"><label for="qYear">Год выпуска</label><select id="qYear">${first.y.map(([y]) => `<option value="${y}"${y === first.def ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
-    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
+    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"><small class="qc-hint" id="qLotHint">Пример, введите свою</small></div>
   </div>
-  <div class="qc-out" aria-live="polite">
-    <div class="qc-total"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
-    <div class="qc-bars">
-      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b class="num" id="qUs"></b></div>
-      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
-    </div>
-    <p class="qc-verdict" id="qVerdict"></p>
-  </div>
+  <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
   <div class="qc-actions">
     <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
     <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
   </div>
-  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
+  <div class="qc-out" id="qCompare">
+    <div class="qc-bars" id="qBars">
+      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
+      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+    </div>
+    <p class="qc-verdict" id="qVerdict"></p>
+  </div>
+  <p class="qc-note" id="qNote">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
   <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
 }
