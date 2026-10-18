@@ -739,3 +739,9 @@ section{padding-block:80px}
   .hb-stats{display:grid;grid-template-columns:1fr 1fr;font-size:14px}
 }
 .hero-q h1 .h1-tail{display:block;font-size:.62em;font-weight:700;line-height:1.2;margin-top:.3em;color:var(--navy-2)}
+.hq-trust{gap:10px}
+.hq-trust li{grid-template-columns:32px 1fr;gap:12px}
+.hq-trust .ico{width:32px;height:32px;border-radius:9px}
+.hq-trust .ico svg{width:18px;height:18px}
+.hq-trust b{font-size:16px;font-weight:700}
+.hero-q .lead{max-width:30em}

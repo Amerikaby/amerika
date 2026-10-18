@@ -6,15 +6,14 @@ export function homeBody({ u, quick, models, extra }) {
 <section class="hero hero-q">
   <div class="wrap">
     <div class="hq-head">
-      <p class="eyebrow">Аукционы Copart и IAAI</p>
-      <h1>Доставка авто из США в Беларусь <mark>под ключ</mark> <span class="h1-tail">покупка на аукционе, доставка и растаможка</span></h1>
-      <p class="lead">Пригон авто из Америки: подбор на Copart и IAAI, доставка до Минска и растаможка. Полную цену до Минска знаете до ставки. Ремонт в неё не входит: машины на аукционах обычно после ДТП, стоимость ремонта оценим по фото заранее.</p>
+      <h1>Доставка авто из США в Беларусь <mark>под ключ</mark></h1>
+      <p class="lead">Пригон авто из Америки: покупка на Copart и IAAI, доставка и растаможка. Ремонт не входит, его оценим по фото до ставки.</p>
     </div>
     ${quick}
     <ul class="hq-trust" aria-label="Гарантии">
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><div><b>Официальный договор</b><span>офис и юрлицо в Минске</span></div></li>
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><div><b>За машину платите аукциону</b><span>деньги за лот не идут через нас</span></div></li>
-      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h13l3-5h2"/><path d="M5 17l-1-6h12l2 6"/><circle cx="8" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span><div><b>Atlantic Express с 1995</b><span>логистика из США до Минска</span></div></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><b>Договор с офисом в Минске</b></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></span><b>За машину платите аукциону напрямую</b></li>
+      <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h13l3-5h2"/><path d="M5 17l-1-6h12l2 6"/><circle cx="8" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></span><b>Логистика Atlantic Express с 1995 года</b></li>
     </ul>
     <div class="facts hq-facts">
       <div><b class="num">9+ лет</b><span>возим авто из США</span></div>
@@ -143,7 +142,7 @@ ${extra}
 export function quickCalc(data, { u, esc }) {
   const first = data[0];
   return `<div class="qc" id="quick">
-  <div class="qc-head"><b>Цена в Минске с растаможкой</b><span>сравнение с av.by</span></div>
+  <div class="qc-head"><b>Цена в Минске с растаможкой</b></div>
   <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<a href="${u('kalkulyator/')}#calc">Другая машина</a></div>
   <div class="qc-fields">
     <div class="field"><label for="qYear">Год выпуска</label><select id="qYear">${first.y.map(([y]) => `<option value="${y}"${y === first.def ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
@@ -161,7 +160,7 @@ export function quickCalc(data, { u, esc }) {
     <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
     <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
   </div>
-  <p class="qc-note">Предварительно, без ремонта. Цены av.by: медиана объявлений по году выпуска.</p>
+  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
   <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
 }
