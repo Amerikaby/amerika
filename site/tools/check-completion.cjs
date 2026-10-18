@@ -6,7 +6,7 @@ const base=process.env.QA_BASE||'http://127.0.0.1:8876/newcodex/';
  const browser=await chromium.launch({channel:'chrome',headless:true});
  try{
   const errors=[];
-  for(const width of [1440,390,360]){
+  for(const width of [1440,409,390,360]){
    const page=await browser.newPage({viewport:{width,height:900}});
    page.on('pageerror',e=>errors.push(e.message));
    await page.goto(base+'auto-usa/');
@@ -75,6 +75,16 @@ const base=process.env.QA_BASE||'http://127.0.0.1:8876/newcodex/';
   assert((await page.evaluate(()=>window.testCopied)).includes('/kalkulyator/?'));
   assert(!(await page.locator('#shareCalcFallback').isVisible()));
   assert((await page.locator('#shareCalcStatus').textContent()).includes('Ссылка скопирована'));
+  // Include intermediate widths and the space consumed by a classic scrollbar.
+  for(const route of ['', 'ceny/', 'auto-usa/', 'kalkulyator/']){
+   await page.goto(base+route);
+   await page.addStyleTag({content:'html { overflow-y: scroll !important; }'});
+   for(const width of [320,360,390,400,409,414,430,480,520,540,700,768,1120,1280,1440]){
+    await page.setViewportSize({width,height:900});
+    const overflow=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+    assert(overflow.scroll<=overflow.client,route+' width '+width+': '+JSON.stringify(overflow));
+   }
+  }
   assert.equal(errors.length,0,JSON.stringify(errors));
   console.log('PASS: network error/retry; no JavaScript errors');
  }finally{await browser.close()}
