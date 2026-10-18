@@ -316,6 +316,67 @@ for (const p of modelPg) await out(p.path, page(p));
   </div>
 </section>`;
   const body = homeBody({ u, quick, models, extra }) + leadSection();
+  // Вариант B «Витрина» (как bid.cars) для сравнения: /glavnaya-b/, не в sitemap
+  {
+    const pick = (id) => (body.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`)) || [''])[0];
+    const fresh = cars.filter((c) => c.gallery.length && +c.spec.year >= 2022).sort((a, b) => +b.spec.year - +a.spec.year).slice(0, 8);
+    const topBrands = brandList.slice(0, 10);
+    const bodyB = `<section class="hero-b">
+  <div class="wrap">
+    <p class="eyebrow">Copart и IAAI · цена сразу до Минска</p>
+    <h1>Авто из США в Беларусь <mark>под ключ</mark></h1>
+    <p class="lead">Пригон авто из Америки: найдите машину в каталоге, а мы проверим лот, купим на аукционе и доставим в Минск.</p>
+    <form class="hb-search" action="${u(CAT)}" method="get" role="search">
+      <label for="hbQ" class="sr">Марка, модель или год</label>
+      <input id="hbQ" name="q" type="search" placeholder="Например: Equinox 2022" autocomplete="off">
+      <button class="btn btn-red" type="submit">Найти машину</button>
+    </form>
+    <div class="hb-chips" aria-label="Популярные марки">${topBrands.map((b) => `<a href="${u(brandPath(b.slug))}">${esc(b.name)}<small>${b.cars.length}</small></a>`).join('')}</div>
+    <div class="hb-stats"><span><b class="num">${cars.length}</b> авто в каталоге</span><span><b class="num">${brandList.length}</b> марок</span><span><b>Copart и IAAI</b> по всем США</span><span><b>за машину</b> платите аукциону</span></div>
+  </div>
+</section>
+${models.replace('<section id="models">', '<section class="white" id="models">')}
+<section id="fresh">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Свежие лоты</p>
+      <h2>Машины 2022 года и новее с аукционов США</h2>
+      <p>Примеры лотов Copart и IAAI. Конкретная машина могла уйти с торгов, похожую подберём под ваш бюджет.</p>
+    </div>
+    <div class="cars fresh">${fresh.map((c) => carCard(c)).join('')}</div>
+    <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Весь каталог: ${cars.length} авто</a></div>
+  </div>
+</section>
+<section class="white" id="steps3">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Как привозим</p><h2>Нашли машину? Дальше всё сделаем мы</h2></div>
+    <ol class="steps3">
+      <li><b>1</b><h3>Проверяем лот</h3><p>Carfax, AutoCheck, фото и отчёт аукциона, оценка ремонта. Считаем полную цену до Минска до ставки.</p></li>
+      <li><b>2</b><h3>Покупаем на аукционе</h3><p>Ставим за вас по договору. За машину вы платите аукциону напрямую, через нас деньги не идут.</p></li>
+      <li><b>3</b><h3>Везём и растаможиваем</h3><p>Atlantic Express доставляет через Клайпеду или Поти, помогаем с таможней в Минске. Обычно 40–70 дней.</p></li>
+    </ol>
+  </div>
+</section>
+<section id="calc-b">
+  <div class="wrap calc-b">
+    <div class="sec-head" style="margin:0">
+      <p class="eyebrow">Цена до Минска</p>
+      <h2>Посчитайте, во сколько обойдётся машина</h2>
+      <p>Выберите модель, год и ставку. Под ключ: лот, сборы, доставка, таможня и наша услуга от ${CONFIG.serviceByn} BYN.</p>
+      <p><a class="qc-more dark" href="${u('kalkulyator/')}">Подробный калькулятор со всеми статьями →</a></p>
+    </div>
+    ${quick}
+  </div>
+</section>
+${pick('faq').replace('<section id="faq">', '<section class="white" id="faq">')}
+${leadSection({ eyebrow: 'Не нашли нужную машину?', title: 'Подберём до 5 вариантов с аукциона и посчитаем под ключ' })}`;
+    await out('glavnaya-b/', page({
+      path: 'glavnaya-b/',
+      title: 'Вариант главной B: витрина | amerika.by',
+      description: 'Тестовый вариант главной страницы.',
+      body: bodyB,
+    }), { sitemap: false });
+  }
   const faq = [...body.matchAll(/<details[^>]*><summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p><\/details>/g)]
     .map((m) => ({ '@type': 'Question', name: plain(m[1]), acceptedAnswer: { '@type': 'Answer', text: plain(m[2]) } }));
   await out('', page({
