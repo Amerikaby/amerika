@@ -65,10 +65,11 @@ for key, bid, mid in MODELS:
         if len(petrol) < 5:
             continue
         prices = sorted(a["usd"] for a in petrol)
-        cc = collections.Counter(a["cc"] for a in petrol).most_common(1)[0][0]
+        ccs = [a["cc"] for a in petrol if a["cc"] not in (None, "None", "")]
+        cc = collections.Counter(ccs).most_common(1)[0][0] if ccs else None
         km = [a["km"] for a in petrol if a["km"]]
         years[str(y)] = {"n": len(petrol), "median": int(st.median(prices)), "p25": int(st.quantiles(prices, n=4)[0]),
-                         "cc": int(round(float(str(cc).replace(",", ".")) * 1000)), "km": int(st.median(km)) if km else None}
+                         "cc": int(round(float(str(cc).replace(",", ".")) * 1000)) if cc else None, "km": int(st.median(km)) if km else None}
         time.sleep(0.3)
     result["models"][key] = years
     print(key, {y: v["n"] for y, v in years.items()})
