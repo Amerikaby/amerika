@@ -96,8 +96,8 @@ function parseSpecs(title, text) {
   else if (/задн[а-я]+ привод|RWD/i.test(both)) spec.drive = 'задний';
   if (/автоматическ[а-я]+ короб|АКПП|вариатор/i.test(first)) spec.gear = /вариатор/i.test(first) ? 'вариатор' : 'автомат';
   else if (/механическ[а-я]+ короб/i.test(first)) spec.gear = 'механика';
-  if (/электромобил|электрическ[а-я]+ (?:силов|двигател|мотор)|\bEV\b|Electric/i.test(title + ' ' + first.slice(0, 300))) spec.fuel = 'электро';
-  else if (/гибрид|hybrid/i.test(title + ' ' + first.slice(0, 300))) spec.fuel = 'гибрид';
+  if (/\bprius\b|гибрид|hybrid/i.test(title + ' ' + first.slice(0, 300))) spec.fuel = 'гибрид';
+  else if (/электромобил|электрическ[а-я]+ (?:силов|двигател|мотор)|\bEV\b|Electric/i.test(title + ' ' + first.slice(0, 300))) spec.fuel = 'электро';
   return spec;
 }
 
@@ -191,7 +191,7 @@ for (const b of brands.values()) for (const m of b.models.values()) {
     for (const v of known) cnt[v] = (cnt[v] || 0) + 1;
     cc[y] = ev ? 0 : (known.length ? +Object.entries(cnt).sort((x, z) => z[1] - x[1])[0][0] : (defaultCc(m.slug, +y) ?? 2000));
   }
-  modelIndex.push({ key: `${b.slug}/${m.slug}`, b: b.name, n: m.name, count: list.length, cc, ev });
+  modelIndex.push({ key: `${b.slug}/${m.slug}`, b: b.name, n: m.name, count: list.length, cc, ev, fuel:ev ? 'ev' : (/prius/i.test(m.name) || list.every(c => c.spec.fuel === 'гибрид') ? 'hybrid' : 'ice') });
 }
 modelIndex.sort((x, y) => y.count - x.count);
 if (process.env.DUMP_MODELS) { console.log(modelIndex.slice(0, 60).map((m) => `${m.key}\t${m.b} ${m.n}\t${m.count}\t${JSON.stringify(m.cc)}`).join('\n')); process.exit(0); }
@@ -318,7 +318,7 @@ for (const p of modelPg) await out(p.path, page(p));
     const mk = {};
     for (const [y, v] of Object.entries(market?.models?.[key] || {})) if (v.n >= 5) mk[y] = v.median;
     const card = pg && modelPg.find((x) => x.card.name === pg.name)?.card;
-    return [m.b, pg ? pg.name : m.n.replace(/^Seria (\d)$/, '$1 Series'), cc, m.ev ? 1 : 0, mk, card ? u(card.rel) : ''];
+    return [m.b, pg ? pg.name : m.n.replace(/^Seria (\d)$/, '$1 Series'), cc, m.ev ? 1 : 0, mk, card ? u(card.rel) : '', m.fuel];
   });
   const popular = MODEL_PAGES.map((pg) => modelIndex.findIndex((m) => (MK_ALIAS[m.key] || m.key) === pg.key)).filter((i) => i >= 0);
   const quick = quickIdx.length ? quickCalc({ idx: quickIdx, popular }, { u, esc }) : '';
@@ -342,7 +342,7 @@ for (const p of modelPg) await out(p.path, page(p));
       <p>Модели, которые чаще всего везут в Беларусь. Все с мотором до 1,9 л: едут через Клайпеду, поэтому доставка дешевле.</p>
     </div>
     <div class="pms">${hmCards}</div>
-    <p class="pm-note">Примеры расчёта на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион и восстановление: черновые оценки. Типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга. Восстановление: средняя стоимость работ и запчастей для машины с небольшими повреждениями. Экономия: разница между ценой на av.by и итогом.</p>
+    <p class="pm-note">Примеры расчёта на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года, без льготы. av.by: медиана цен объявлений, не цена сделки. Цена лота и резерв восстановления — черновые ориентиры. Итог включает лот, сборы, доставку, таможенные платежи, услугу и указанный резерв восстановления. Фактические расходы и право на льготу подтверждаем по конкретной машине.</p>
     <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';
@@ -560,7 +560,7 @@ for (const c of cars) {
   const rows = EXAMPLE_PRICES.map((p) => ({ p, r: costOf(p, o) }));
   const ccText = ev ? 'электро' : `${(cc / 1000).toFixed(1).replace('.', ',')} л${hybrid ? ', гибрид' : ''}`;
   const calcQ = new URLSearchParams({ price: '10000', year: String(year), cc: String(cc) });
-  if (alt) calcQ.set('fuel', 'alt');
+  if (alt) calcQ.set('fuel', ev ? 'ev' : 'hybrid');
   const calcHref = u('kalkulyator/') + '?' + calcQ.toString() + '#calc';
   const km = c.spec.mileageNum && c.spec.mileageUnit === 'миль' ? Math.round(c.spec.mileageNum * 1.609344 / 100) * 100 : null;
   const mileage = c.spec.mileageNum ? `${money(c.spec.mileageNum)} ${c.spec.mileageUnit}${km ? ` (≈ ${money(km)} км)` : ''}` : '';
@@ -598,10 +598,10 @@ for (const c of cars) {
       <div class="estimate">
         <h2>Сколько будет стоить в Минске <span class="tag">пример</span></h2>
         <div class="table-wrap"><table class="tbl">
-          <thead><tr><th>Цена лота</th><th>Таможня</th><th>Итого в Минске</th></tr></thead>
-          <tbody>${rows.map(({ p, r }) => `<tr><td>${money(p)} $</td><td>${money(r.duty + r.cust)} $</td><td><b>≈ ${money(r.total)} $</b></td></tr>`).join('')}</tbody>
+          <thead><tr><th>Цена лота</th><th>До Минска без ремонта</th><th>Резерв восстановления</th><th>Итого с восстановлением</th></tr></thead>
+          <tbody>${rows.map(({ p, r }) => `<tr><td>${money(p)} $</td><td>${money(r.delivered)} $</td><td>${money(r.repair)} $</td><td><b>≈ ${money(r.total)} $</b></td></tr>`).join('')}</tbody>
         </table></div>
-        <p class="note">Расчёт для ${c.spec.year ? `${year} года` : `машины ${year} года (год лота не указан, взят для примера)`}, ${ccText}${ccDefault ? ' (типичный объём для модели, уточним по лоту)' : ''}, площадка на востоке США, доставка через ${PORT_NAME[port]}. В сумме: сборы аукциона, доставка, пошлина, утильсбор, СВХ и наша услуга ${CONFIG.serviceByn} BYN. ${esc(dutyText)} Ремонт считается отдельно.</p>
+        <p class="note">Расчёт для ${c.spec.year ? `${year} года` : `машины ${year} года (год лота не указан, взят для примера)`}, ${ccText}${ccDefault ? ' (типичный объём для модели, уточним по лоту)' : ''}, площадка на востоке США, доставка через ${PORT_NAME[port]}. В сумме: сборы аукциона, доставка, пошлина, утильсбор, СВХ и наша услуга ${CONFIG.serviceByn} BYN. ${esc(dutyText)} В итог уже включён условный резерв восстановления ${CONFIG.repairBudget} $. Это не оценка повреждений конкретного лота: измените резерв в калькуляторе после проверки машины.</p>
         <div class="cta-row"><a class="btn btn-navy" href="${esc(calcHref)}">Посчитать точнее в калькуляторе</a></div>
       </div>
       <div class="prose">

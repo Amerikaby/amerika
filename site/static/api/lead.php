@@ -1,7 +1,8 @@
 <?php
 /** Standalone preview form; uses the existing WordPress mail transport and form 103 recipient. */
 if (!defined('ABSPATH')) {
-    $bootstrap = dirname(__DIR__, 2) . '/wp-load.php';
+    $bootstrap = dirname(__DIR__) . '/wp-load.php';
+    if (!is_file($bootstrap)) $bootstrap = dirname(__DIR__, 2) . '/wp-load.php';
     if (!is_file($bootstrap)) { http_response_code(503); header('Content-Type: application/json'); echo '{"ok":false,"message":"Приём заявок временно недоступен."}'; exit; }
     require_once $bootstrap;
 }

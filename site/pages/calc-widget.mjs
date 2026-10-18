@@ -42,10 +42,11 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
           <label id="fuelLabel">Двигатель</label>
           <div class="seg" role="radiogroup" aria-labelledby="fuelLabel">
             <label><input type="radio" name="fuel" value="ice" checked><span>Бензин / дизель</span></label>
-            <label><input type="radio" name="fuel" value="alt"><span id="fuelAlt">Гибрид / электро</span></label>
+            <label id="hybridChoice"><input type="radio" name="fuel" value="hybrid"><span>Гибрид</span></label>
+            <label><input type="radio" name="fuel" value="ev"><span>Электро</span></label>
           </div>
         </div>
-        <p class="hint wide" id="evHint" hidden>Для электромобиля укажите объём 0.</p>
+        <p class="hint wide" id="evHint" hidden>Для электромобиля объём двигателя не требуется. Условия ввоза подтвердим по лоту.</p>
 
         <div class="field"><label for="repair">Бюджет восстановления, $</label><input id="repair" type="number" min="0" max="100000" step="100" value="1500"></div>
         <div class="field"><label for="service">Наша услуга, BYN</label><select id="service"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div>
@@ -81,7 +82,7 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
         <p class="route" id="route"></p>
       </form>
       <div class="bill" aria-live="polite">
-        <div class="bill-in">
+        <p class="calc-error" id="calcInputError" role="status" hidden></p><div class="bill-in">
         <div class="bill-head"><b>Ваш расчёт до Минска</b><span>предварительный</span></div>
         <p id="budgetError" class="budget-error" role="status" hidden>Даже без цены лота расходы выше этого бюджета. Увеличьте бюджет или обсудите варианты с менеджером.</p>
         <div class="maxbid" id="maxbid" hidden><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>

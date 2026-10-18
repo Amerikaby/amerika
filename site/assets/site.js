@@ -7,6 +7,11 @@ var $ = function(id){return document.getElementById(id)};
 var qsa = function(sel, root){return Array.prototype.slice.call((root || document).querySelectorAll(sel))};
 var nowYear = new Date().getFullYear();
 var params = new URLSearchParams(location.search);
+function validFields(rules, error) {
+  var messages=[];
+  rules.forEach(function(r){var el=$(r[0]), n=Number(el.value), bad=!el.disabled && (!el.value.trim() || !Number.isFinite(n) || n<r[1] || n>r[2]);el.setAttribute("aria-invalid",String(bad));var hint=$(el.id+"Error");if(!hint){hint=document.createElement("small");hint.id=el.id+"Error";hint.className="field-error";el.after(hint);el.setAttribute("aria-describedby",((el.getAttribute("aria-describedby")||"")+" "+hint.id).trim());}hint.textContent=bad?r[3]:"";hint.hidden=!bad;if(bad)messages.push(r[3]);});
+  error.textContent=messages.join(" ");error.hidden=!messages.length;return !messages.length;
+}
 
 /* ---------- Аналитика: счётчики, цели, метки рекламы ---------- */
 var A = CONFIG.analytics || {};
@@ -68,10 +73,14 @@ document.addEventListener("click", function(e){
   var btn = $("burger"), panel = $("mnav"), top = document.querySelector(".top");
   if (!btn || !panel) return;
   function setH(){ document.documentElement.style.setProperty("--top-h", top.getBoundingClientRect().height + "px"); }
+  var background=qsa("main, footer, .mbar, .review-strip, .top a"), previousInert=[];
   function toggle(open){
     btn.setAttribute("aria-expanded", open); panel.hidden = !open;
     document.body.classList.toggle("menu-open", open); setH();
+    if(open){previousInert=background.map(function(el){return el.inert});background.forEach(function(el){el.inert=true});panel.querySelector("a").focus();}
+    else {background.forEach(function(el,i){el.inert=previousInert[i]||false});btn.focus();}
   }
+  document.addEventListener("keydown",function(e){if(panel.hidden || e.key!=="Tab")return;var items=[btn].concat(qsa('a[href],button:not([disabled])',panel)),i=items.indexOf(document.activeElement);e.preventDefault();items[(i+(e.shiftKey?-1:1)+items.length)%items.length].focus();});
   btn.addEventListener("click", function(){ toggle(btn.getAttribute("aria-expanded") !== "true"); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !panel.hidden) { toggle(false); btn.focus(); } });
   panel.addEventListener("click", function(e){ if (e.target.closest("a")) toggle(false); });
@@ -97,6 +106,7 @@ qsa("form[data-lead]").forEach(function(form){
     track("lead_attempt",{form:formName});
     if(!CONFIG.leadEndpoint){msg.textContent="Приём заявок пока не подключён. Позвоните нам или напишите в Telegram.";return;}
     var endpoint=new URL(CONFIG.leadEndpoint,location.origin+BASE).href;
+    var locked=qsa("input,textarea,select",form).map(function(el){var state={el:el,disabled:el.disabled};el.disabled=true;return state;});
     pending=true;button.disabled=true;form.setAttribute("aria-busy","true");msg.textContent="Отправляем…";
     var controller=new AbortController(),timeout=setTimeout(function(){controller.abort()},20000);
     try{
@@ -108,7 +118,7 @@ qsa("form[data-lead]").forEach(function(form){
       if(!response.ok||result.ok!==true)throw Error(result.message||"Не удалось передать заявку. Позвоните нам или напишите в Telegram.");
       track("lead_submit",{form:formName});msg.textContent=result.message;form.reset();requestId=null;
     }catch(error){msg.textContent=error.name==="AbortError"?"Сервер не успел ответить. Повторите отправку или позвоните нам.":error.message;}
-    finally{clearTimeout(timeout);pending=false;button.disabled=false;form.removeAttribute("aria-busy")}
+    finally{clearTimeout(timeout);locked.forEach(function(x){x.el.disabled=x.disabled});pending=false;button.disabled=false;form.removeAttribute("aria-busy")}
   });
 });
 
@@ -144,14 +154,18 @@ function fillYears(sel, def){
   var cost = costOf;
   function options(){
     var moto = val("vtype") === "moto";
-    var cc = Math.max(0, +$("volume").value || 0), alt = val("fuel") === "alt";
+    var ev=val("fuel")==="ev", cc=ev?0:Number($("volume").value), alt=val("fuel")!=="ice";
     var yard = $("yard").value.trim(), region = regionOf(yard) || "east";
     var autoPort = autoPortFor(moto, alt, cc);
     var port = $("port").value === "auto" ? autoPort : $("port").value;
-    return {moto:moto, year:+$("year").value, cc:cc, alt:alt, ev:!moto && alt && cc === 0, region:region, yard:yard,
+    return {moto:moto, year:+$("year").value, cc:cc, alt:alt, ev:!moto && ev, region:region, yard:yard,
             port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked, repair:Math.max(0,+$("repair").value||0), serviceByn:+$("service").value};
   }
   function calc(){
+    var ev=val("fuel")==="ev";$("volume").disabled=ev;
+    $("evHint").hidden=!ev;$("carOnly").hidden=val("vtype")==="moto";
+    var valid=validFields([["volume",1,10000,"Укажите объём двигателя больше нуля."],["price",1,10000000,"Укажите положительную цену или бюджет."],["repair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $."],["year",nowYear-20,nowYear,"Выберите год выпуска."]],$("calcInputError"));
+    document.querySelector("#calcForm + .bill .bill-in").hidden=!valid;$("sendCalc").setAttribute("aria-disabled",String(!valid));if(!valid)return null;
     var o = options(), budget = val("mode") === "budget";
     var input = Math.max(0, +$("price").value || 0), r;
     if (budget) {
@@ -167,9 +181,9 @@ function fillYears(sel, def){
     $("budgetError").hidden = !budget || cost(0,o).total <= input;
     if(budget && cost(0,o).total>input) $("maxbid").hidden=true;
     $("r-max").textContent = fmt(r.price);
-    $("evHint").hidden = !o.alt || o.moto;
+    $("evHint").hidden = !ev;
     $("carOnly").hidden = o.moto;
-    $("fuelAlt").textContent = o.moto ? "Электро" : "Гибрид / электро";
+    $("hybridChoice").hidden=o.moto;
     $("r-duty-l").textContent = o.moto ? "Пошлина и НДС 20%" : "Таможенная пошлина";
     $("r-cust-l").textContent = o.moto ? "Таможенный сбор, СВХ, декларант" : "Утильсбор, СВХ, декларант";
     $("motoNote").hidden = !o.moto;
@@ -222,6 +236,7 @@ function fillYears(sel, def){
     r.addEventListener("change", function(){
       var moto = r.value === "moto";
       $("volume").value = moto ? 1000 : 2000;
+      if(moto && val("fuel")==="hybrid")document.querySelector('#calcForm input[name="fuel"][value="ice"]').checked=true;
       if (val("mode") === "price") $("price").value = moto ? 5000 : 12000;
       calc();
     });
@@ -242,7 +257,8 @@ function fillYears(sel, def){
   if (+params.get("price") > 0) $("price").value = +params.get("price");
   if (+params.get("year") >= nowYear - 20 && +params.get("year") <= nowYear) $("year").value = +params.get("year");
   if (params.has("cc") && +params.get("cc") >= 0) $("volume").value = +params.get("cc");
-  if (params.get("fuel") === "alt") document.querySelector('#calcForm input[name="fuel"][value="alt"]').checked = true;
+  var requestedFuel=params.get("fuel");if(requestedFuel==="alt")requestedFuel=Number($("volume").value)===0?"ev":"hybrid";
+  if(["hybrid","ev"].includes(requestedFuel))document.querySelector('#calcForm input[name="fuel"][value="'+requestedFuel+'"]').checked=true;
 
   if(params.has("repair")) $("repair").value = Math.max(0,Number(params.get("repair"))||0);
   if(CONFIG.servicePrices.includes(Number(params.get("service")))) $("service").value=params.get("service");
@@ -255,8 +271,8 @@ function fillYears(sel, def){
   calc();
 
   var send = $("sendCalc");
-  if (send) send.addEventListener("click", function(){
-    var r = calc(), box = $("lcar");
+  if (send) send.addEventListener("click", function(e){
+    var r=calc();if(!r){e.preventDefault();return;}var box = $("lcar");
     track("calc_send", {total: r.total});
     if (!box) return;
     var f = r.moto ? (r.alt ? "электромотоцикл" : "мотоцикл") : (r.alt ? (r.cc ? "гибрид" : "электро") : "бензин/дизель");
@@ -291,17 +307,19 @@ function fillYears(sel, def){
   }
   function cur(){
     var year = +$("qYear").value, ev, alt, cc;
-    if (sel >= 0) { ev = !!IDX[sel][3]; alt = ev; cc = ev ? 0 : Math.max(0, +$("qCc").value || 0); }
-    else { var f = box.querySelector('input[name="qFuel"]:checked').value; ev = f === "ev"; alt = f !== "ice"; cc = ev ? 0 : Math.max(0, +$("qCc").value || 0); }
+    var f=box.querySelector('input[name="qFuel"]:checked').value;ev=f==="ev";alt=f!=="ice";cc=ev?0:Number($("qCc").value);
     return {year:year, o:opts(cc, alt, ev, year), mk: sel >= 0 ? IDX[sel][4][year] : null};
   }
   function run(){
     var c = cur(), o = c.o;
+    $("qCc").disabled=o.ev;$("qFuelRow").hidden=false;
+    var valid=validFields([["qCc",1,10000,"Укажите объём двигателя больше нуля."],["qLot",1,10000000,"Укажите положительную ставку."],["qRepair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $."]],$("qInputError"));
+    [".qc-total",".qc-actions",".qc-out"].forEach(function(s){$("qPanelModel").querySelector(s).hidden=!valid});if(!valid)return null;
     if (!lotTouched) { var lim = c.mk ? maxBid(c.mk, o) : 0; $("qLot").value = lim ? Math.max(1000, Math.floor(lim * 0.75 / 500) * 500) : 10000; }
     var lot = Math.max(0, +$("qLot").value || 0), r = costOf(lot, o);
     $("qTotal").textContent = fmt(r.total);
     $("qByn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
-    $("qFuelRow").hidden = sel >= 0;
+    $("qFuelRow").hidden = false;
     $("qCc").disabled = o.ev;
     var h = $("qHint");
     if (sel >= 0) h.textContent = o.ev ? "Электромобиль: условия растаможки и квоту уточним при расчёте." : (ccTouched ? "" : "Объём подставлен типичный для " + IDX[sel][1] + " " + c.year + " года. Если у вашей машины другой, поправьте.");
@@ -326,7 +344,8 @@ function fillYears(sel, def){
     return {c:c, lot:lot, total:Math.round(r.total)};
   }
   function pick(i, year){
-    sel = i; q.value = name(i); closeList(); lotTouched = false; ccTouched = false;
+    sel = i; q.value = name(i); closeList(); lotTouched = false; ccTouched = false; $("qLot").value=10000;
+    box.querySelector('input[name="qFuel"][value="'+(IDX[i][6]||(IDX[i][3]?"ev":"ice"))+'"]').checked=true;
     var mk = IDX[i][4], ys = Object.keys(mk).map(Number);
     if (year) $("qYear").value = year;
     else if (ys.length) $("qYear").value = ys.sort(function(a, b){ return Math.abs(a - (nowYear - 4)) - Math.abs(b - (nowYear - 4)); })[0];
@@ -358,7 +377,7 @@ function fillYears(sel, def){
     sel = -1; for (var i = 0; i < IDX.length; i++) if (name(i).toLowerCase() === t) { sel = i; break; }
     qsa(".qc-pop button", box).forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
     if (sel < 0 && !ccTouched) $("qCc").value = 2000;
-    render(); run();
+    if(sel>=0){pick(sel);return;}render(); run();
   });
   q.addEventListener("keydown", function(e){
     if (list.hidden) return;
@@ -393,6 +412,8 @@ function fillYears(sel, def){
 
   /* Бюджет: модели, которые укладываются и на av.by стоят не дешевле */
   function fit(){
+    var valid=validFields([["qBudget",1,10000000,"Укажите положительный бюджет."],["qRepair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $ во вкладке модели."]],$("qBudgetError"));
+    $("qFit").hidden=!valid;$("qPanelBudget").querySelector(".qc-actions").hidden=!valid;if(!valid)return null;
     var budget = Math.max(0, +$("qBudget").value || 0), rows = [];
     $("qBudgetContext").textContent="Резерв восстановления: "+fmt(+$("qRepair").value||0)+"; услуга: "+$("qService").value+" BYN; "+($("qBenefit").checked?"с льготой":"без льготы")+". Настройки можно изменить во вкладке модели.";
     IDX.forEach(function(r, i){
@@ -401,7 +422,7 @@ function fillYears(sel, def){
         var y = +ys, mk = r[4][ys];
         /* Год, в котором такая машина в Беларуси стоит чуть дороже бюджета: тот же класс, а из США укладывается */
         if (y < nowYear - 8 || mk < budget * 0.95 || mk > budget * 1.4) return;
-        var o = opts(r[3] ? 0 : ccFor(i, y), !!r[3], !!r[3], y), bid = maxBid(budget, o);
+        var o = opts(r[3] ? 0 : ccFor(i, y), !!r[3] || r[6]==="hybrid", !!r[3], y), bid = maxBid(budget, o);
         if (bid < 2500) return;
         var score = Math.abs(mk - budget * 1.15);
         if (!best || score < best.score) best = {i:i, y:y, mk:mk, bid:bid, score:score};
@@ -425,12 +446,13 @@ function fillYears(sel, def){
 
   /* Заявка */
   function toLead(text){ var lc = $("lcar"); if (lc) lc.value = text; }
-  $("qSend").addEventListener("click", function(){
-    var x = run(), o = x.c.o, nm = sel >= 0 ? name(sel) : (q.value.trim() || "машина");
+  $("qSend").addEventListener("click", function(e){
+    var x=run();if(!x){e.preventDefault();return;}var o = x.c.o, nm = sel >= 0 ? name(sel) : (q.value.trim() || "машина");
     track("calc_send", {total: x.total, calc: "quick"});
     toLead("Быстрый расчёт: " + nm + ", " + x.c.year + " г., " + (o.ev ? "электро" : o.cc + " см³" + (o.alt ? ", гибрид" : "")) + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ с восстановлением (резерв " + o.repair + " $), услуга " + o.serviceByn + " BYN, " + (o.benefit?"с льготой":"без льготы") + ", через " + PORTS[o.port].name + ".");
   });
-  $("qSendB").addEventListener("click", function(){
+  $("qSendB").addEventListener("click", function(e){
+    if(!fit()){e.preventDefault();return;}
     track("calc_send", {calc: "budget"});
     toLead("Бюджет до Минска: " + (+$("qBudget").value || 0) + " $ с резервом восстановления " + $("qRepair").value + " $, услуга " + $("qService").value + " BYN, " + ($("qBenefit").checked?"с льготой":"без льготы") + ". Подберите варианты.");
   });
@@ -449,6 +471,9 @@ function fillYears(sel, def){
   if (params.get("type") === "moto") form.querySelector('input[name="cvtype"][value="moto"]').checked = true;
   function run(){
     var moto = val("cvtype") === "moto", ev = val("cfuel") === "ev";
+    $("ccVolume").disabled=ev;$("ccVolField").hidden=ev;
+    var valid=validFields([["ccVolume",1,10000,"Укажите объём двигателя больше нуля."],["ccPrice",1,10000000,"Укажите положительную стоимость по документам."],["ccYear",nowYear-20,nowYear,"Выберите год выпуска."]],$("ccInputError"));
+    $("ccResult").hidden=!valid;if(!valid)return;
     var cur = val("cur"), price = Math.max(0, +$("ccPrice").value || 0);
     var eur = cur === "eur" ? price : price / CONFIG.eurUsd;
     var cc = ev ? 0 : Math.max(0, +$("ccVolume").value || 0), year = +$("ccYear").value, age = nowYear - year;

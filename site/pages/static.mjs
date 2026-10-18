@@ -151,7 +151,7 @@ ${M.dutyPct.map((r, i) => `<tr><td>ДВС ${lim(M.dutyPct, i, 'см³')}</td><td
         <p class="route wide">Возраст: <b id="ccAge"></b>. <span id="ccRule"></span></p>
       </form>
       <div class="bill" aria-live="polite">
-        <div class="bill-head"><b>Платежи на таможне</b><span>предварительно</span></div>
+        <p class="calc-error" id="ccInputError" role="status" hidden></p><div id="ccResult"><div class="bill-head"><b>Платежи на таможне</b><span>предварительно</span></div>
         <div class="row"><span>Таможенная пошлина</span><span class="num" id="cr-duty-eur"></span></div>
         <div class="row" id="cr-vat-row" hidden><span>НДС 20%</span><span class="num" id="cr-vat"></span></div>
         <div class="row" id="cr-util-row"><span>Утилизационный сбор</span><span class="num" id="cr-util"></span></div>
@@ -161,7 +161,7 @@ ${M.dutyPct.map((r, i) => `<tr><td>ДВС ${lim(M.dutyPct, i, 'см³')}</td><td
         <small class="num" id="cr-total-usd" style="color:var(--muted);font-size:14px;text-align:right;margin-top:4px"></small>
         <p class="note warn-note" id="ccMotoNote" hidden><b>Расчёт для мотоциклов ориентировочный.</b> Таможенная стоимость мотоцикла включает доставку до границы ЕАЭС: введите цену вместе с доставкой до Клайпеды или Поти.</p>
         <p class="note">Расчёт предварительный. Таможня считает платежи по курсу на день регистрации декларации. Доставка и услуги сюда не входят: полную цену до Минска покажет <a href="${u('kalkulyator/')}">калькулятор под ключ</a>.</p>
-        <div class="actions" style="display:flex;margin-top:14px"><a class="btn btn-red" href="#lead" style="flex:1">Получить точный расчёт</a></div>
+        <div class="actions" style="display:flex;margin-top:14px"><a class="btn btn-red" href="#lead" style="flex:1">Получить точный расчёт</a></div></div>
       </div>
     </div>
   </div>

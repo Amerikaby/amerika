@@ -83,9 +83,9 @@ ${extra}
       <details open><summary>Как я могу быть уверен, что деньги не пропадут?</summary><p>За машину вы платите аукциону напрямую, банковским переводом со своего счёта. За доставку платите перевозчику, пошлину таможне. Нам только фиксированную сумму за услугу по договору. У нас офис в Минске: ул. Большое Стиклево, 83, 3 этаж.</p></details>
       <details><summary>Сколько идёт машина из США в Минск?</summary><p>Обычно 40–70 дней после оплаты лота: около 1–2 недель по США до порта, 4–6 недель морем, затем доставка в Минск. Через Поти путь дольше, чем через Клайпеду.</p></details>
       <details><summary>Почему одни машины едут через Клайпеду, а другие через Поти?</summary><p>Через Евросоюз сейчас можно везти в Беларусь легковые машины с двигателем не больше 1,9 литра. Машины с большим объёмом мы везём через грузинский порт Поти. Электромобили и гибриды обычно тоже идут через Поти. Точный маршрут подтвердим при расчёте.</p></details>
-      <details><summary>Могут ли появиться платежи, которых нет в расчёте?</summary><p>В расчёте все обязательные платежи до Минска: лот, сборы аукциона, доставка, пошлина, утильсбор, СВХ, декларант и наша услуга. Сумма может немного измениться из-за курса валют на день оплаты.</p></details>
+      <details><summary>Могут ли появиться платежи, которых нет в расчёте?</summary><p>На сайте показана предварительная смета. Сборы и доставка зависят от аукциона, площадки и маршрута, таможенные платежи — от характеристик машины и курса на день оформления. Резерв ремонта — отдельное предположение, а не фиксированная цена работ. До ставки запросите расчёт по конкретному лоту с указанием подтверждённых сумм и резервов.</p></details>
       <details><summary>Можно ли купить машину, которую я нашёл сам?</summary><p>Да. Пришлите ссылку на лот или VIN, мы проверим историю и повреждения и посчитаем полную стоимость до ставки. Если вы сами знаете, какую ставку сделать, это тариф «Покупка вашего лота».</p></details>
-      <details><summary>Что если машина окажется хуже, чем на фото?</summary><p>Перед ставкой проверяем историю по Carfax и AutoCheck и все фото лота. Если машина не стоит своих денег, скажем об этом прямо.</p></details>
+      <details><summary>Что если машина окажется хуже, чем на фото?</summary><p>Отчёты и фотографии помогают оценить риск, но не исключают скрытые повреждения. Фактическая стоимость ремонта может превысить предварительный резерв. До покупки обсудите с менеджером условия действующего договора: границы проверки, ответственность сторон и порядок согласования дополнительных работ. Не считайте расчёт по фото гарантией состояния машины.</p></details>
       <details><summary>Есть ли льготы на растаможку?</summary><p>По Указу № 140 многодетные семьи и инвалиды I и II группы платят 50% таможенных платежей: для легковых авто половину пошлины, для мотоциклов половину пошлины и НДС. Таможенный сбор платится полностью. Для электромобилей действуют отдельные условия и квота, их уточним при расчёте.</p></details>
     </div>
   </div>
@@ -113,7 +113,7 @@ export function quickCalc(data, { u, esc }) {
       <div class="field"><label for="qCc">Объём, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="1500"></div>
       <div class="field"><label for="qLot">Ставка, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
     </div>
-    <div class="qc-fuel" id="qFuelRow" hidden>
+    <div class="qc-fuel" id="qFuelRow">
       <div class="seg" role="radiogroup" aria-label="Двигатель">
         <label><input type="radio" name="qFuel" value="ice" checked><span>Бензин, дизель</span></label>
         <label><input type="radio" name="qFuel" value="hybrid"><span>Гибрид</span></label>
@@ -124,7 +124,7 @@ export function quickCalc(data, { u, esc }) {
     <div class="qc-fields two"><div class="field"><label for="qRepair">Бюджет восстановления, $</label><input id="qRepair" type="number" min="0" max="100000" step="100" value="1500"></div><div class="field"><label for="qService">Наша услуга, BYN</label><select id="qService"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div></div>
     <label class="check qc-benefit"><input type="checkbox" id="qBenefit"> У меня есть право на льготу 50%</label>
     <p class="qc-hint">1 500 $ на восстановление — условный пример. Измените сумму под свой лот; оценку подтвердит менеджер.</p>
-    <div class="qc-total" aria-live="polite"><span>Итого с восстановлением</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    <p class="calc-error" id="qInputError" role="status" hidden></p><div class="qc-total" aria-live="polite"><span>Итого с восстановлением</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
     <div class="qc-actions">
       <a class="btn btn-red" href="#lead" id="qSend">Прислать мне этот расчёт</a>
       <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
@@ -140,7 +140,7 @@ export function quickCalc(data, { u, esc }) {
   <div id="qPanelBudget" role="tabpanel" aria-labelledby="qTabBudget" class="qc-panel" hidden>
     <div class="field"><label for="qBudget">Весь бюджет с восстановлением, $</label><input id="qBudget" type="number" inputmode="numeric" min="3000" step="1000" value="20000"></div>
     <p class="qc-hint" id="qBudgetContext"></p><p class="qc-hint">С доставкой, растаможкой и выбранным резервом восстановления. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
-    <ul class="qc-fit" id="qFit"></ul>
+    <p class="calc-error" id="qBudgetError" role="status" hidden></p><ul class="qc-fit" id="qFit"></ul>
     <div class="qc-actions">
       <a class="btn btn-red" href="#lead" id="qSendB">Подобрать машины под бюджет</a>
     </div>
