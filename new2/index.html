@@ -60,31 +60,53 @@
       <p class="lead">Пригон авто из Америки: покупка на Copart и IAAI, доставка и растаможка. Ремонт не входит, его оценим по фото до ставки.</p>
     </div>
     <div class="qc" id="quick">
-  <div class="qc-head"><b>Цена в Минске с растаможкой</b></div>
-  <div class="qc-models" role="radiogroup" aria-label="Модель"><label><input type="radio" name="qm" value="0" checked><span>Equinox</span></label><label><input type="radio" name="qm" value="1"><span>Trailblazer</span></label><label><input type="radio" name="qm" value="2"><span>Trax</span></label><label><input type="radio" name="qm" value="3"><span>Rogue</span></label><label><input type="radio" name="qm" value="4"><span>Bronco Sport</span></label><label><input type="radio" name="qm" value="5"><span>Jetta</span></label><label class="other"><input type="radio" name="qm" value="other"><span>Другая машина</span></label></div>
-  <div class="qc-other" id="qOther" hidden>
-    <div class="field wide"><label for="qName">Марка и модель</label><input id="qName" type="text" placeholder="Например: Mercedes S500" autocomplete="off"></div>
-    <div class="field"><label for="qCc">Объём двигателя, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="2000"></div>
-    <div class="field"><label for="qFuel">Двигатель</label><select id="qFuel"><option value="ice">Бензин, дизель</option><option value="hybrid">Гибрид</option><option value="ev">Электро</option></select></div>
+  <div class="qc-tabs" role="tablist" aria-label="Что считаем">
+    <button type="button" role="tab" id="qTabModel" aria-selected="true" aria-controls="qPanelModel">Знаю модель</button>
+    <button type="button" role="tab" id="qTabBudget" aria-selected="false" aria-controls="qPanelBudget">Знаю бюджет</button>
   </div>
-  <div class="qc-fields">
-    <div class="field"><label for="qYear">Год выпуска</label><select id="qYear"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022" selected>2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option></select></div>
-    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"><small class="qc-hint" id="qLotHint">Пример, введите свою</small></div>
-  </div>
-  <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
-  <div class="qc-actions">
-    <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
-    <a class="qc-more" href="/new2/kalkulyator/#calc" id="qMore">Все статьи расчёта →</a>
-  </div>
-  <div class="qc-out" id="qCompare">
-    <div class="qc-bars" id="qBars">
-      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
-      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+  <div id="qPanelModel" role="tabpanel" aria-labelledby="qTabModel" class="qc-panel">
+    <div class="field qc-search">
+      <label for="qModel">Марка и модель</label>
+      <input id="qModel" type="text" autocomplete="off" placeholder="Например: Toyota RAV4" role="combobox" aria-expanded="false" aria-controls="qList" aria-autocomplete="list">
+      <ul class="qc-list" id="qList" role="listbox" hidden></ul>
     </div>
-    <p class="qc-verdict" id="qVerdict"></p>
+    <div class="qc-pop" aria-label="Популярные"><button type="button" data-i="1">Equinox</button><button type="button" data-i="16">Trailblazer</button><button type="button" data-i="17">Trax</button><button type="button" data-i="11">Rogue</button><button type="button" data-i="41">Bronco Sport</button><button type="button" data-i="0">Jetta</button></div>
+    <div class="qc-fields three">
+      <div class="field"><label for="qYear">Год</label><select id="qYear"></select></div>
+      <div class="field"><label for="qCc">Объём, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="1500"></div>
+      <div class="field"><label for="qLot">Ставка, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
+    </div>
+    <div class="qc-fuel" id="qFuelRow" hidden>
+      <div class="seg" role="radiogroup" aria-label="Двигатель">
+        <label><input type="radio" name="qFuel" value="ice" checked><span>Бензин, дизель</span></label>
+        <label><input type="radio" name="qFuel" value="hybrid"><span>Гибрид</span></label>
+        <label><input type="radio" name="qFuel" value="ev"><span>Электро</span></label>
+      </div>
+    </div>
+    <p class="qc-hint" id="qHint"></p>
+    <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    <div class="qc-actions">
+      <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
+      <a class="qc-more" href="/new2/kalkulyator/#calc" id="qMore">Все статьи расчёта →</a>
+    </div>
+    <div class="qc-out">
+      <div class="qc-bars" id="qBars">
+        <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
+        <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+      </div>
+      <p class="qc-verdict" id="qVerdict"></p>
+    </div>
   </div>
-  <p class="qc-note" id="qNote">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
-  <script type="application/json" id="quickData">[{"n":"Equinox","b":"Chevrolet","rel":"/new2/usa/chevrolet/equinox/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,25000,14000],[2023,1500,19970,12800],[2022,1500,19200,11800],[2021,1500,17900,10500],[2020,1500,17000,7300],[2019,1500,16800,7100]]},{"n":"Trailblazer","b":"Chevrolet","rel":"/new2/usa/chevrolet/trailblazer/","def":2022,"y":[[2025,1300,20600,11000],[2024,1300,19990,10500],[2023,1300,19475,12700],[2022,1300,17925,10900],[2021,1300,17000,10000],[2020,1300,17400,8300]]},{"n":"Trax","b":"Chevrolet","rel":"/new2/usa/chevrolet/trax/","def":2022,"y":[[2025,1200,21500,11700],[2024,1200,20100,10700],[2023,1200,19950,13400],[2022,1400,14950,7900],[2021,1400,13950,7000],[2020,1400,14225,5000],[2019,1400,13424,4200]]},{"n":"Rogue","b":"Nissan","rel":"/new2/usa/nissan/rogue/","def":2022,"y":[[2025,1500,24772,13900],[2024,1500,23670,13100],[2023,1500,21099,13900],[2022,1500,21000,13600],[2019,2500,18869,0]]},{"n":"Bronco Sport","b":"Ford","rel":"/new2/usa/ford/bronco-sport/","def":2022,"y":[[2025,1500,25950,14700],[2024,1500,23050,12700],[2023,1500,19950,12800],[2022,1500,19950,12600],[2021,1500,18900,11500],[2020,1500,22930,13000]]},{"n":"Jetta","b":"Volkswagen","rel":"/new2/usa/vw/jetta/","def":2022,"y":[[2025,1500,22950,12600],[2024,1500,21999,11700],[2023,1500,19000,11800],[2022,1500,18374,11000],[2021,1400,18750,11600],[2020,1400,18180,8700],[2019,1400,16800,7400]]}]</script>
+  <div id="qPanelBudget" role="tabpanel" aria-labelledby="qTabBudget" class="qc-panel" hidden>
+    <div class="field"><label for="qBudget">Бюджет до Минска, $</label><input id="qBudget" type="number" inputmode="numeric" min="3000" step="1000" value="20000"></div>
+    <p class="qc-hint">Под ключ с растаможкой, без ремонта. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
+    <ul class="qc-fit" id="qFit"></ul>
+    <div class="qc-actions">
+      <a class="btn btn-red" href="#lead" id="qSendB">Подобрать под мой бюджет</a>
+    </div>
+  </div>
+  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
+  <script type="application/json" id="quickData">{"idx":[["VW","Jetta",{"2011":1400,"2012":1400,"2013":1400,"2014":1400,"2015":1400,"2016":1400,"2017":1400,"2018":1400,"2019":1400,"2020":1400,"2021":1400,"2022":1500,"2023":1500,"2024":1500,"2025":1500,"2026":1500},0,{"2017":11631,"2018":14062,"2019":16800,"2020":18180,"2021":18750,"2022":18374,"2023":19000,"2024":21999,"2025":22950},"/new2/usa/vw/jetta/"],["Chevrolet","Equinox",{"2011":1500,"2012":1500,"2013":1500,"2014":1500,"2015":1500,"2016":1500,"2017":1500,"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2023":1500,"2024":1500,"2025":1500,"2026":1500},0,{"2017":16275,"2018":15999,"2019":16800,"2020":17000,"2021":17900,"2022":19200,"2023":19970,"2024":25000,"2025":25950},"/new2/usa/chevrolet/equinox/"],["Buick","Encore",{"2019":1400,"2020":1400,"2021":1400,"2022":1300,"2023":1400,"2024":1200},0,{},""],["Chevrolet","Malibu",{"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2023":1500},0,{},""],["GMC","Terrain",{"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2023":1500,"2024":1500,"2025":1500,"2026":1500},0,{},""],["VW","Tiguan",{"2018":2000,"2019":2000,"2020":2000,"2021":2000,"2022":2000,"2024":2000},0,{},""],["Honda","Civic",{"2018":2000,"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["VW","Golf",{"2017":1400,"2018":1400,"2019":1400,"2020":1400,"2021":1400,"2022":1400},0,{},""],["Ford","Escape",{"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2023":1500,"2024":1500,"2025":1500},0,{},""],["Honda","Accord",{"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2024":1500},0,{},""],["BMW","3 Series",{"2019":2000,"2020":2000,"2021":2000,"2023":2000},0,{},""],["Nissan","Rogue",{"2011":2500,"2012":2500,"2013":2500,"2014":2500,"2015":2500,"2016":2500,"2017":2500,"2018":2500,"2019":2500,"2020":2500,"2021":2500,"2022":1500,"2023":1500,"2024":1500,"2025":1500,"2026":1500},0,{"2017":15000,"2019":18869,"2022":21000,"2023":21099,"2024":23670,"2025":24772},"/new2/usa/nissan/rogue/"],["Chevrolet","Bolt",{"2017":0,"2018":0,"2019":0,"2020":0,"2021":0,"2022":0,"2023":0},1,{},""],["Audi","A3",{"2018":2000,"2019":2000,"2020":2000,"2022":2000},0,{},""],["Mazda","CX-5",{"2018":2500,"2019":2500,"2020":2500,"2021":2500,"2022":2500},0,{},""],["Honda","CR-V",{"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2024":1500},0,{},""],["Chevrolet","Trailblazer",{"2011":1300,"2012":1300,"2013":1300,"2014":1300,"2015":1300,"2016":1300,"2017":1300,"2018":1300,"2019":1300,"2020":1300,"2021":1300,"2022":1300,"2023":1300,"2024":1300,"2025":1300,"2026":1300},0,{"2020":17400,"2021":17000,"2022":17925,"2023":19475,"2024":19990,"2025":20600},"/new2/usa/chevrolet/trailblazer/"],["Chevrolet","Trax",{"2011":1400,"2012":1400,"2013":1400,"2014":1400,"2015":1400,"2016":1400,"2017":1400,"2018":1400,"2019":1400,"2020":1400,"2021":1400,"2022":1400,"2023":1200,"2024":1200,"2025":1200,"2026":1200},0,{"2019":13424,"2020":14225,"2021":13950,"2022":14950,"2023":19950,"2024":20100,"2025":21500},"/new2/usa/chevrolet/trax/"],["Subaru","Forester",{"2019":2500,"2020":2500,"2021":2500,"2022":2500,"2023":2500},0,{},""],["Toyota","Camry",{"2018":2500,"2019":2500,"2020":2500,"2021":2500,"2022":2500,"2023":2500},0,{},""],["Toyota","RAV4",{"2018":2500,"2019":2500,"2020":2500,"2021":2500},0,{},""],["Audi","A4",{"2018":2000,"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Ford","Edge",{"2019":2000,"2020":2000},0,{},""],["Audi","Q5",{"2018":2000,"2019":2000,"2020":2000,"2021":2000},0,{},""],["Ford","Mustang",{"2019":2300,"2020":2300,"2021":2300,"2024":2300},0,{},""],["Hyundai","Tucson",{"2019":2000,"2020":2000,"2021":2000,"2022":2500},0,{},""],["Kia","Sportage",{"2019":2400,"2020":2400,"2021":2400,"2023":2400},0,{},""],["Subaru","Outback",{"2020":2500,"2021":2500,"2022":2500},0,{},""],["Ford","Ecosport",{"2019":1000,"2020":1000,"2021":1000},0,{},""],["BMW","2 Series",{"2016":2000,"2017":2000,"2018":2000,"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Honda","HR-V",{"2019":1800,"2021":1800,"2022":1800},0,{},""],["BMW","X3",{"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Honda","Fit",{"2019":1500,"2020":1500},0,{},""],["Ford","Fusion",{"2018":1500,"2019":1500,"2020":1500},0,{},""],["Chevrolet","Cruze",{"2018":1400,"2019":1400},0,{},""],["Toyota","Corolla",{"2019":1800,"2020":1800,"2021":1800,"2024":1800},0,{},""],["Jeep","Renegade",{"2018":2400,"2019":2400,"2020":2400,"2021":2400,"2022":2400,"2023":2400},0,{},""],["Mazda","3",{"2018":2500,"2019":2500,"2020":2500},0,{},""],["VW","Taos",{"2022":1500,"2023":1500,"2024":1500,"2025":1500},0,{},""],["Mitsubishi","Eclipse Cross",{"2018":1500,"2019":1500,"2020":1500,"2022":1500},0,{},""],["Alfa Romeo","Giulia",{"2019":2000,"2020":2000,"2022":2000},0,{},""],["Ford","Bronco Sport",{"2011":1500,"2012":1500,"2013":1500,"2014":1500,"2015":1500,"2016":1500,"2017":1500,"2018":1500,"2019":1500,"2020":1500,"2021":1500,"2022":1500,"2023":1500,"2024":1500,"2025":1500,"2026":1500},0,{"2020":22930,"2021":18900,"2022":19950,"2023":19950,"2024":23050,"2025":25950},"/new2/usa/ford/bronco-sport/"],["Hyundai","Santa Fe",{"2019":2400,"2020":2400,"2023":2400},0,{},""],["Volvo","XC60",{"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Audi","Q3",{"2019":2000,"2020":2000,"2021":2000},0,{},""],["Infiniti","Q50",{"2019":3000,"2020":3000,"2021":3000},0,{},""],["Mitsubishi","Outlander",{"2019":2500,"2020":2500},0,{},""],["Mitsubishi","Outlander Sport",{"2020":2000,"2021":2000},0,{},""],["Toyota","C-HR",{"2019":2000,"2020":2000,"2021":2000},0,{},""],["Nissan","Sentra",{"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Alfa Romeo","Stelvio",{"2019":2000,"2020":2000,"2021":2000,"2022":2000},0,{},""],["Jeep","Compass",{"2019":2400,"2020":2400,"2021":2400},0,{},""],["VW","Passat",{"2020":2000},0,{},""],["Kia","K5",{"2021":1600,"2022":1600,"2023":1600,"2024":1600},0,{},""],["Volvo","S60",{"2020":2000,"2021":2000,"2023":2000},0,{},""],["Volvo","XC40",{"2019":2000,"2020":2000,"2021":2000},0,{},""],["Subaru","Crosstrek",{"2019":2000,"2020":2000,"2021":2000},0,{},""],["Mini","Countryman",{"2020":1500,"2021":1500},0,{},""],["Mazda","6",{"2018":2500,"2020":2500,"2021":2500},0,{},""],["Hyundai","Kona",{"2018":2000,"2020":2000,"2023":1600,"2024":2000},0,{},""],["Hyundai","Elantra",{"2019":2000,"2020":2000,"2022":2000,"2023":2000},0,{},""],["Chevrolet","Camaro",{"2019":2000,"2020":2000,"2022":2000},0,{},""],["BMW","5 Series",{"2018":2000,"2020":2000,"2022":2000,"2023":2000},0,{},""],["BMW","4 Series",{"2017":2000,"2019":2000,"2020":2000,"2022":2000},0,{},""],["Kia","Optima",{"2019":2400,"2020":2400},0,{},""],["Nissan","Kicks",{"2018":1600,"2019":1600,"2020":1600},0,{},""],["Mini","Cooper",{"2019":1500,"2020":1500,"2021":1500},0,{},""],["Ford","Explorer",{"2020":2300,"2022":2300},0,{},""],["Buick","Envision",{"2021":2000,"2022":2000,"2024":2000},0,{},""],["Mitsubishi","Mirage",{"2021":1200,"2022":1200,"2023":1200},0,{},""],["Kia","Sorento",{"2019":2500,"2021":2500,"2025":2500},0,{},""],["Kia","Soul",{"2016":2000,"2020":2000},0,{},""],["Kia","Seltos",{"2021":2000},0,{},""],["Kia","Rio",{"2020":1600,"2021":1600},0,{},""],["Nissan","Versa",{"2020":1600},0,{},""],["Nissan","Leaf",{"2019":0},1,{},""],["Nissan","Murano",{"2019":3500,"2020":3500},0,{},""],["Jaguar","F-Pace",{"2018":2000,"2019":2000,"2020":2000},0,{},""],["Mercedes-Benz","GLB",{"2020":2000,"2021":2000},0,{},""],["Mercedes-Benz","CLA",{"2019":2000,"2020":2000},0,{},""],["Mini","Clubman",{"2019":1500,"2020":1500,"2022":1500},0,{},""],["Fiat","500",{"2019":1400,"2020":1400,"2022":1400},0,{},""],["Tesla","Model 3",{"2018":0,"2022":0},1,{},""],["Dodge","Journey",{"2019":2400,"2020":2400},0,{},""],["Hyundai","Sonata",{"2020":2500,"2021":2500},0,{},""],["Hyundai","Accent",{"2019":1600,"2020":1600},0,{},""],["Buick","Envista",{"2024":1200,"2025":1200},0,{},""],["Buick","Regal",{"2019":2000,"2020":2000},0,{},""],["Chevrolet","Spark",{"2020":1400,"2021":1400},0,{},""],["BMW","X3M",{"2018":2000,"2021":2000},0,{},""],["BMW","X2",{"2018":2000,"2019":2000},0,{},""],["BMW","X1",{"2018":2000},0,{},""],["Kia","Stinger",{"2019":2000,"2021":2000},0,{},""],["Toyota","Highlander",{"2019":3500,"2022":3500},0,{},""],["Toyota","Prius",{"2019":1800},0,{},""],["Nissan","Rogue Sport",{"2020":2000},0,{},""],["Volvo","XC90",{"2019":2000,"2020":2000},0,{},""],["Audi","A5",{"2018":2000,"2019":2000},0,{},""],["Audi","Q7",{"2018":2000,"2019":2000},0,{},""],["Mercedes-Benz","Class C",{"2019":2000,"2020":2000},0,{},""],["Mazda","CX-3",{"2018":2000,"2020":2000},0,{},""],["Mazda","MX-5",{"2019":2000,"2020":2000},0,{},""],["Jeep","Cherokee",{"2020":2400},0,{},""],["Fiat","124 Spider",{"2019":1400},0,{},""],["Ford","FOCUS",{"2018":2000},0,{},""],["VW","Atlas",{"2023":2000},0,{},""],["VW","Arteon",{"2020":2000},0,{},""],["VW","ID.4",{"2021":0},1,{},""],["Hyundai","Ioniq 5",{"2022":0},1,{},""],["GMC","Acadia",{"2019":2000},0,{},""],["Chevrolet","Blazer",{"2020":2000},0,{},""],["BMW","i3",{"2019":0},1,{},""],["Kia","Forte",{"2021":2000},0,{},""],["Honda","Insight",{"2019":1500},0,{},""],["Toyota","Supra",{"2021":2000},0,{},""],["Toyota","Sienna",{"2019":2500},0,{},""],["Toyota","Prius Prime",{"2021":1800},0,{},""],["Toyota","4Runner",{"2019":4000},0,{},""],["Toyota","Prius C",{"2019":1500},0,{},""],["Toyota","Yaris",{"2019":1500},0,{},""],["Nissan","Altima",{"2019":2500},0,{},""],["Volvo","S90",{"2017":2000},0,{},""],["Volvo","V60",{"2020":2000},0,{},""],["Volvo","V90",{"2018":2000},0,{},""],["Cadillac","Xt4",{"2024":2000},0,{},""],["Audi","RS 3",{"2020":2000},0,{},""],["Audi","RSQ8",{"2020":2000},0,{},""],["Audi","A8",{"2019":2000},0,{},""],["Audi","SQ5",{"2020":2000},0,{},""],["Jaguar","XE",{"2020":2000},0,{},""],["Jaguar","E-Pace",{"2020":2000},0,{},""],["Lexus","UX",{"2022":2000},0,{},""],["Mazda","CX-50",{"2023":2500},0,{},""],["Mazda","CX-30",{"2020":2500},0,{},""],["Jeep","Wrangler",{"2021":2000},0,{},""],["Fiat","500L",{"2019":1400},0,{},""],["Infiniti","QX50",{"2021":2000},0,{},""],["Acura","TLX",{"2020":2000},0,{},""],["Acura","RDX",{"2021":2000},0,{},""],["Tesla","Model Y",{"2020":0},1,{},""],["Tesla","Model X",{"2018":0},1,{},""],["Porsche","Boxster",{"2023":2000},0,{},""],["Dodge","Challenger",{"2019":2000},0,{},""],["Chrysler","Pacifica",{"2020":3600},0,{},""],["Bentley","Bentayga",{"2018":2000},0,{},""],["Aston Martin","DB11",{"2020":2000},0,{},""]],"popular":[1,16,17,11,41,0]}</script>
 </div>
     <ul class="hq-trust" aria-label="Гарантии">
       <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></span><b>Договор с офисом в Минске</b></li>
@@ -103,42 +125,15 @@
     <div class="sec-head">
       <p class="eyebrow">Что входит в цену</p>
       <h2>Каждый платёж видно. И видно, кому он уходит</h2>
-      <p>Деньги за машину не проходят через нас. Вы платите каждому участнику напрямую, со своего имени, по его счёту. Нам только фиксированную сумму за услугу.</p>
+      <p>Деньги за машину не проходят через нас. Каждому участнику вы платите напрямую.</p>
     </div>
-    <div class="inc">
-      <article>
-        <p class="to"><b>1</b>Аукциону</p>
-        <ul>
-          <li><strong>Цена лота</strong>Ставка, на которой вы выиграли торги на Copart или IAAI.</li>
-          <li><strong>Сборы аукциона</strong>Сбор покупателя, gate fee, оформление документов. Зависят от цены лота.</li>
-        </ul>
-      </article>
-      <article>
-        <p class="to"><b>2</b>Перевозчику</p>
-        <ul>
-          <li><strong>Доставка по США</strong>С площадки аукциона до порта отправки. Зависит от штата.</li>
-          <li><strong>Море</strong>Контейнер до Клайпеды или Поти.</li>
-          <li><strong>Порт → Минск</strong>Автовоз до таможни в Минске.</li>
-        </ul>
-      </article>
-      <article>
-        <p class="to"><b>3</b>Таможне</p>
-        <ul>
-          <li><strong>Таможенная пошлина</strong>По возрасту машины, объёму двигателя и цене. Для электромобилей отдельные условия.</li>
-          <li><strong>Утильсбор, СВХ, декларант</strong>Обязательные платежи при оформлении в Минске.</li>
-        </ul>
-      </article>
-      <article class="ours">
-        <p class="to"><b>4</b>Нам</p>
-        <ul>
-          <li><strong>Услуга по договору</strong>Подбор, проверка, торги, организация доставки и сопровождение до Минска.</li>
-          <li><strong>Фиксированная сумма</strong>599, 799 или 1999 BYN по тарифу. Без процента от цены машины.</li>
-        </ul>
-      </article>
+    <div class="inc inc-short">
+      <article><p class="to"><b>1</b>Аукциону</p><ul><li>Цена лота</li><li>Сборы аукциона</li></ul></article>
+      <article><p class="to"><b>2</b>Перевозчику</p><ul><li>Доставка по США</li><li>Море до Клайпеды или Поти</li><li>Порт → Минск</li></ul></article>
+      <article><p class="to"><b>3</b>Таможне</p><ul><li>Пошлина</li><li>Утильсбор, СВХ, декларант</li></ul></article>
+      <article class="ours"><p class="to"><b>4</b>Нам</p><ul><li>Услуга по договору: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b></li><li>Без процента от цены машины</li></ul><a href="/new2/ceny/">Что входит в тарифы →</a></article>
     </div>
-    <div class="inc-foot">
-      <span><b>Отдельно от расчёта:</b> ремонт повреждений. Его стоимость мы оцениваем по фото и отчёту аукциона до ставки, ремонт можно сделать у нашего партнёрского СТО.</span>
-    </div>
+    <p class="inc-note">Ремонт в расчёт не входит. Его стоимость оценим по фото и отчёту аукциона до ставки.</p>
   </div>
 </section>
 
@@ -151,22 +146,22 @@
     </div>
     <div class="mtiles"><a class="mtile" href="/new2/usa/chevrolet/equinox/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Equinox" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Chevrolet</span><h3>Equinox</h3><dl><div><dt>На av.by</dt><dd class="num">19 200 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">11 800 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Equinox</h3><dl><div><dt>На av.by</dt><dd class="num">19 200 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">11 800 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a><a class="mtile" href="/new2/usa/chevrolet/trailblazer/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Chevrolet-Trailblazer-KL79MSSL5NB025516-1.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Trailblazer" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Chevrolet</span><h3>Trailblazer</h3><dl><div><dt>На av.by</dt><dd class="num">17 925 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">10 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Trailblazer</h3><dl><div><dt>На av.by</dt><dd class="num">17 925 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">10 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a><a class="mtile" href="/new2/usa/chevrolet/trax/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2024-Chevrolet-Trax-KL77LHE22RC107395-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Chevrolet Trax" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Chevrolet</span><h3>Trax</h3><dl><div><dt>На av.by</dt><dd class="num">14 950 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">7 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Chevrolet</span><h3>Trax</h3><dl><div><dt>На av.by</dt><dd class="num">14 950 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">7 900 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a><a class="mtile" href="/new2/usa/nissan/rogue/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg" srcset="https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-300x225.jpg 300w, https://amerika.by/wp-content/uploads/2026/02/2022-Nissan-Rogue-5N1BT3BB4NC717051-4-768x576.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Nissan Rogue" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Nissan</span><h3>Rogue</h3><dl><div><dt>На av.by</dt><dd class="num">21 000 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">13 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Nissan</span><h3>Rogue</h3><dl><div><dt>На av.by</dt><dd class="num">21 000 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">13 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a><a class="mtile" href="/new2/usa/ford/bronco-sport/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg" srcset="https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-300x219.jpg 300w, https://amerika.by/wp-content/uploads/2026/09/2024-Chevrolet-Equinox-3GNAXSEG8RL178666-4-1-768x560.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Ford Bronco Sport" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Ford</span><h3>Bronco Sport</h3><dl><div><dt>На av.by</dt><dd class="num">19 950 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">12 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Ford</span><h3>Bronco Sport</h3><dl><div><dt>На av.by</dt><dd class="num">19 950 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">12 600 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a><a class="mtile" href="/new2/usa/vw/jetta/">
   <div class="ph"><img src="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg" srcset="https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1-300x218.jpg 300w, https://amerika.by/wp-content/uploads/2026/08/2022-Volkswagen-Jetta-3VWCM7BU5NM030302-1.jpg 768w" sizes="(max-width:560px) 50vw, 380px" alt="Volkswagen Jetta" loading="lazy" decoding="async" width="380" height="285"><span class="yr">2022</span></div>
-  <div class="tx"><span>Volkswagen</span><h3>Jetta</h3><dl><div><dt>На av.by</dt><dd class="num">18 374 $</dd></div><div class="us"><dt>Из США дешевле при ставке до</dt><dd class="num">11 000 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
+  <div class="tx"><span>Volkswagen</span><h3>Jetta</h3><dl><div><dt>На av.by</dt><dd class="num">18 374 $</dd></div><div class="us"><dt>Выгодно до ставки</dt><dd class="num">11 000 $</dd></div></dl><span class="go">Цены по всем годам →</span></div>
 </a></div>
     <div class="sec-foot"><a class="btn btn-navy" href="/new2/auto-usa/">Каталог: 1227 авто из США</a></div>
   </div>
@@ -177,19 +172,15 @@
     <div class="sec-head">
       <p class="eyebrow">Шаги и сроки</p>
       <h2>Где ваша машина и что будет дальше</h2>
-      <p>Пять шагов от договора до ключей. На каждом шаге вы знаете, где машина: присылаем фото и номер контейнера, отслеживание по VIN.</p>
+      <p>Обычно 40–70 дней от оплаты лота до Минска. На каждом шаге вы знаете, где машина.</p>
     </div>
     <ol class="timeline">
-      <li><span class="dot"><b>1</b></span><span class="when">День 1</span><h3>Договор и подбор</h3><p>Обсуждаем бюджет, подписываем договор. В течение часа присылаем до 5 подходящих лотов с расчётом под ключ.</p></li>
-      <li><span class="dot"><b>2</b></span><span class="when">До ставки</span><h3>Проверка и торги</h3><p>Carfax, AutoCheck, оценка ремонта. Ставим за вас. После победы вы оплачиваете лот аукциону напрямую.</p></li>
-      <li><span class="dot"><b>3</b></span><span class="when">1–2 недели</span><h3>Доставка по США</h3><p>Забираем машину с площадки и везём в порт. Присылаем фото и номер контейнера.</p></li>
-      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>Контейнер идёт в Клайпеду или Поти. Маршрут зависит от двигателя, подтверждаем при расчёте.</p></li>
-      <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Привозим на таможню, помогаем с документами и платежами. В тарифе «Премиум» оформляем всё за вас.</p></li>
+      <li><span class="dot"><b>1</b></span><span class="when">День 1</span><h3>Договор и подбор</h3><p>Подписываем договор и присылаем до 5 лотов с расчётом.</p></li>
+      <li><span class="dot"><b>2</b></span><span class="when">До ставки</span><h3>Проверка и торги</h3><p>Проверяем историю и ставим за вас. Лот оплачиваете аукциону.</p></li>
+      <li><span class="dot"><b>3</b></span><span class="when">1–2 недели</span><h3>Доставка по США</h3><p>Везём с площадки в порт, присылаем фото и номер контейнера.</p></li>
+      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>Контейнер идёт в Клайпеду или Поти.</p></li>
+      <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Помогаем с документами и платежами на таможне.</p></li>
     </ol>
-    <div class="total-time">
-      <b class="num">40–70 дней</b>
-      <p>Обычный срок от оплаты лота до машины в Минске. Через Поти путь дольше, чем через Клайпеду. Точный срок скажем по вашему лоту.</p>
-    </div>
   </div>
 </section>
 
@@ -198,7 +189,7 @@
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Логистика</p>
       <h2>Логистика: Atlantic Express Corporation</h2>
-      <p>Доставку из США организует наш логистический партнёр Atlantic Express Corporation (с 1995 года). Машину забирают с площадки аукциона, грузят в контейнер и отправляют в порт. Оплату за доставку вы переводите напрямую, без посредников.</p>
+      <p>Везёт машины из США с 1995 года. За доставку вы платите перевозчику напрямую.</p>
     </div>
     <div class="atl-card">
       <div class="since"><b class="num">1995</b><span>с этого года работает<br>Atlantic Express Corporation</span></div>
@@ -211,15 +202,6 @@
   </div>
 </section>
 
-<section class="price-band">
-  <div class="wrap pb-in">
-    <div>
-      <p class="eyebrow">Сколько стоит наша работа</p>
-      <p class="pb-text">Фиксированная сумма в договоре, без процента от цены машины: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b> по тарифу. Оплата через ЕРИП.</p>
-    </div>
-    <a class="btn btn-line" href="/new2/ceny/">Что входит в тарифы</a>
-  </div>
-</section>
 <section class="white" id="blog">
   <div class="wrap">
     <div class="sec-head">
@@ -252,7 +234,7 @@
   <div class="wrap">
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Бесплатно и без обязательств</p>
-      <h2>Пришлём до 5 вариантов с аукциона и расчёт под ключ</h2>
+      <h2>Пришлём до 5 вариантов с аукциона и расчёт до Минска</h2>
       <p>Оставьте телефон и напишите, какую машину ищете. Менеджер подберёт лоты и посчитает полную цену до Минска. Подборка ни к чему не обязывает.</p>
       <div class="channels">
         <a href="tel:+375296332828" class="num">+375 (29) 633-28-28<small>Позвонить</small></a>

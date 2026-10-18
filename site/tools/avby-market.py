@@ -4,12 +4,27 @@
 Запуск: python3 site/tools/avby-market.py
 Берёт все объявления по каждой модели и году выпуска (2017–2025) через публичный API av.by
 и сохраняет по годам: число объявлений, медиану и нижний квартиль цены в $, типичный двигатель, медиану пробега.
-Модели задаются в MODELS: (ключ страницы, id марки на av.by, id модели на av.by).
+Модели задаются в MODELS: (ключ марка/модель как в каталоге сайта, id марки на av.by, id модели на av.by).
+Id смотреть: https://api.av.by/offer-types/cars/catalog/brand-items и .../brand-items/<id марки>/models
 """
 import json, subprocess, time, statistics as st, collections, datetime, pathlib
 
 MODELS = [("chevrolet/equinox", 41, 1596), ("chevrolet/trailblazer", 41, 149), ("chevrolet/trax", 41, 2594),
-          ("nissan/rogue", 892, 1929), ("ford/bronco-sport", 330, 10105), ("vw/jetta", 1216, 1223)]
+          ("nissan/rogue", 892, 1929), ("ford/bronco-sport", 330, 10105), ("vw/jetta", 1216, 1223),
+          # Остальные частые модели каталога: для сравнения с рынком в быстром расчёте на главной
+          ("buick/encore", 1506, 2570), ("chevrolet/malibu", 41, 136), ("gmc/terrain", 372, 2423),
+          ("vw/tiguan", 1216, 1974), ("honda/civic", 383, 391), ("vw/golf", 1216, 5908),
+          ("ford/escape", 330, 341), ("honda/accord", 383, 384), ("bmw/seria-3", 8, 5863),
+          ("chevrolet/bolt", 41, 5986), ("audi/a3", 6, 1428), ("mazda/cx-5", 634, 2397),
+          ("honda/cr-v", 383, 393), ("subaru/forester", 1136, 1142), ("toyota/camry", 1181, 1192),
+          ("toyota/rav4", 1181, 1209), ("audi/a4", 6, 5810), ("ford/edge", 330, 2079),
+          ("audi/q5", 6, 2093), ("ford/mustang", 330, 359), ("hyundai/tucson", 433, 1638),
+          ("kia/sportage", 545, 569), ("subaru/outback", 1136, 1148), ("ford/ecosport", 330, 2642),
+          ("bmw/seria-2", 8, 2575), ("honda/hr-v", 383, 401), ("bmw/x3", 8, 1661),
+          ("honda/fit", 383, 399), ("chevrolet/cruze", 41, 2264), ("toyota/corolla", 1181, 1196),
+          ("jeep/renegade", 540, 5008), ("mazda/3", 634, 637), ("vw/taos", 1216, 10081),
+          ("mitsubishi/eclipse-cross", 834, 5956), ("alfa-romeo/giulia", 1, 5545), ("hyundai/santa-fe", 433, 453),
+          ("volvo/xc60", 1238, 2098)]
 YEARS = range(2017, 2026)
 OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "market-avby.json"
 

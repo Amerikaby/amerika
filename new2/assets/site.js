@@ -371,71 +371,168 @@ function fillYears(sel, def){
 (function(){
   var box = $("quick"), dataEl = $("quickData");
   if (!box || !dataEl) return;
-  var D = JSON.parse(dataEl.textContent), lotTouched = false, used = false;
-  function sel(){ return box.querySelector('input[name="qm"]:checked').value; }
-  function model(){ var v = sel(); return v === "other" ? null : D[+v]; }
-  /* Строка модели: [год, см³, медиана av.by, ставить до] */
-  function row(m){ var y = +$("qYear").value; for (var i = 0; i < m.y.length; i++) if (m.y[i][0] === y) return m.y[i]; return m.y[0]; }
-  /* Ставка по умолчанию: заметно ниже границы выгоды, круглая */
-  function defLot(r){ return r && r[3] ? Math.max(1000, Math.floor(r[3] * 0.75 / 500) * 500) : 10000; }
-  function setYears(list, def){
-    var s = $("qYear"), keep = +s.value; s.innerHTML = "";
-    list.forEach(function(y){ var o = document.createElement("option"); o.value = y; o.textContent = y; s.appendChild(o); });
-    s.value = list.indexOf(keep) >= 0 && def == null ? keep : (def || list[0]);
+  /* idx: [марка, модель, {год: см³}, электро, {год: медиана av.by}, ссылка] */
+  var D = JSON.parse(dataEl.textContent), IDX = D.idx, sel = -1, lotTouched = false, ccTouched = false, used = false;
+  var q = $("qModel"), list = $("qList"), active = -1, shown = [];
+  var name = function(i){ return IDX[i][0] + " " + IDX[i][1]; };
+  var years = []; for (var y = nowYear; y >= nowYear - 15; y--) years.push(y);
+  years.forEach(function(y){ var o = document.createElement("option"); o.value = y; o.textContent = y; $("qYear").appendChild(o); });
+  $("qYear").value = nowYear - 4;
+  /* Объём модели в году: ближайший год из каталога */
+  function ccFor(i, y){
+    var t = IDX[i][2], best = null, d = 99;
+    for (var k in t) { var dd = Math.abs(+k - y); if (dd < d) { d = dd; best = t[k]; } }
+    return best == null ? 2000 : best;
   }
-  function refill(){
-    var m = model(), years = [];
-    if (m) { setYears(m.y.map(function(r){ return r[0]; }), m.def); }
-    else { for (var y = nowYear; y >= nowYear - 15; y--) years.push(y); setYears(years, years.indexOf(+$("qYear").value) >= 0 ? null : nowYear - 4); }
-    $("qOther").hidden = !!m;
+  function opts(cc, alt, ev, year){ return {moto:false, year:year, cc:cc, alt:alt, ev:ev, region:"east", port:autoPortFor(false, alt, cc), sublot:false, benefit:false}; }
+  function maxBid(target, o){
+    if (costOf(0, o).total > target) return 0;
+    var lo = 0, hi = target;
+    for (var k = 0; k < 32; k++) { var mid = (lo + hi) / 2; if (costOf(mid, o).total <= target) lo = mid; else hi = mid; }
+    return Math.floor(lo / 100) * 100;
+  }
+  function cur(){
+    var year = +$("qYear").value, ev, alt, cc;
+    if (sel >= 0) { ev = !!IDX[sel][3]; alt = ev; cc = ev ? 0 : Math.max(0, +$("qCc").value || 0); }
+    else { var f = box.querySelector('input[name="qFuel"]:checked').value; ev = f === "ev"; alt = f !== "ice"; cc = ev ? 0 : Math.max(0, +$("qCc").value || 0); }
+    return {year:year, o:opts(cc, alt, ev, year), mk: sel >= 0 ? IDX[sel][4][year] : null};
   }
   function run(){
-    var m = model(), r = m ? row(m) : null, o;
-    if (!lotTouched) $("qLot").value = defLot(r);
-    var lot = Math.max(0, +$("qLot").value || 0), year = +$("qYear").value;
-    if (m) {
-      o = {moto:false, year:year, cc:r[1], alt:false, ev:false, region:"east", port:autoPortFor(false, false, r[1]), sublot:false, benefit:false};
-    } else {
-      var fuel = $("qFuel").value, cc = fuel === "ev" ? 0 : Math.max(0, +$("qCc").value || 0), alt = fuel !== "ice";
-      o = {moto:false, year:year, cc:cc, alt:alt, ev:fuel === "ev", region:"east", port:autoPortFor(false, alt, cc), sublot:false, benefit:false};
-    }
-    var c = costOf(lot, o);
-    $("qTotal").textContent = fmt(c.total);
-    $("qByn").textContent = "≈ " + Math.round(c.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
-    $("qLotHint").hidden = lotTouched;
-    $("qCc").disabled = !m && $("qFuel").value === "ev";
+    var c = cur(), o = c.o;
+    if (!lotTouched) { var lim = c.mk ? maxBid(c.mk, o) : 0; $("qLot").value = lim ? Math.max(1000, Math.floor(lim * 0.75 / 500) * 500) : 10000; }
+    var lot = Math.max(0, +$("qLot").value || 0), r = costOf(lot, o);
+    $("qTotal").textContent = fmt(r.total);
+    $("qByn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN";
+    $("qFuelRow").hidden = sel >= 0;
+    $("qCc").disabled = o.ev;
+    var h = $("qHint");
+    if (sel >= 0) h.textContent = o.ev ? "Электромобиль: условия растаможки и квоту уточним при расчёте." : (ccTouched ? "" : "Объём подставлен типичный для " + IDX[sel][1] + " " + c.year + " года. Если у вашей машины другой, поправьте.");
+    else h.textContent = !$("qList").hidden ? "Выберите модель из списка." : q.value.trim() ? "Этой модели нет в нашем списке. Укажите объём и тип двигателя, остальное посчитаем." : "Начните вводить марку или выберите популярную модель.";
     var v = $("qVerdict");
-    if (m) {
-      var mk = r[2], max = Math.max(c.total, mk), diff = mk - c.total;
+    if (c.mk) {
+      var bid = maxBid(c.mk, o), max = Math.max(r.total, c.mk), diff = c.mk - r.total;
       $("qBars").hidden = false;
-      $("qMk").textContent = fmt(mk);
-      $("qBarUs").style.width = (c.total / max * 100) + "%"; $("qBarMk").style.width = (mk / max * 100) + "%";
+      $("qMk").textContent = fmt(c.mk);
+      $("qBarUs").style.width = (r.total / max * 100) + "%"; $("qBarMk").style.width = (c.mk / max * 100) + "%";
       v.className = "qc-verdict " + (diff > 0 ? "good" : "bad");
-      v.innerHTML = diff > 0
-        ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(r[3]) + "."
-        : (r[3] ? "При такой ставке дороже рынка. " + m.n + " " + r[0] + " выгодно брать при ставке до <b>" + fmt(r[3]) + "</b>."
-                : m.n + " " + r[0] + " из США выходит не дешевле рынка. Посмотрите другой год.");
+      v.innerHTML = diff > 0 ? "Дешевле рынка примерно на <b>" + fmt(diff) + "</b>. Выгодно при ставке до " + fmt(bid) + "."
+        : (bid ? "При такой ставке дороже рынка. Выгодно брать при ставке до <b>" + fmt(bid) + "</b>." : "Такая машина из США выходит не дешевле рынка. Посмотрите другой год.");
+      if (IDX[sel][5]) v.innerHTML += ' <a href="' + IDX[sel][5] + '">Цены по всем годам →</a>';
     } else {
       $("qBars").hidden = true;
       v.className = "qc-verdict";
       v.innerHTML = "Маршрут через <b>" + PORTS[o.port].name + "</b>" + (o.port === "poti" ? ": машины больше 1,9 л, гибриды и электро везём в обход ЕС." : ".")
-        + " Сравнение с рынком Беларуси для этой машины пришлём вместе с точным расчётом.";
+        + (sel >= 0 ? " Цен av.by для этого года мало, сравнение с рынком пришлём с точным расчётом." : " Сравнение с рынком Беларуси пришлём с точным расчётом.");
     }
-    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(year), cc: String(o.cc)}).toString() + (o.alt ? "&fuel=alt" : "") + "#calc";
-    return {m:m, o:o, lot:lot, year:year, total:Math.round(c.total)};
+    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(c.year), cc: String(o.cc)}).toString() + (o.alt ? "&fuel=alt" : "") + "#calc";
+    return {c:c, lot:lot, total:Math.round(r.total)};
   }
-  qsa('input[name="qm"]', box).forEach(function(i){ i.addEventListener("change", function(){ lotTouched = false; refill(); run(); }); });
-  $("qYear").addEventListener("change", function(){ if (model()) lotTouched = false; run(); });
-  $("qLot").addEventListener("input", function(){ lotTouched = true; run(); });
-  ["qCc", "qFuel"].forEach(function(id){ $(id).addEventListener("input", run); $(id).addEventListener("change", run); });
-  box.addEventListener("change", function(){ if (!used) { used = true; track("calc_used", {calc: "quick"}); } });
-  run();
-  $("qSend").addEventListener("click", function(){
-    var x = run(), lc = $("lcar");
-    var name = x.m ? x.m.b + " " + x.m.n : ($("qName").value.trim() || "машина") + ", " + (x.o.ev ? "электро" : x.o.cc + " см³" + (x.o.alt ? ", гибрид" : ""));
-    track("calc_send", {total: x.total, calc: "quick"});
-    if (lc) lc.value = "Быстрый расчёт: " + name + ", " + x.year + " г., ставка " + x.lot + " $, итого ≈ " + x.total + " $ с растаможкой, через " + PORTS[x.o.port].name + ".";
+  function pick(i, year){
+    sel = i; q.value = name(i); closeList(); lotTouched = false; ccTouched = false;
+    var mk = IDX[i][4], ys = Object.keys(mk).map(Number);
+    if (year) $("qYear").value = year;
+    else if (ys.length) $("qYear").value = ys.sort(function(a, b){ return Math.abs(a - (nowYear - 4)) - Math.abs(b - (nowYear - 4)); })[0];
+    else { var cy = Object.keys(IDX[i][2]).map(Number).sort(function(a, b){ return b - a; }); if (cy.length) $("qYear").value = Math.min(cy[0], nowYear); }
+    $("qCc").value = ccFor(i, +$("qYear").value);
+    qsa(".qc-pop button", box).forEach(function(b){ b.setAttribute("aria-pressed", +b.dataset.i === i); });
+    run();
+  }
+  /* Подсказки по вводу */
+  function closeList(){ list.hidden = true; q.setAttribute("aria-expanded", "false"); active = -1; }
+  function render(){
+    var t = q.value.trim().toLowerCase().replace(/ё/g, "е"), words = t.split(/\s+/).filter(Boolean);
+    shown = !words.length ? [] : IDX.map(function(r, i){ return i; }).filter(function(i){
+      var hay = (name(i).toLowerCase() + (IDX[i][0] === "VW" ? " volkswagen" : "")).split(/[\s-]+/);
+      return words.every(function(w){ return hay.some(function(h){ return h.indexOf(w) === 0; }); });
+    }).slice(0, 8);
+    list.innerHTML = "";
+    shown.forEach(function(i, k){
+      var li = document.createElement("li"); li.setAttribute("role", "option"); li.id = "qOpt" + k;
+      li.innerHTML = "<b></b>" + (Object.keys(IDX[i][4]).length ? "<small>есть цены av.by</small>" : "");
+      li.querySelector("b").textContent = name(i);
+      li.addEventListener("mousedown", function(e){ e.preventDefault(); pick(i); });
+      list.appendChild(li);
+    });
+    list.hidden = !shown.length; q.setAttribute("aria-expanded", String(!!shown.length));
+  }
+  q.addEventListener("input", function(){
+    var t = q.value.trim().toLowerCase();
+    sel = -1; for (var i = 0; i < IDX.length; i++) if (name(i).toLowerCase() === t) { sel = i; break; }
+    qsa(".qc-pop button", box).forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+    if (sel < 0 && !ccTouched) $("qCc").value = 2000;
+    render(); run();
   });
+  q.addEventListener("keydown", function(e){
+    if (list.hidden) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault(); active = (active + (e.key === "ArrowDown" ? 1 : -1) + shown.length) % shown.length;
+      qsa("li", list).forEach(function(li, k){ li.classList.toggle("on", k === active); });
+      q.setAttribute("aria-activedescendant", "qOpt" + active);
+    } else if (e.key === "Enter" && active >= 0) { e.preventDefault(); pick(shown[active]); }
+    else if (e.key === "Escape") closeList();
+  });
+  q.addEventListener("blur", function(){ setTimeout(function(){ closeList(); run(); }, 100); });
+  q.addEventListener("focus", function(){ if (q.value.trim() && sel < 0) render(); });
+  qsa(".qc-pop button", box).forEach(function(b){ b.addEventListener("click", function(){ pick(+b.dataset.i); }); });
+  $("qYear").addEventListener("change", function(){ if (sel >= 0 && !ccTouched) $("qCc").value = ccFor(sel, +$("qYear").value); lotTouched = false; run(); });
+  $("qCc").addEventListener("input", function(){ ccTouched = true; run(); });
+  $("qLot").addEventListener("input", function(){ lotTouched = true; run(); });
+  qsa('input[name="qFuel"]', box).forEach(function(r){ r.addEventListener("change", run); });
+  box.addEventListener("change", function(){ if (!used) { used = true; track("calc_used", {calc: "quick"}); } });
+
+  /* Вкладки */
+  function tab(budget){
+    $("qTabModel").setAttribute("aria-selected", String(!budget)); $("qTabBudget").setAttribute("aria-selected", String(budget));
+    $("qPanelModel").hidden = budget; $("qPanelBudget").hidden = !budget;
+    if (budget) fit();
+  }
+  $("qTabModel").addEventListener("click", function(){ tab(false); });
+  $("qTabBudget").addEventListener("click", function(){ tab(true); });
+
+  /* Бюджет: модели, которые укладываются и на av.by стоят не дешевле */
+  function fit(){
+    var budget = Math.max(0, +$("qBudget").value || 0), rows = [];
+    IDX.forEach(function(r, i){
+      var best = null;
+      Object.keys(r[4]).forEach(function(ys){
+        var y = +ys, mk = r[4][ys];
+        /* Год, в котором такая машина в Беларуси стоит чуть дороже бюджета: тот же класс, а из США укладывается */
+        if (y < nowYear - 8 || mk < budget * 0.95 || mk > budget * 1.4) return;
+        var o = opts(r[3] ? 0 : ccFor(i, y), !!r[3], !!r[3], y), bid = maxBid(budget, o);
+        if (bid < 2500) return;
+        var score = Math.abs(mk - budget * 1.15);
+        if (!best || score < best.score) best = {i:i, y:y, mk:mk, bid:bid, score:score};
+      });
+      if (best) rows.push(best);
+    });
+    rows.sort(function(a, b){ return b.y - a.y || b.mk - a.mk; });
+    var ul = $("qFit"); ul.innerHTML = "";
+    rows.slice(0, 6).forEach(function(x){
+      var li = document.createElement("li"), btn = document.createElement("button");
+      btn.type = "button";
+      btn.innerHTML = '<b></b><span>ставка до <em class="num">' + fmt(x.bid) + '</em></span><span>на av.by <em class="num">' + fmt(x.mk) + "</em></span>";
+      btn.querySelector("b").textContent = name(x.i) + " " + x.y;
+      btn.addEventListener("click", function(){ tab(false); pick(x.i, x.y); lotTouched = true; $("qLot").value = Math.floor(x.bid / 500) * 500; run(); });
+      li.appendChild(btn); ul.appendChild(li);
+    });
+    if (!rows.length) ul.innerHTML = '<li class="empty">Под этот бюджет популярные модели с выгодой не подобрались. Напишите нам, подберём вариант.</li>';
+    return rows;
+  }
+  $("qBudget").addEventListener("input", fit);
+
+  /* Заявка */
+  function toLead(text){ var lc = $("lcar"); if (lc) lc.value = text; }
+  $("qSend").addEventListener("click", function(){
+    var x = run(), o = x.c.o, nm = sel >= 0 ? name(sel) : (q.value.trim() || "машина");
+    track("calc_send", {total: x.total, calc: "quick"});
+    toLead("Быстрый расчёт: " + nm + ", " + x.c.year + " г., " + (o.ev ? "электро" : o.cc + " см³" + (o.alt ? ", гибрид" : "")) + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ с растаможкой, через " + PORTS[o.port].name + ".");
+  });
+  $("qSendB").addEventListener("click", function(){
+    track("calc_send", {calc: "budget"});
+    toLead("Бюджет до Минска: " + (+$("qBudget").value || 0) + " $. Подберите варианты.");
+  });
+
+  pick(D.popular[0]);
 })();
 
 /* ---------- Таможенный калькулятор ---------- */

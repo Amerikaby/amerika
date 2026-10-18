@@ -27,42 +27,15 @@ export function homeBody({ u, quick, models, extra }) {
     <div class="sec-head">
       <p class="eyebrow">Что входит в цену</p>
       <h2>Каждый платёж видно. И видно, кому он уходит</h2>
-      <p>Деньги за машину не проходят через нас. Вы платите каждому участнику напрямую, со своего имени, по его счёту. Нам только фиксированную сумму за услугу.</p>
+      <p>Деньги за машину не проходят через нас. Каждому участнику вы платите напрямую.</p>
     </div>
-    <div class="inc">
-      <article>
-        <p class="to"><b>1</b>Аукциону</p>
-        <ul>
-          <li><strong>Цена лота</strong>Ставка, на которой вы выиграли торги на Copart или IAAI.</li>
-          <li><strong>Сборы аукциона</strong>Сбор покупателя, gate fee, оформление документов. Зависят от цены лота.</li>
-        </ul>
-      </article>
-      <article>
-        <p class="to"><b>2</b>Перевозчику</p>
-        <ul>
-          <li><strong>Доставка по США</strong>С площадки аукциона до порта отправки. Зависит от штата.</li>
-          <li><strong>Море</strong>Контейнер до Клайпеды или Поти.</li>
-          <li><strong>Порт → Минск</strong>Автовоз до таможни в Минске.</li>
-        </ul>
-      </article>
-      <article>
-        <p class="to"><b>3</b>Таможне</p>
-        <ul>
-          <li><strong>Таможенная пошлина</strong>По возрасту машины, объёму двигателя и цене. Для электромобилей отдельные условия.</li>
-          <li><strong>Утильсбор, СВХ, декларант</strong>Обязательные платежи при оформлении в Минске.</li>
-        </ul>
-      </article>
-      <article class="ours">
-        <p class="to"><b>4</b>Нам</p>
-        <ul>
-          <li><strong>Услуга по договору</strong>Подбор, проверка, торги, организация доставки и сопровождение до Минска.</li>
-          <li><strong>Фиксированная сумма</strong>599, 799 или 1999 BYN по тарифу. Без процента от цены машины.</li>
-        </ul>
-      </article>
+    <div class="inc inc-short">
+      <article><p class="to"><b>1</b>Аукциону</p><ul><li>Цена лота</li><li>Сборы аукциона</li></ul></article>
+      <article><p class="to"><b>2</b>Перевозчику</p><ul><li>Доставка по США</li><li>Море до Клайпеды или Поти</li><li>Порт → Минск</li></ul></article>
+      <article><p class="to"><b>3</b>Таможне</p><ul><li>Пошлина</li><li>Утильсбор, СВХ, декларант</li></ul></article>
+      <article class="ours"><p class="to"><b>4</b>Нам</p><ul><li>Услуга по договору: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b></li><li>Без процента от цены машины</li></ul><a href="${u('ceny/')}">Что входит в тарифы →</a></article>
     </div>
-    <div class="inc-foot">
-      <span><b>Отдельно от расчёта:</b> ремонт повреждений. Его стоимость мы оцениваем по фото и отчёту аукциона до ставки, ремонт можно сделать у нашего партнёрского СТО.</span>
-    </div>
+    <p class="inc-note">Ремонт в расчёт не входит. Его стоимость оценим по фото и отчёту аукциона до ставки.</p>
   </div>
 </section>
 
@@ -73,19 +46,15 @@ ${models}
     <div class="sec-head">
       <p class="eyebrow">Шаги и сроки</p>
       <h2>Где ваша машина и что будет дальше</h2>
-      <p>Пять шагов от договора до ключей. На каждом шаге вы знаете, где машина: присылаем фото и номер контейнера, отслеживание по VIN.</p>
+      <p>Обычно 40–70 дней от оплаты лота до Минска. На каждом шаге вы знаете, где машина.</p>
     </div>
     <ol class="timeline">
-      <li><span class="dot"><b>1</b></span><span class="when">День 1</span><h3>Договор и подбор</h3><p>Обсуждаем бюджет, подписываем договор. В течение часа присылаем до 5 подходящих лотов с расчётом под ключ.</p></li>
-      <li><span class="dot"><b>2</b></span><span class="when">До ставки</span><h3>Проверка и торги</h3><p>Carfax, AutoCheck, оценка ремонта. Ставим за вас. После победы вы оплачиваете лот аукциону напрямую.</p></li>
-      <li><span class="dot"><b>3</b></span><span class="when">1–2 недели</span><h3>Доставка по США</h3><p>Забираем машину с площадки и везём в порт. Присылаем фото и номер контейнера.</p></li>
-      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>Контейнер идёт в Клайпеду или Поти. Маршрут зависит от двигателя, подтверждаем при расчёте.</p></li>
-      <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Привозим на таможню, помогаем с документами и платежами. В тарифе «Премиум» оформляем всё за вас.</p></li>
+      <li><span class="dot"><b>1</b></span><span class="when">День 1</span><h3>Договор и подбор</h3><p>Подписываем договор и присылаем до 5 лотов с расчётом.</p></li>
+      <li><span class="dot"><b>2</b></span><span class="when">До ставки</span><h3>Проверка и торги</h3><p>Проверяем историю и ставим за вас. Лот оплачиваете аукциону.</p></li>
+      <li><span class="dot"><b>3</b></span><span class="when">1–2 недели</span><h3>Доставка по США</h3><p>Везём с площадки в порт, присылаем фото и номер контейнера.</p></li>
+      <li><span class="dot"><b>4</b></span><span class="when">4–6 недель</span><h3>Море</h3><p>Контейнер идёт в Клайпеду или Поти.</p></li>
+      <li><span class="dot"><b>5</b></span><span class="when">Финиш</span><h3>Минск и таможня</h3><p>Помогаем с документами и платежами на таможне.</p></li>
     </ol>
-    <div class="total-time">
-      <b class="num">40–70 дней</b>
-      <p>Обычный срок от оплаты лота до машины в Минске. Через Поти путь дольше, чем через Клайпеду. Точный срок скажем по вашему лоту.</p>
-    </div>
   </div>
 </section>
 
@@ -94,7 +63,7 @@ ${models}
     <div class="sec-head" style="margin:0">
       <p class="eyebrow">Логистика</p>
       <h2>Логистика: Atlantic Express Corporation</h2>
-      <p>Доставку из США организует наш логистический партнёр Atlantic Express Corporation (с 1995 года). Машину забирают с площадки аукциона, грузят в контейнер и отправляют в порт. Оплату за доставку вы переводите напрямую, без посредников.</p>
+      <p>Везёт машины из США с 1995 года. За доставку вы платите перевозчику напрямую.</p>
     </div>
     <div class="atl-card">
       <div class="since"><b class="num">1995</b><span>с этого года работает<br>Atlantic Express Corporation</span></div>
@@ -107,15 +76,6 @@ ${models}
   </div>
 </section>
 
-<section class="price-band">
-  <div class="wrap pb-in">
-    <div>
-      <p class="eyebrow">Сколько стоит наша работа</p>
-      <p class="pb-text">Фиксированная сумма в договоре, без процента от цены машины: <b class="num">599</b>, <b class="num">799</b> или <b class="num">1999 BYN</b> по тарифу. Оплата через ЕРИП.</p>
-    </div>
-    <a class="btn btn-line" href="${u('ceny/')}">Что входит в тарифы</a>
-  </div>
-</section>
 ${extra}
 <section id="faq">
   <div class="wrap faq-grid">
@@ -138,34 +98,56 @@ ${extra}
 `;
 }
 
-/** Быстрый расчёт на первом экране. data: [{n, b, rel, def, y: [[год, см³, медиана av.by, ставить до], ...]}] */
+/** Быстрый расчёт на первом экране.
+ * data.idx: [[марка, модель, {год: см³}, электро 0/1, {год: медиана av.by $}, ссылка на страницу модели], ...]; data.popular: индексы быстрых кнопок. */
 export function quickCalc(data, { u, esc }) {
-  const first = data[0];
   return `<div class="qc" id="quick">
-  <div class="qc-head"><b>Цена в Минске с растаможкой</b></div>
-  <div class="qc-models" role="radiogroup" aria-label="Модель">${data.map((m, i) => `<label><input type="radio" name="qm" value="${i}"${i === 0 ? ' checked' : ''}><span>${esc(m.n)}</span></label>`).join('')}<label class="other"><input type="radio" name="qm" value="other"><span>Другая машина</span></label></div>
-  <div class="qc-other" id="qOther" hidden>
-    <div class="field wide"><label for="qName">Марка и модель</label><input id="qName" type="text" placeholder="Например: Mercedes S500" autocomplete="off"></div>
-    <div class="field"><label for="qCc">Объём двигателя, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="2000"></div>
-    <div class="field"><label for="qFuel">Двигатель</label><select id="qFuel"><option value="ice">Бензин, дизель</option><option value="hybrid">Гибрид</option><option value="ev">Электро</option></select></div>
+  <div class="qc-tabs" role="tablist" aria-label="Что считаем">
+    <button type="button" role="tab" id="qTabModel" aria-selected="true" aria-controls="qPanelModel">Знаю модель</button>
+    <button type="button" role="tab" id="qTabBudget" aria-selected="false" aria-controls="qPanelBudget">Знаю бюджет</button>
   </div>
-  <div class="qc-fields">
-    <div class="field"><label for="qYear">Год выпуска</label><select id="qYear">${first.y.map(([y]) => `<option value="${y}"${y === first.def ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
-    <div class="field"><label for="qLot">Ставка на аукционе, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"><small class="qc-hint" id="qLotHint">Пример, введите свою</small></div>
-  </div>
-  <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
-  <div class="qc-actions">
-    <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
-    <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
-  </div>
-  <div class="qc-out" id="qCompare">
-    <div class="qc-bars" id="qBars">
-      <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
-      <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+  <div id="qPanelModel" role="tabpanel" aria-labelledby="qTabModel" class="qc-panel">
+    <div class="field qc-search">
+      <label for="qModel">Марка и модель</label>
+      <input id="qModel" type="text" autocomplete="off" placeholder="Например: Toyota RAV4" role="combobox" aria-expanded="false" aria-controls="qList" aria-autocomplete="list">
+      <ul class="qc-list" id="qList" role="listbox" hidden></ul>
     </div>
-    <p class="qc-verdict" id="qVerdict"></p>
+    <div class="qc-pop" aria-label="Популярные">${data.popular.map((i) => `<button type="button" data-i="${i}">${esc(data.idx[i][1])}</button>`).join('')}</div>
+    <div class="qc-fields three">
+      <div class="field"><label for="qYear">Год</label><select id="qYear"></select></div>
+      <div class="field"><label for="qCc">Объём, см³</label><input id="qCc" type="number" inputmode="numeric" min="0" step="100" value="1500"></div>
+      <div class="field"><label for="qLot">Ставка, $</label><input id="qLot" type="number" inputmode="numeric" min="0" step="500" value="8000"></div>
+    </div>
+    <div class="qc-fuel" id="qFuelRow" hidden>
+      <div class="seg" role="radiogroup" aria-label="Двигатель">
+        <label><input type="radio" name="qFuel" value="ice" checked><span>Бензин, дизель</span></label>
+        <label><input type="radio" name="qFuel" value="hybrid"><span>Гибрид</span></label>
+        <label><input type="radio" name="qFuel" value="ev"><span>Электро</span></label>
+      </div>
+    </div>
+    <p class="qc-hint" id="qHint"></p>
+    <div class="qc-total" aria-live="polite"><span>Итого в Минске</span><b class="num" id="qTotal">—</b><small class="num" id="qByn"></small></div>
+    <div class="qc-actions">
+      <a class="btn btn-red" href="#lead" id="qSend">Получить точный расчёт</a>
+      <a class="qc-more" href="${u('kalkulyator/')}#calc" id="qMore">Все статьи расчёта →</a>
+    </div>
+    <div class="qc-out">
+      <div class="qc-bars" id="qBars">
+        <div class="qc-bar"><span>Из США до Минска</span><i><em id="qBarUs"></em></i><b></b></div>
+        <div class="qc-bar mk"><span>Такая же на av.by</span><i><em id="qBarMk"></em></i><b class="num" id="qMk"></b></div>
+      </div>
+      <p class="qc-verdict" id="qVerdict"></p>
+    </div>
   </div>
-  <p class="qc-note" id="qNote">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
+  <div id="qPanelBudget" role="tabpanel" aria-labelledby="qTabBudget" class="qc-panel" hidden>
+    <div class="field"><label for="qBudget">Бюджет до Минска, $</label><input id="qBudget" type="number" inputmode="numeric" min="3000" step="1000" value="20000"></div>
+    <p class="qc-hint">Под ключ с растаможкой, без ремонта. Ниже машины, которые в него укладываются и в Беларуси стоят столько же или дороже.</p>
+    <ul class="qc-fit" id="qFit"></ul>
+    <div class="qc-actions">
+      <a class="btn btn-red" href="#lead" id="qSendB">Подобрать под мой бюджет</a>
+    </div>
+  </div>
+  <p class="qc-note">Предварительно, без ремонта. av.by: средняя цена объявлений.</p>
   <script type="application/json" id="quickData">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
 }

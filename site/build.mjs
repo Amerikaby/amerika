@@ -177,6 +177,24 @@ for (const c of cars) {
 }
 // Имя модели для фильтра: самое частое из названий машин этой рубрики старого сайта
 for (const b of brands.values()) for (const m of b.models.values()) m.name = [...m.names.entries()].sort((x, y) => y[1] - x[1])[0][0];
+// Модели каталога для быстрого расчёта: марка, модель, типичный объём по годам (самый частый в каталоге, иначе по таблице)
+const modelIndex = [];
+for (const b of brands.values()) for (const m of b.models.values()) {
+  const list = b.cars.filter((c) => c.model?.slug === m.slug && c.spec.year);
+  if (!m.slug || !list.length) continue;
+  const ev = EV_MODELS.has(m.slug) || list.every((c) => c.spec.fuel === 'электро');
+  const byYear = {};
+  for (const c of list) (byYear[c.spec.year] ||= []).push(c.spec.cc);
+  const cc = {};
+  for (const [y, arr] of Object.entries(byYear)) {
+    const known = arr.filter(Boolean), cnt = {};
+    for (const v of known) cnt[v] = (cnt[v] || 0) + 1;
+    cc[y] = ev ? 0 : (known.length ? +Object.entries(cnt).sort((x, z) => z[1] - x[1])[0][0] : (defaultCc(m.slug, +y) ?? 2000));
+  }
+  modelIndex.push({ key: `${b.slug}/${m.slug}`, b: b.name, n: m.name, count: list.length, cc, ev });
+}
+modelIndex.sort((x, y) => y.count - x.count);
+if (process.env.DUMP_MODELS) { console.log(modelIndex.slice(0, 60).map((m) => `${m.key}\t${m.b} ${m.n}\t${m.count}\t${JSON.stringify(m.cc)}`).join('\n')); process.exit(0); }
 const brandList = [...brands.values()].sort((a, b) => b.cars.length - a.cars.length || a.name.localeCompare(b.name));
 
 /** Заголовок статьи для <title>: не длиннее 65 знаков, режем по двоеточию или по слову. */
@@ -287,13 +305,20 @@ for (const p of modelPg) await out(p.path, page(p));
 
 // 1. Главная
 {
-  // Быстрый расчёт: годы 2019+ с ценами av.by, по умолчанию год из карточки модели
-  const quickData = MODEL_PAGES.map((m) => {
-    const card = modelPg.find((p) => p.card.name === m.name)?.card;
-    const y = modelRows(m, market, { costOf, autoPortFor }).filter((r) => r.year >= 2019).map((r) => [r.year, r.cc, r.mk.median, r.bid || 0]);
-    return card && y.length ? { n: m.name, b: m.brandName, rel: u(card.rel), def: card.best?.year || y[0][0], y } : null;
-  }).filter(Boolean);
-  const quick = quickData.length ? quickCalc(quickData, { u, esc }) : '';
+  // Быстрый расчёт: модели каталога с типичным объёмом по годам и медианой av.by (site/data/market-avby.json)
+  const MK_ALIAS = { 'ford/bronco': 'ford/bronco-sport' };
+  const nowY = new Date().getFullYear();
+  const quickIdx = modelIndex.map((m) => {
+    const key = MK_ALIAS[m.key] || m.key, pg = MODEL_PAGES.find((x) => x.key === key);
+    const cc = { ...m.cc };
+    if (pg) for (let y = nowY - 15; y <= nowY; y++) cc[y] = pg.cc(y);
+    const mk = {};
+    for (const [y, v] of Object.entries(market?.models?.[key] || {})) if (v.n >= 5) mk[y] = v.median;
+    const card = pg && modelPg.find((x) => x.card.name === pg.name)?.card;
+    return [m.b, pg ? pg.name : m.n.replace(/^Seria (\d)$/, '$1 Series'), cc, m.ev ? 1 : 0, mk, card ? u(card.rel) : ''];
+  });
+  const popular = MODEL_PAGES.map((pg) => modelIndex.findIndex((m) => (MK_ALIAS[m.key] || m.key) === pg.key)).filter((i) => i >= 0);
+  const quick = quickIdx.length ? quickCalc({ idx: quickIdx, popular }, { u, esc }) : '';
   const models = modelPg.length ? `<section id="models">
   <div class="wrap">
     <div class="sec-head">
@@ -315,7 +340,7 @@ for (const p of modelPg) await out(p.path, page(p));
     <div class="sec-foot"><a class="btn btn-line" href="${u('blog/')}">Все статьи</a></div>
   </div>
 </section>`;
-  const body = homeBody({ u, quick, models, extra }) + leadSection();
+  const body = homeBody({ u, quick, models, extra }) + leadSection({ title: 'Пришлём до 5 вариантов с аукциона и расчёт до Минска' });
   // Вариант B «Витрина» (как bid.cars) для сравнения: /glavnaya-b/, не в sitemap
   {
     const pick = (id) => (body.match(new RegExp(`<section[^>]*id="${id}"[\\s\\S]*?</section>`)) || [''])[0];
