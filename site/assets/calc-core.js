@@ -50,7 +50,10 @@ function costOf(price, o){
     duty = (o.ev ? 0 : dutyEur(price / CONFIG.eurUsd, o.year, o.cc) * CONFIG.eurUsd) * (o.benefit ? .5 : 1);
     cust = (utilByn(o.year) + CONFIG.customsFeeByn + CONFIG.svhByn) / CONFIG.usdByn;
   }
-  var ours = CONFIG.serviceByn / CONFIG.usdByn;
-  return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours,
-          total: price + fee + inland + sea + last + extra + duty + cust + ours};
+  var service = CONFIG.servicePrices.indexOf(Number(o.serviceByn)) >= 0 ? Number(o.serviceByn) : CONFIG.serviceByn;
+  var ours = service / CONFIG.usdByn;
+  var repair = Math.max(0, Number.isFinite(Number(o.repair)) ? Number(o.repair) : CONFIG.repairBudget);
+  var delivered = price + fee + inland + sea + last + extra + duty + cust + ours;
+  return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours, repair:repair, delivered:delivered,
+          total: delivered + repair};
 }

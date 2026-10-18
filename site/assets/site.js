@@ -10,6 +10,7 @@ var params = new URLSearchParams(location.search);
 
 /* ---------- Аналитика: счётчики, цели, метки рекламы ---------- */
 var A = CONFIG.analytics || {};
+if (BASE !== "/" && !A.preview) A = {}; // do not mix review traffic with live advertising goals
 window.dataLayer = window.dataLayer || [];
 (function(){
   function load(src){ var s = document.createElement("script"); s.async = true; s.src = src; document.head.appendChild(s); }
@@ -77,29 +78,37 @@ document.addEventListener("click", function(e){
   window.addEventListener("resize", function(){ if (window.innerWidth > 1120 && !panel.hidden) toggle(false); });
 })();
 
-/* ---------- Формы заявок ---------- */
+/* ---------- Forms: success only after an explicit positive server response ---------- */
+qsa('[data-plan]').forEach(function(link){link.addEventListener('click',function(){var field=$('lcar');if(field)field.value='Интересует тариф «'+link.dataset.plan+'». ';});});
 qsa("form[data-lead]").forEach(function(form){
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-    var msg = form.querySelector(".msg"), phoneEl = form.querySelector('[name="phone"]');
-    var agree = form.querySelector('[name="agree"]');
-    msg.hidden = false;
-    if (phoneEl.value.replace(/\D/g, "").length < 9) { msg.textContent = "Укажите телефон, чтобы менеджер мог с вами связаться."; phoneEl.focus(); return; }
-    if (agree && !agree.checked) { msg.textContent = "Чтобы отправить заявку, отметьте согласие на обработку персональных данных."; agree.focus(); return; }
-    var data = {source: location.href};
-    ATTR_KEYS.concat(["landing","referrer"]).forEach(function(k){ if (attribution && attribution[k]) data[k] = attribution[k]; });
-    qsa("input[name],textarea[name],select[name]", form).forEach(function(el){ if (el.type !== "checkbox") data[el.name] = el.value; });
-    var formName = form.getAttribute("data-lead") || "lead";
-    // Конверсия только после успешной отправки, попытка — отдельным событием (опыт krov.by: клик ≠ заявка)
-    track("lead_attempt", {form: formName});
-    if (!CONFIG.leadEndpoint) {
-      msg.textContent = "Это тестовая версия сайта (тестовый режим): заявка никуда не отправлена. После подключения amoCRM она будет сразу приходить менеджеру.";
-      return;
-    }
-    msg.textContent = "Отправляем…";
-    fetch(CONFIG.leadEndpoint, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data)})
-      .then(function(r){ if (!r.ok) throw 0; track("lead_submit", {form: formName}); msg.textContent = "Заявка принята. Менеджер перезвонит в течение часа в рабочее время."; form.reset(); })
-      .catch(function(){ msg.textContent = "Не получилось отправить. Позвоните нам: +375 (29) 633-28-28 или напишите в Telegram."; });
+  var pending=false, requestId=null;
+  form.addEventListener("input",function(){if(!pending)requestId=null;});
+  form.addEventListener("submit",async function(e){
+    e.preventDefault(); if(pending)return;
+    var msg=form.querySelector(".msg"), phone=form.querySelector('[name="phone"]'), agree=form.querySelector('[name="agree"]'), button=form.querySelector('[type="submit"]');
+    msg.hidden=false;
+    var digits=phone.value.replace(/\D/g,"");
+    if(digits.length<9||digits.length>15){msg.textContent="Укажите телефон с кодом страны.";phone.focus();return;}
+    if(!agree.checked){msg.textContent="Подтвердите согласие на обработку данных.";agree.focus();return;}
+    var data={source:location.href,agree:true};
+    ATTR_KEYS.concat(["landing","referrer"]).forEach(function(k){if(attribution&&attribution[k])data[k]=attribution[k]});
+    qsa("input[name],textarea[name]",form).forEach(function(el){if(el.type!=="checkbox")data[el.name]=el.value});
+    var formName=form.getAttribute("data-lead")||"lead";
+    track("lead_attempt",{form:formName});
+    if(!CONFIG.leadEndpoint){msg.textContent="Приём заявок пока не подключён. Позвоните нам или напишите в Telegram.";return;}
+    var endpoint=new URL(CONFIG.leadEndpoint,location.origin+BASE).href;
+    pending=true;button.disabled=true;form.setAttribute("aria-busy","true");msg.textContent="Отправляем…";
+    var controller=new AbortController(),timeout=setTimeout(function(){controller.abort()},20000);
+    try{
+      var init=await fetch(endpoint,{credentials:"same-origin",cache:"no-store",signal:controller.signal});
+      var ticket=await init.json();if(!init.ok||!ticket.ok||!ticket.token)throw Error("Приём заявок временно недоступен. Позвоните нам.");
+      requestId=requestId||crypto.randomUUID();data.requestId=requestId;data.token=ticket.token;
+      var response=await fetch(endpoint,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(data),signal:controller.signal});
+      var result=await response.json();
+      if(!response.ok||result.ok!==true)throw Error(result.message||"Не удалось передать заявку. Позвоните нам или напишите в Telegram.");
+      track("lead_submit",{form:formName});msg.textContent=result.message;form.reset();requestId=null;
+    }catch(error){msg.textContent=error.name==="AbortError"?"Сервер не успел ответить. Повторите отправку или позвоните нам.":error.message;}
+    finally{clearTimeout(timeout);pending=false;button.disabled=false;form.removeAttribute("aria-busy")}
   });
 });
 
@@ -140,7 +149,7 @@ function fillYears(sel, def){
     var autoPort = autoPortFor(moto, alt, cc);
     var port = $("port").value === "auto" ? autoPort : $("port").value;
     return {moto:moto, year:+$("year").value, cc:cc, alt:alt, ev:!moto && alt && cc === 0, region:region, yard:yard,
-            port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked};
+            port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked, repair:Math.max(0,+$("repair").value||0), serviceByn:+$("service").value};
   }
   function calc(){
     var o = options(), budget = val("mode") === "budget";
@@ -155,6 +164,8 @@ function fillYears(sel, def){
     }
     $("priceLabel").textContent = budget ? "Бюджет под ключ, $" : "Цена лота, $";
     $("maxbid").hidden = !budget;
+    $("budgetError").hidden = !budget || cost(0,o).total <= input;
+    if(budget && cost(0,o).total>input) $("maxbid").hidden=true;
     $("r-max").textContent = fmt(r.price);
     $("evHint").hidden = !o.alt || o.moto;
     $("carOnly").hidden = o.moto;
@@ -191,9 +202,10 @@ function fillYears(sel, def){
     $("r-duty").textContent = o.ev ? "0 $ (электро)" : fmt(r.duty);
     $("r-cust").textContent = fmt(r.cust);
     $("r-ours").textContent = fmt(r.ours);
+    $("r-repair").textContent = fmt(r.repair);
     $("r-total").textContent = fmt(r.total);
-    $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn;
-    return {moto:o.moto, price:Math.round(r.price), year:o.year, cc:o.cc, alt:o.alt, port:o.port, yard:o.yard, budget:budget, total:Math.round(r.total)};
+    $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn + " (НБРБ, " + CONFIG.ratesDate + ")";
+    return {moto:o.moto, price:Math.round(r.price), year:o.year, cc:o.cc, alt:o.alt, port:o.port, yard:o.yard, budget:budget, repair:r.repair, serviceByn:o.serviceByn, benefit:o.benefit, total:Math.round(r.total)};
   }
 
   $("advToggle").addEventListener("click", function(){
@@ -232,6 +244,9 @@ function fillYears(sel, def){
   if (params.has("cc") && +params.get("cc") >= 0) $("volume").value = +params.get("cc");
   if (params.get("fuel") === "alt") document.querySelector('#calcForm input[name="fuel"][value="alt"]').checked = true;
 
+  if(params.has("repair")) $("repair").value = Math.max(0,Number(params.get("repair"))||0);
+  if(CONFIG.servicePrices.includes(Number(params.get("service")))) $("service").value=params.get("service");
+  $("benefit").checked=params.get("benefit")==="1";
   fillYards();
   var used = false;
   function onUse(){ calc(); if (!used) { used = true; track("calc_used", {calc: "turnkey"}); } }
@@ -246,7 +261,7 @@ function fillYears(sel, def){
     if (!box) return;
     var f = r.moto ? (r.alt ? "электромотоцикл" : "мотоцикл") : (r.alt ? (r.cc ? "гибрид" : "электро") : "бензин/дизель");
     box.value = "Расчёт с калькулятора: " + (r.budget ? "бюджет " + r.total + " $, ставка до " + r.price + " $" : "лот " + r.price + " $, итого ≈ " + r.total + " $ под ключ")
-      + ", " + r.year + " г., " + r.cc + " см³, " + f + (r.yard ? ", площадка " + r.yard : "") + ", через " + PORTS[r.port].name + ".";
+      + ", " + r.year + " г., " + r.cc + " см³, " + f + (r.yard ? ", площадка " + r.yard : "") + ", через " + PORTS[r.port].name + ", резерв восстановления " + r.repair + " $, услуга " + r.serviceByn + " BYN, " + (r.benefit ? "с льготой" : "без льготы") + ".";
   });
 })();
 
@@ -267,7 +282,7 @@ function fillYears(sel, def){
     for (var k in t) { var dd = Math.abs(+k - y); if (dd < d) { d = dd; best = t[k]; } }
     return best == null ? 2000 : best;
   }
-  function opts(cc, alt, ev, year){ return {moto:false, year:year, cc:cc, alt:alt, ev:ev, region:"east", port:autoPortFor(false, alt, cc), sublot:false, benefit:false}; }
+  function opts(cc, alt, ev, year){ return {moto:false, year:year, cc:cc, alt:alt, ev:ev, region:"east", port:autoPortFor(false, alt, cc), sublot:false, benefit:$("qBenefit").checked, repair:Math.max(0,+$("qRepair").value||0), serviceByn:+$("qService").value}; }
   function maxBid(target, o){
     if (costOf(0, o).total > target) return 0;
     var lo = 0, hi = target;
@@ -307,7 +322,7 @@ function fillYears(sel, def){
       v.innerHTML = "Маршрут через <b>" + PORTS[o.port].name + "</b>" + (o.port === "poti" ? ": машины больше 1,9 л, гибриды и электро везём в обход ЕС." : ".")
         + (sel >= 0 ? " Цен av.by для этого года мало, сравнение с рынком пришлём с точным расчётом." : " Сравнение с рынком Беларуси пришлём с точным расчётом.");
     }
-    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(c.year), cc: String(o.cc)}).toString() + (o.alt ? "&fuel=alt" : "") + "#calc";
+    $("qMore").href = BASE + "kalkulyator/?" + new URLSearchParams({price: String(lot), year: String(c.year), cc: String(o.cc), repair:String(o.repair), service:String(o.serviceByn), benefit:o.benefit ? "1" : "0"}).toString() + (o.alt ? "&fuel=alt" : "") + "#calc";
     return {c:c, lot:lot, total:Math.round(r.total)};
   }
   function pick(i, year){
@@ -360,6 +375,7 @@ function fillYears(sel, def){
   $("qYear").addEventListener("change", function(){ if (sel >= 0 && !ccTouched) $("qCc").value = ccFor(sel, +$("qYear").value); lotTouched = false; run(); });
   $("qCc").addEventListener("input", function(){ ccTouched = true; run(); });
   $("qLot").addEventListener("input", function(){ lotTouched = true; run(); });
+  ["qRepair","qService","qBenefit"].forEach(function(id){$(id).addEventListener("change",function(){run();fit()})});
   qsa('input[name="qFuel"]', box).forEach(function(r){ r.addEventListener("change", run); });
   box.addEventListener("change", function(){ if (!used) { used = true; track("calc_used", {calc: "quick"}); } });
 
@@ -367,14 +383,18 @@ function fillYears(sel, def){
   function tab(budget){
     $("qTabModel").setAttribute("aria-selected", String(!budget)); $("qTabBudget").setAttribute("aria-selected", String(budget));
     $("qPanelModel").hidden = budget; $("qPanelBudget").hidden = !budget;
+    $("qTabModel").tabIndex=budget?-1:0; $("qTabBudget").tabIndex=budget?0:-1;
     if (budget) fit();
   }
   $("qTabModel").addEventListener("click", function(){ tab(false); });
   $("qTabBudget").addEventListener("click", function(){ tab(true); });
+  [$("qTabModel"),$("qTabBudget")].forEach(function(t){t.addEventListener("keydown",function(e){if(["ArrowLeft","ArrowRight","Home","End"].includes(e.key)){e.preventDefault();var b=e.key==="End"?true:e.key==="Home"?false:t.id==="qTabModel";tab(b);$(b?"qTabBudget":"qTabModel").focus()}})});
+  $("qTabBudget").tabIndex=-1;
 
   /* Бюджет: модели, которые укладываются и на av.by стоят не дешевле */
   function fit(){
     var budget = Math.max(0, +$("qBudget").value || 0), rows = [];
+    $("qBudgetContext").textContent="Резерв восстановления: "+fmt(+$("qRepair").value||0)+"; услуга: "+$("qService").value+" BYN; "+($("qBenefit").checked?"с льготой":"без льготы")+". Настройки можно изменить во вкладке модели.";
     IDX.forEach(function(r, i){
       var best = null;
       Object.keys(r[4]).forEach(function(ys){
@@ -408,11 +428,11 @@ function fillYears(sel, def){
   $("qSend").addEventListener("click", function(){
     var x = run(), o = x.c.o, nm = sel >= 0 ? name(sel) : (q.value.trim() || "машина");
     track("calc_send", {total: x.total, calc: "quick"});
-    toLead("Быстрый расчёт: " + nm + ", " + x.c.year + " г., " + (o.ev ? "электро" : o.cc + " см³" + (o.alt ? ", гибрид" : "")) + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ с растаможкой, через " + PORTS[o.port].name + ".");
+    toLead("Быстрый расчёт: " + nm + ", " + x.c.year + " г., " + (o.ev ? "электро" : o.cc + " см³" + (o.alt ? ", гибрид" : "")) + ", ставка " + x.lot + " $, итого ≈ " + x.total + " $ с восстановлением (резерв " + o.repair + " $), услуга " + o.serviceByn + " BYN, " + (o.benefit?"с льготой":"без льготы") + ", через " + PORTS[o.port].name + ".");
   });
   $("qSendB").addEventListener("click", function(){
     track("calc_send", {calc: "budget"});
-    toLead("Бюджет до Минска: " + (+$("qBudget").value || 0) + " $. Подберите варианты.");
+    toLead("Бюджет до Минска: " + (+$("qBudget").value || 0) + " $ с резервом восстановления " + $("qRepair").value + " $, услуга " + $("qService").value + " BYN, " + ($("qBenefit").checked?"с льготой":"без льготы") + ". Подберите варианты.");
   });
 
   pick(D.popular[0]);
@@ -459,7 +479,7 @@ function fillYears(sel, def){
     $("cr-svh").textContent = fmtByn(CONFIG.svhByn);
     var totalByn = (duty + vat) * eurByn + util + CONFIG.customsFeeByn + CONFIG.svhByn;
     $("cr-total").textContent = fmtByn(totalByn);
-    $("cr-total-usd").textContent = "≈ " + fmt(totalByn / CONFIG.usdByn) + " · курс: 1 € = " + CONFIG.eurUsd + " $, 1 $ = " + CONFIG.usdByn + " BYN";
+    $("cr-total-usd").textContent = "≈ " + fmt(totalByn / CONFIG.usdByn) + " · курс: 1 € = " + CONFIG.eurUsd.toFixed(4) + " $, 1 $ = " + CONFIG.usdByn + " BYN";
   }
   var used = false;
   function onUse(){ run(); if (!used) { used = true; track("calc_used", {calc: "customs"}); } }
@@ -577,7 +597,7 @@ function carCard(c){
       $("vinActions").hidden = true; return;
     }
     var text = "Здравствуйте! Подскажите, где сейчас моя машина. VIN: " + vin;
-    msg.textContent = "Онлайн-отслеживание подключаем. Пока пришлите VIN менеджеру: он ответит, где машина и когда она будет в Минске.";
+    msg.textContent = "VIN подготовлен для обращения. Отправьте его менеджеру в мессенджере или через форму ниже — уточним этап доставки и ожидаемый срок.";
     $("vinActions").hidden = false;
     $("vinWa").href = "https://wa.me/375296332828?text=" + encodeURIComponent(text);
     $("vinTg").href = "https://t.me/amerikaa_by";

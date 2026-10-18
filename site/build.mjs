@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Генератор статического сайта amerika.by (тестовая версия в /new2/).
+// Генератор статического сайта amerika.by (тестовая версия в /newcodex/).
 // Запуск: node site/build.mjs            — сборка из кеша (site/cache/), при отсутствии кеша скачивает данные
 //         node site/build.mjs --refresh  — заново скачать всё из WordPress REST API и карты старого сайта
 //         BASE=/ node site/build.mjs     — собрать для корня домена (например, new.amerika.by)
 //         PUBLIC_URL=https://new.amerika.by — где сайт реально открыт (для og:image и логотипа в разметке)
-//         OUT=/path/to/dir               — куда писать (по умолчанию new2/ рядом с site/)
+//         OUT=/path/to/dir               — куда писать (по умолчанию newcodex/ рядом с site/)
 import { readFile, writeFile, mkdir, rm, copyFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -21,9 +21,9 @@ import { PHOTO_BLOCK, isStubImage, fixTitleCase, defaultCc, EV_MODELS } from './
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(ROOT, '..');
 /** Единственная константа адреса: все внутренние ссылки строятся от неё. */
-const BASE = normalizeBase(process.env.BASE ?? '/new2/');
+const BASE = normalizeBase(process.env.BASE ?? '/newcodex/');
 const PUBLIC_URL = (process.env.PUBLIC_URL || 'https://amerika.by').replace(/\/+$/, '');
-const OUT = path.resolve(process.env.OUT || path.join(REPO, 'new2'));
+const OUT = path.resolve(process.env.OUT || path.join(REPO, 'newcodex'));
 const CACHE = path.join(ROOT, 'cache');
 const REFRESH = process.argv.includes('--refresh');
 const CARS_PER_PAGE = 36;
@@ -279,13 +279,14 @@ const brandChips = (current) => `<div class="chips">${brandList.map((b) => `<a h
 const plural = (n, one, few, many) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? one : (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? few : many); };
 
 // ---------- Сборка ----------
+if (OUT === REPO || REPO.startsWith(OUT + path.sep) || OUT === ROOT || OUT.startsWith(ROOT + path.sep)) throw new Error('Unsafe output directory: ' + OUT);
 if (existsSync(OUT)) await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 
 // Ассеты
 await mkdir(path.join(OUT, 'assets'), { recursive: true });
 await writeFile(path.join(OUT, 'assets', 'site.js'), configSrc + '\n' + coreSrc + '\n' + await readFile(path.join(ROOT, 'assets', 'site.js'), 'utf8'));
-await copyFile(path.join(ROOT, 'assets', 'site.css'), path.join(OUT, 'assets', 'site.css'));
+await writeFile(path.join(OUT, 'assets', 'site.css'), await readFile(path.join(ROOT, 'assets', 'site.css'), 'utf8') + '\n' + await readFile(path.join(ROOT, 'assets', 'theme.css'), 'utf8'));
 await mkdir(path.join(OUT, 'img'), { recursive: true });
 for (const dir of [path.join(REPO, 'new', 'img'), path.join(ROOT, 'static', 'img')]) {
   if (!existsSync(dir)) continue;
@@ -324,40 +325,24 @@ for (const p of modelPg) await out(p.path, page(p));
   // Популярные машины: средние цены av.by, аукциона, под ключ по Указу 140 и экономия (site/data/home-models.json)
   const HM = JSON.parse(await readFile(path.join(ROOT, 'data', 'home-models.json'), 'utf8'));
   const r100 = (n) => Math.round(n / 100) * 100;
-  const hmCards = HM.models.map((m) => {
+  const hmCards = HM.models.slice(0, 3).map((m) => {
     const mk = market?.models?.[m.key]?.[HM.year];
-    if (!mk) return '';
     const car = cars.find((c) => c.slug === m.photo[0]);
     const ph = car?.gallery?.[m.photo[1]];
-    const o = { moto: false, year: HM.year, cc: m.cc, alt: false, ev: false, region: 'east', port: autoPortFor(false, false, m.cc), sublot: false, benefit: true };
-    const ben = costOf(m.auction, o).total, full = costOf(m.auction, { ...o, benefit: false }).total;
-    const total = ben + m.repair, save = r100(mk.median - total);
-    const href = m.page ? u(m.page) : '#quick-sec';
-    return `<article class="pm">
-  <a class="ph" href="${href}">${ph ? `<img src="${esc(ph.card)}" srcset="${esc(ph.small)} 300w, ${esc(ph.card)} 768w" sizes="(max-width:560px) 92vw, 380px" alt="${esc(m.brand + ' ' + m.name)} ${HM.year}" loading="lazy" decoding="async" width="380" height="270">` : ''}<span class="tag">${HM.year} · ${(m.cc / 1000).toFixed(1).replace('.', ',')} л · через Клайпеду</span></a>
-  <div class="tx">
-    <span class="br">${esc(m.brand)}</span><h3>${esc(m.name)}</h3>
-    <dl>
-      <div><dt>На av.by в среднем</dt><dd class="num">${money(r100(mk.median))} $</dd></div>
-      <div><dt>На аукционе в среднем<small>не сильно битая</small></dt><dd class="num">${money(r100(m.auction))} $</dd></div>
-      <div><dt>Под ключ в Минске<small>с таможней по Указу 140</small></dt><dd class="num">${money(r100(ben))} $</dd></div>
-      <div><dt>Восстановление в среднем</dt><dd class="num">${money(r100(m.repair))} $</dd></div>
-      <div class="tk"><dt>Итого готовая машина</dt><dd class="num">${money(r100(total))} $</dd></div>
-    </dl>
-    <p class="save">Экономия <b class="num">≈ ${money(save)} $</b></p>
-    <p class="nob">Без льготы по Указу 140 итого ≈ ${money(r100(full + m.repair))} $</p>
-  </div>
-</article>`;
+    const o = {moto:false,year:HM.year,cc:m.cc,alt:false,ev:false,region:'east',port:autoPortFor(false,false,m.cc),sublot:false,benefit:false,repair:m.repair,serviceByn:CONFIG.serviceByn};
+    const result=costOf(m.auction,o);
+    const href=u('kalkulyator/')+'?'+new URLSearchParams({price:String(m.auction),year:String(HM.year),cc:String(m.cc),repair:String(m.repair),service:String(CONFIG.serviceByn)}).toString()+'#calc';
+    return `<article class="pm compact-model"><a class="ph" href="${href}">${ph?`<img src="${esc(ph.card)}" alt="${esc(m.brand+' '+m.name)}" loading="lazy" width="768" height="560">`:''}<span class="tag">${HM.year} · ${(m.cc/1000).toFixed(1).replace('.',',')} л</span></a><div class="tx"><span class="br">${esc(m.brand)}</span><h3>${esc(m.name)}</h3><p class="model-total-label">Пример бюджета с восстановлением</p><strong class="model-total num">≈ ${money(result.total)} $</strong><p class="model-condition">Без льготы · услуга ${CONFIG.serviceByn} BYN</p><details><summary>Посмотреть состав цены</summary><dl><div><dt>Лот (пример)</dt><dd>${money(m.auction)} $</dd></div><div><dt>До Минска со сборами и услугой</dt><dd>${money(result.delivered)} $</dd></div><div><dt>Резерв восстановления</dt><dd>${money(result.repair)} $</dd></div>${mk?`<div><dt>Медиана объявлений av.by</dt><dd>${money(mk.median)} $</dd></div>`:''}</dl><p class="note">Цены лота и восстановления — черновые ориентиры, требуют проверки по конкретной машине.</p></details><a class="model-calc" href="${href}">Изменить расчёт →</a></div></article>`;
   }).join('');
   const models = hmCards ? `<section id="models">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Популярные модели</p>
-      <h2>Сколько стоит машина из США и сколько вы сэкономите</h2>
+      <h2>Какая машина ваша?</h2>
       <p>Модели, которые чаще всего везут в Беларусь. Все с мотором до 1,9 л: едут через Клайпеду, поэтому доставка дешевле.</p>
     </div>
     <div class="pms">${hmCards}</div>
-    <p class="pm-note">Средние цены на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион: типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга. Восстановление: средняя стоимость работ и запчастей для машины с небольшими повреждениями. Экономия: разница между ценой на av.by и итогом.</p>
+    <p class="pm-note">Примеры расчёта на ${HM.date.split('-').reverse().join('.')} для машин ${HM.year} года. av.by: средняя цена объявлений. Аукцион и восстановление: черновые оценки. Типичная цена лота с небольшими повреждениями. Под ключ: лот, сборы, доставка через Клайпеду, растаможка с возмещением 50% пошлины по Указу № 140 (многодетные семьи, инвалиды I и II группы) и наша услуга. Восстановление: средняя стоимость работ и запчастей для машины с небольшими повреждениями. Экономия: разница между ценой на av.by и итогом.</p>
     <div class="sec-foot"><a class="btn btn-navy" href="${u(CAT)}">Каталог: ${cars.length} авто из США</a></div>
   </div>
 </section>` : '';
@@ -792,6 +777,9 @@ ${SERVICES.map(([p, t, d]) => `- [${t}](${SITE.origin}/${p}): ${d}`).join('\n')}
 ## Статьи
 ${posts.slice(0, 20).map((p) => `- [${p.title}](${SITE.origin}/blog/${p.slug}/)`).join('\n')}
 `, { sitemap: false });
+await out('prices.html', `<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta http-equiv="refresh" content="0;url=${u('ceny/')}"><title>Цены</title><a href="${u('ceny/')}">Перейти к тарифам</a></html>`, {sitemap:false});
+await mkdir(path.join(OUT,'api'),{recursive:true});
+await copyFile(path.join(ROOT,'static','api','lead.php'),path.join(OUT,'api','lead.php'));
 await out('robots.txt', `# Тестовая версия сайта: индексация закрыта\nUser-agent: *\nDisallow: /\n`, { sitemap: false });
 await out('.htaccess', `# Тестовая версия: отключаем правила WordPress внутри этой папки и отдаём свою 404.
 # При переносе в корень сайта этот файл НЕ копировать поверх .htaccess WordPress.

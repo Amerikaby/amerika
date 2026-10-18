@@ -23,7 +23,7 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
             <button type="button" data-p="11000,2021,2500,ice">Nissan Rogue</button>
             <button type="button" data-p="12000,2021,1500,ice">Ford Bronco Sport</button>
             <button type="button" data-p="9000,2024,1200,ice">Chevrolet Trax</button>
-            <button type="button" data-p="9000,2022,1400,ice">VW Jetta</button>
+            <button type="button" data-p="8500,2022,1500,ice">VW Jetta</button>
           </div>
         </div>
         <div class="field">
@@ -47,6 +47,9 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
         </div>
         <p class="hint wide" id="evHint" hidden>Для электромобиля укажите объём 0.</p>
 
+        <div class="field"><label for="repair">Бюджет восстановления, $</label><input id="repair" type="number" min="0" max="100000" step="100" value="1500"></div>
+        <div class="field"><label for="service">Наша услуга, BYN</label><select id="service"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div>
+        <p class="hint wide">Резерв 1 500 $ — пример, не оценка повреждений. Укажите свой бюджет ремонта. Возраст по году выпуска ориентировочный: на границе 3 и 5 лет нужна точная дата выпуска.</p>
         <button type="button" class="adv-toggle wide" id="advToggle" aria-expanded="false" aria-controls="adv">Точнее: аукцион, площадка, порт <span aria-hidden="true">▾</span></button>
         <div class="adv wide" id="adv" hidden>
           <p class="adv-title">Если лот уже выбран</p>
@@ -80,6 +83,7 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
       <div class="bill" aria-live="polite">
         <div class="bill-in">
         <div class="bill-head"><b>Ваш расчёт до Минска</b><span>предварительный</span></div>
+        <p id="budgetError" class="budget-error" role="status" hidden>Даже без цены лота расходы выше этого бюджета. Увеличьте бюджет или обсудите варианты с менеджером.</p>
         <div class="maxbid" id="maxbid" hidden><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
         <div class="grp">Аукцион <i>платите аукциону</i></div>
         <div class="row"><span>Лот на аукционе</span><span class="num" id="r-lot"></span></div>
@@ -94,7 +98,8 @@ export function calcWidget({ sendHref = '#lead' } = {}) {
         <div class="row"><span id="r-cust-l">Утильсбор, СВХ, декларант</span><span class="num" id="r-cust"></span></div>
         <div class="grp">Мы <i>по договору</i></div>
         <div class="row ours"><span>Наша услуга</span><span class="num" id="r-ours"></span></div>
-        <div class="total"><span>Итого в Минске</span><b class="num" id="r-total"></b></div>
+        <div class="grp">Восстановление <i>отдельный бюджет</i></div><div class="row"><span>Ваш резерв</span><span class="num" id="r-repair"></span></div>
+        <div class="total"><span>Итого с восстановлением</span><b class="num" id="r-total"></b></div>
         <small class="num" id="r-byn"></small>
         <p class="note warn-note" id="motoNote" hidden><b>Расчёт для мотоциклов ориентировочный.</b> Доставку мотоцикла считаем по вашему лоту: стоимость места в контейнере зависит от размеров техники.</p>
         <p class="note">Расчёт ориентировочный: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации. Точный расчёт по конкретной машине сделает менеджер.</p>

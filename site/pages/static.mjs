@@ -17,7 +17,7 @@ export function staticPages({ u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection
   };
   const svcOthers = (cur) => `<section class="sec tight white"><div class="wrap"><h2 style="font-size:24px;margin-bottom:18px">Другие услуги</h2><div class="svc">${SERVICES.filter(([p]) => p !== cur).slice(0, 3).map(([p, t, d, ic]) => `<a href="${u(p)}"><span class="ico" aria-hidden="true">${ICONS[ic]}</span><h3>${t}</h3><p>${d}</p><span class="go">Подробнее →</span></a>`).join('')}</div></div></section>`;
 
-  const PICK = 990; // тариф «Подбор», BYN
+  const PICK = CONFIG.servicePrices[1]; // тариф «Подбор», BYN
   const plans = `<div class="plans">
       <div class="plan">
         <h3>Покупка вашего лота</h3>
@@ -27,7 +27,7 @@ export function staticPages({ u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection
         <a class="btn btn-line" href="#lead" data-plan="Покупка вашего лота">Отправить мой лот</a>
       </div>
       <div class="plan hit">
-        <span class="tag">Чаще выбирают</span>
+        <span class="tag">Поиск под ваш бюджет</span>
         <h3>Подбор</h3>
         <p class="for">Вы называете бюджет, мы находим машину</p>
         <div class="price num">${PICK} <small>BYN</small></div>
@@ -76,9 +76,9 @@ export function staticPages({ u, esc, SITE, SERVICES, ICONS, CONFIG, leadSection
       <p>Переключите «Мотоцикл»: пошлина для мотоциклов считается процентом от таможенной стоимости плюс НДС 20%, утильсбор не платится. Стоимость доставки мотоцикла пока ориентировочная, точную сумму назовём по вашему лоту.</p>
     </div>
     <div class="box">
-      <h2>Что не входит в расчёт</h2>
-      <p>Ремонт повреждений. Его стоимость мы оцениваем по фото и отчёту аукциона до ставки. Ремонт можно сделать у партнёрского СТО в Минске.</p>
-      <p>Курсы: 1 $ = ${CONFIG.usdByn} BYN, 1 € = ${CONFIG.eurUsd} $. Таможня считает платежи по курсу на день декларации, поэтому итог может немного измениться.</p>
+      <h2>Восстановление — отдельная строка</h2>
+      <p>Указанный вами резерв ремонта включён в итог. Значение 1 500 $ — пример: стоимость повреждений оцениваем по фото и отчёту аукциона до ставки. Ремонт можно сделать у партнёрского СТО в Минске.</p>
+      <p>Курсы НБРБ на ${CONFIG.ratesDate}: 1 $ = ${CONFIG.usdByn} BYN, 1 € = ${CONFIG.eurUsd.toFixed(4)} $. Таможня считает платежи по курсу на день декларации, поэтому итог может немного измениться.</p>
       <p><a class="btn btn-navy" href="${u('tamozhennyj-kalkulator/')}">Только таможня: отдельный калькулятор</a></p>
     </div>
   </div>
@@ -355,7 +355,7 @@ ${leadSection()}`,
       <form class="vin-form" id="vinForm" novalidate>
         <label for="vin" style="flex-basis:100%">VIN автомобиля (17 символов)</label>
         <input id="vin" name="vin" maxlength="17" autocomplete="off" spellcheck="false" placeholder="Например: 1HGCV1F30LA000000">
-        <button class="btn btn-navy" type="submit">Проверить</button>
+        <button class="btn btn-navy" type="submit">Запросить статус</button>
       </form>
       <div class="vin-out" id="vinOut" hidden>
         <p class="msg" id="vinMsg"></p>
@@ -446,7 +446,7 @@ ${leadSection({ eyebrow: 'Консультация', title: 'Спросите п
     title: `Цены на подбор авто из США: тарифы 590, ${PICK} и 1999 BYN | Amerika.by`,
     description: `Тарифы на авто из США: покупка вашего лота 590 BYN, подбор ${PICK} BYN, под ключ 1999 BYN. Скидка от 2 машин, условия для дилеров. Фиксированная цена в договоре, оплата через ЕРИП.`,
     crumbs: [['ceny/', 'Цены']],
-    body: `${head({ eyebrow: 'Цены', h1: 'Сколько стоит подбор авто из США', lead: 'Фиксированная цена в договоре, без процента от стоимости машины. Оплатить можно через ЕРИП. Выберите тариф по тому, сколько хотите делать сами.' })}
+    body: `${head({ eyebrow: 'Цены', h1: 'Сколько стоит подбор авто из США', lead: 'Фиксированная цена в договоре, без процента от стоимости машины. Оплатить можно через ЕРИП. Выберите тариф по тому, сколько хотите делать сами. Автомобиль, доставка, таможня и восстановление оплачиваются отдельно.' })}
 <section class="sec" style="padding-top:12px">
   <div class="wrap">
     ${plans}

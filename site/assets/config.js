@@ -1,13 +1,16 @@
 /* Ставки калькуляторов. Единственный источник цифр: используется в site.js и при сборке (таблицы пошлин). */
 /* Все ставки и тарифы в одном месте. Логистика и сборы аукциона — ориентиры, их нужно сверить с актуальными ценами. */
 var CONFIG = {
-  usdByn: 2.95,          // курс USD/BYN
-  eurUsd: 1.15,          // курс EUR/USD
+  usdByn: 3.0091,          // курс USD/BYN
+  eurUsd: 3.3749 / 3.0091,          // курс EUR/USD
+  ratesDate: "2026-10-18",
+  repairBudget: 1500, // editable illustrative allowance, not a lot-specific repair quote
+  servicePrices: [590, 990, 1999],
   serviceByn: 590,       // наша услуга (минимальный тариф)
-  leadEndpoint: "",      // сюда подставим вебхук amoCRM; пусто = тестовый режим
+  leadEndpoint: "api/lead.php", // WordPress mail transport; recipient from existing contact form 103
   // Счётчики. Пусто = не загружаются. Пример: gtm "GTM-XXXXXXX", ym 12345678, ga4 "G-XXXXXXXXXX".
   // Если подключён GTM, GA4 и Метрику лучше ставить внутри GTM, а здесь оставить пустыми.
-  analytics: {gtm: "", ym: "", ga4: ""},
+  analytics: {gtm: "", ym: 91733040, ga4: "", preview: false}, // existing live counter; preview goals stay local
   auctionFixed: 160,     // gate fee, environmental fee, документы, $
   auctionFee: [          // сбор покупателя по цене лота, $
     [500,200],[1000,350],[1500,450],[2000,525],[3000,650],[4000,750],

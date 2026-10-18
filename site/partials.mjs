@@ -26,7 +26,6 @@ export const NAV = [
   ['kalkulyator/', 'Калькулятор'],
   ['uslugi/', 'Услуги'],
   ['ceny/', 'Цены'],
-  ['blog/', 'Блог'],
   ['o-kompanii/', 'О компании'],
   ['kontakty/', 'Контакты'],
 ];
@@ -58,7 +57,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
   /** Абсолютный адрес файла там, где сайт реально лежит сейчас (og:image, логотип в разметке должны открываться). */
   const assetUrl = (p) => PUBLIC_URL + BASE + p;
 
-  function header(path) {
+  function header(path, leadHref) {
     const navLinks = NAV.map(([p, t]) => `<a href="${u(p)}"${path.startsWith(p) ? ' aria-current="page"' : ''}>${t}</a>`).join('');
     const mobLinks = NAV.map(([p, t]) => `<a class="item" href="${u(p)}"${path.startsWith(p) ? ' aria-current="page"' : ''}>${t}</a>`
       + (p === 'uslugi/' ? `<div class="sub">${SERVICES.map(([sp, st]) => `<a href="${u(sp)}">${st}</a>`).join('')}</div>` : '')
@@ -75,7 +74,7 @@ export function makeLayout(BASE, PUBLIC_URL) {
         <a href="${SITE.viber}" aria-label="Viber" title="Viber">${ICONS.viber}</a>
         <a href="${SITE.wa}" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">${ICONS.wa}</a>
       </div>
-      <a class="btn btn-red hdr-cta" href="#lead">Подобрать авто</a>
+      <a class="btn btn-red hdr-cta" href="${leadHref}">Подобрать авто</a>
     </div>
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Меню">
       <svg class="bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -189,22 +188,20 @@ export function makeLayout(BASE, PUBLIC_URL) {
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:image" content="${esc(ogImage)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#13284f">
+<meta name="theme-color" content="#f8f6f0">
 <link rel="icon" href="${u('img/logo.svg')}" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap&subset=cyrillic">
-<link rel="stylesheet" href="${u('assets/site.css')}">
+<link rel="stylesheet" href="${u('assets/site.css')}?v=merged-20261018">
 ${ld.map((x) => `<script type="application/ld+json">${JSON.stringify(x).replace(/</g, '\\u003c')}</script>`).join('\n')}
 </head>
 <body>
-${header(path)}
+<div class="review-strip"><div class="wrap"><span>НОВАЯ ВЕРСИЯ · ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР</span><a href="${u('ceny/')}">Тарифы и условия →</a></div></div>
+${header(path, body.includes('id="lead"') ? '#lead' : u() + '#lead')}
 <main id="main">
 ${cr && !noCrumbs ? crumbs(cr) : ''}
 ${body}
 </main>
 ${footer()}
-<script src="${u('assets/site.js')}" defer></script>
+<script src="${u('assets/site.js')}?v=merged-20261018" defer></script>
 </body>
 </html>
 `;
@@ -227,12 +224,12 @@ ${footer()}
       <p class="addr">Офис: ${SITE.city}, ${SITE.address} · <span style="white-space:nowrap">${SITE.hours}</span></p>
     </div>
     <form class="lead-form" id="leadForm" data-lead novalidate>
-      <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
+      <div class="field"><label for="lphone">Телефон</label><input id="lphone" name="phone" required maxlength="24" type="tel" inputmode="tel" autocomplete="tel" placeholder="+375 (__) ___-__-__"></div>
       <div class="field"><label for="lname">Имя <small>(необязательно)</small></label><input id="lname" name="name" autocomplete="name"></div>
       <div class="field"><label for="lcar">${carLabel}</label><textarea id="lcar" name="car" rows="3" placeholder="${esc(placeholder)}">${esc(car)}</textarea></div>
       <label class="check" for="lagree"><input id="lagree" name="agree" type="checkbox" required> <span>Согласен на обработку персональных данных в соответствии с <a href="${u('privacy-policy/')}" target="_blank">политикой конфиденциальности</a></span></label>
       <button class="btn btn-red" type="submit">${button}</button>
-      <p class="msg" hidden></p>
+      <div class="form-trap" aria-hidden="true"><label>Оставьте пустым<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="form-privacy">Заявка поступит в Amerika.by. Ответим в рабочее время.</p><p class="msg" role="status" aria-live="polite" hidden></p>
     </form>
   </div>
 </section>`;
