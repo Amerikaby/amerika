@@ -29,7 +29,7 @@ YEARS = range(2017, 2026)
 OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "market-avby.json"
 
 def post(body):
-    for a in range(4):
+    for a in range(8):
         r = subprocess.run(["curl", "-sS", "-m", "30", "-X", "POST", "https://api.av.by/offer-types/cars/filters/main/apply",
                             "-H", "content-type: application/json", "-H", "accept: application/json",
                             "-H", "origin: https://cars.av.by", "-H", "user-agent: Mozilla/5.0", "-d", json.dumps(body)],
@@ -37,7 +37,7 @@ def post(body):
         try:
             return json.loads(r.stdout)
         except ValueError:
-            time.sleep(2 + 2 * a)
+            time.sleep(min(60, 3 * 2 ** a))
     raise SystemExit("av.by не отвечает: " + r.stderr[:200])
 
 def collect(bid, mid, year):
@@ -57,7 +57,12 @@ def collect(bid, mid, year):
         time.sleep(0.5)
 
 result = {"source": "av.by", "date": datetime.date.today().isoformat(), "models": {}}
+PART = OUT.with_suffix(".partial.json")  # промежуточный результат: при сбое сети перезапуск продолжит с места
+done = json.loads(PART.read_text()) if PART.exists() else {}
 for key, bid, mid in MODELS:
+    if key in done:
+        result["models"][key] = done[key]
+        continue
     years = {}
     for y in YEARS:
         ads = collect(bid, mid, y)
@@ -72,6 +77,8 @@ for key, bid, mid in MODELS:
                          "cc": int(round(float(str(cc).replace(",", ".")) * 1000)) if cc else None, "km": int(st.median(km)) if km else None}
         time.sleep(0.3)
     result["models"][key] = years
+    PART.write_text(json.dumps(result["models"], ensure_ascii=False))
     print(key, {y: v["n"] for y, v in years.items()})
 OUT.write_text(json.dumps(result, ensure_ascii=False, indent=1))
+PART.unlink()
 print("→", OUT)
