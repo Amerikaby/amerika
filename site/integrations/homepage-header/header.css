@@ -1,0 +1,64 @@
+/* Test header only. Keep the approved hero and all following sections intact. */
+#masthead.amzh-smart {
+  background:#f8f6f0; box-shadow:none; border-bottom:1px solid transparent;
+  transition:transform .22s ease, border-color .22s ease;
+}
+#masthead.amzh-smart .top,
+#masthead.amzh-smart .row-navigation,
+#masthead.amzh-smart .main-navigation,
+#masthead.amzh-smart #primary-menu {background:#f8f6f0}
+#masthead.amzh-smart .top {height:36px;max-height:36px;font-size:12px}
+#masthead.amzh-smart .top-container {height:36px;max-height:36px}
+#masthead.amzh-smart .top-menu ul {margin:0;padding:0;gap:16px}
+#masthead.amzh-smart .top-menu li {margin:0}
+#masthead.amzh-smart .top-container .left,
+#masthead.amzh-smart .top-container .right {min-width:0}
+#masthead.amzh-smart .adres {margin:0;font-size:12px}
+#masthead.amzh-smart .row-navigation {min-height:64px}
+#masthead.amzh-smart .row-navigation>.container {
+  display:flex;align-items:center;gap:24px;min-height:64px;
+}
+#masthead.amzh-smart .amzh-brand {flex:0 0 52px}
+#masthead.amzh-smart .amzh-brand img {width:52px;height:auto;display:block;margin:0}
+#masthead.amzh-smart .main-navigation {flex:1;min-width:0;width:auto}
+#masthead.amzh-smart #primary-menu>li>a {font-size:14px;padding-top:21px;padding-bottom:21px}
+#masthead.amzh-smart .amzh-phone {flex:none;font-size:12px}
+#masthead.amzh-smart .amzh-phone .phone {margin:0}
+#masthead.amzh-smart.is-compact .top {display:none}
+#masthead.amzh-smart.is-compact {border-bottom-color:#d9dfe0}
+#masthead.amzh-smart.is-hidden {transform:translateY(calc(-100% - 4px));pointer-events:none}
+#masthead.amzh-smart:not(.is-hidden) {transform:none}
+body.home #primary.site-main {margin-top:100px}
+#consultation {scroll-margin-top:76px}
+@media (min-width:1025px) and (max-width:1199px) {
+  #masthead.amzh-smart .row-navigation>.container {gap:14px}
+  #masthead.amzh-smart #primary-menu>li>a {font-size:12px}
+  #masthead.amzh-smart .amzh-phone {font-size:11px}
+}
+@media (max-width:1024px) {
+  #masthead.amzh-smart .top,
+  #masthead.amzh-smart .amzh-brand,
+  #masthead.amzh-smart .amzh-phone {display:none}
+  #masthead.amzh-smart .row-navigation>.container {min-height:64px;display:block}
+  #masthead.amzh-smart .site-branding-mobile {padding-top:6px}
+  #masthead.amzh-smart .site-branding-mobile img {width:50px;height:48px}
+  body.home #primary.site-main {margin-top:64px}
+}
+@media (prefers-reduced-motion:reduce) {
+  #masthead.amzh-smart {transition:none}
+}
+
+/* Open number and compact mobile contact. */
+#masthead.amzh-smart .amzh-phone a{color:#172a41;text-decoration:none;white-space:nowrap;font-weight:700}
+#masthead.amzh-smart .amzh-phone a:focus-visible{outline:2px solid #d20b34;outline-offset:4px}
+#masthead.amzh-smart .row-navigation>.container{position:relative}
+#masthead.amzh-smart .amzh-brand{position:static;transform:none}
+#masthead.amzh-smart .amzh-phone .phone{white-space:nowrap}
+@media(max-width:1024px){
+ #masthead.amzh-smart .amzh-phone{display:flex;position:absolute;left:76px;right:62px;top:0;height:64px;align-items:center;justify-content:center;font-size:14px}
+ #masthead.amzh-smart .amzh-phone a{display:flex;align-items:center;min-height:44px}
+ #masthead.amzh-smart .row-navigation>.container{min-height:64px}
+}
+@media(max-width:360px){#masthead.amzh-smart .amzh-phone{left:66px;right:56px;font-size:12px}}
+body.admin-bar #masthead.amzh-smart{top:32px}
+@media(max-width:782px){body.admin-bar #masthead.amzh-smart{top:46px}}
