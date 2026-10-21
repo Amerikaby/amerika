@@ -1178,3 +1178,5 @@
 #amz-hero-v2 .car-stage{margin-inline:-12px}}
 @media (prefers-reduced-motion:reduce){#amz-hero-v2 .car-slide{transition:none}}
 #amz-hero-v2{display:block;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body);text-align:left} #amz-hero-v2 .trust-strip{margin-bottom:0} #amz-hero-v2 .car-title{min-height:2.4em} #amz-hero-v2 a{text-decoration:none} #amz-hero-v2 .cta-sub a{text-decoration:underline} #amz-hero-v2 button{letter-spacing:normal;text-transform:none}
+
+#amz-hero-v2 .car-option .car-option-price{display:block;margin-top:5px;font:500 10px/1.35 var(--body);color:var(--muted);white-space:normal}

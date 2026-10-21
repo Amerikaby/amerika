@@ -22,8 +22,10 @@ Behavior:
 - All phone links remain visible and directly callable; phone_click and form
   analytics are retained. The obsolete phone reveal step is removed.
 - SVG slider controls are centered independently of theme font metrics.
-- Price captions are supported through optional positive numeric data-price
-  attributes on each figure. No prices are set or published pending confirmation.
+- On 2026-10-21 the owner confirmed 10+ years of experience and an Equinox price
+  starting at $13,500 including delivery and repair. This price appears as a
+  small static caption inside the Equinox selector; other models have no price.
+  The optional data-price-based caption below the selectors remains unused.
 
 Verification:
 PHP lint and JavaScript syntax checks passed. Live browser checks covered desktop,
@@ -35,3 +37,7 @@ The original lower homepage template fragment is byte-for-byte unchanged.
 Before future changes download the current production files and compare hashes.
 Private backups and guarded deployment scripts are retained outside the webroot;
 this repository contains the public website UI only.
+
+When deploying edited CSS, clear the WP Rocket minified CSS cache as well as
+the page cache: rocket_clean_minify(['css']), then rocket_clean_domain().
+Clearing only the page cache can keep an old CSS copy despite an enqueue version bump.
