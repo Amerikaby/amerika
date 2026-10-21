@@ -6,6 +6,7 @@ The original homepage content after the hero remains unchanged.
 
 Deployment mapping for the active WordPress theme:
 header.php -> wp-content/themes/amerika/header.php
+footer.php -> wp-content/themes/amerika/footer.php
 home.php -> wp-content/themes/amerika/templates/home.php
 header.css, header.js -> wp-content/themes/amerika/assets/header-20261020/
 hero-v2.css, slider-v2.js -> wp-content/themes/amerika/assets/hero-20261020/
@@ -37,6 +38,10 @@ The original lower homepage template fragment is byte-for-byte unchanged.
 Before future changes download the current production files and compare hashes.
 Private backups and guarded deployment scripts are retained outside the webroot;
 this repository contains the public website UI only.
+
+On 2026-10-21 the owner removed the floating Free AutoCheck promotion on all
+screen sizes. Its launcher and associated modal are no longer rendered by
+footer.php. Existing CF7 records, other forms and Jivo are retained.
 
 When deploying edited CSS, clear the WP Rocket minified CSS cache as well as
 the page cache: rocket_clean_minify(['css']), then rocket_clean_domain().

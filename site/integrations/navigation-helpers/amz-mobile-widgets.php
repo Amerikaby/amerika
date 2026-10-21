@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Amerika — Compact mobile widgets
- * Description: Compact mobile launchers for the existing Jivo chat and AutoCheck form.
- * Version: 1.0.4
+ * Description: Compact mobile launcher for the existing Jivo chat.
+ * Version: 1.1.0
  */
 defined('ABSPATH') || exit;
 
@@ -11,17 +11,6 @@ add_action('wp_head', static function () {
     ?>
 <style id="amz-mobile-widgets-style">
 @media(max-width:767px){
- body a.free-autocheck{
-  position:fixed;left:calc(14px + env(safe-area-inset-left,0px));right:auto;
-  bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:none;
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  width:auto;max-width:calc(100vw - 96px);height:40px;min-height:40px;
-  margin:0;padding:8px 11px;box-sizing:border-box;border:1px solid rgba(23,42,65,.14);
-  border-radius:20px;background:rgba(255,255,255,.94);box-shadow:0 3px 12px rgba(23,42,65,.10);
-  font-size:11px;line-height:1.2;font-weight:600;white-space:nowrap;z-index:1030;
- }
- body a.free-autocheck img{width:80px;max-width:80px;height:auto;max-height:24px;object-fit:contain;margin:0}
- body a.free-autocheck:focus-visible{outline:2px solid #d20b34;outline-offset:3px}
  /* Keep Jivo's own launcher and click handlers; change only its compact appearance. */
  #jvLabelWrap{
   left:auto!important;right:calc(14px + env(safe-area-inset-right,0px))!important;
@@ -49,8 +38,8 @@ add_action('wp_head', static function () {
  #jcont [class*="header__"]{left:0!important;right:0!important;width:auto!important;max-width:100%!important}
  #jcont [class*="headerContainer__"]{width:100%!important;min-width:0!important}
  #jcont [class*="info__"]{width:100%!important;min-width:0!important;padding-right:24px!important;box-sizing:border-box!important}
- body.modal-open a.free-autocheck,body.modal-open #jvLabelWrap,
- html.amz-mobile-menu-open a.free-autocheck,html.amz-mobile-menu-open #jvLabelWrap{
+ body.modal-open #jvLabelWrap,
+ html.amz-mobile-menu-open #jvLabelWrap{
   visibility:hidden!important;pointer-events:none!important;
  }
 }
@@ -70,10 +59,6 @@ add_action('wp_footer', static function () {
  let frame = 0;
  function update() {
   frame = 0;
-  const autoCheck = document.querySelector("a.free-autocheck");
-  if (autoCheck && !autoCheck.hasAttribute("aria-label")) {
-   autoCheck.setAttribute("aria-label", "Бесплатный AutoCheck");
-  }
   const label = document.getElementById("jvLabelWrap");
   if (label && !enhanced.has(label)) {
    enhanced.set(label, Object.fromEntries(
