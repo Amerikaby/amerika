@@ -474,9 +474,9 @@ get_header();
 
 						<h2>Интересует какая-то конкретная модель?</h2>
 
-						<span class="first">Уже через 60 минут <span class="blue">бесплатно</span>.</span>
+						<span class="first">Подберём <span class="blue">до 5 вариантов</span>.</span>
 
-						<span class="second">Получите <span class="blue">5 лучших вариантов автомобилей</span>, <br />которые сейчас есть на аукционе.</span>
+						<span class="second">Автомобили под ваш бюджет, <br />которые сейчас есть на аукционе.</span>
 
 					</div>
 

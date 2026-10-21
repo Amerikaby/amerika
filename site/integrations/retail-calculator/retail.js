@@ -1,9 +1,16 @@
 /* Ставки калькуляторов. Единственный источник цифр: используется в site.js и при сборке (таблицы пошлин). */
 /* Все ставки и тарифы в одном месте. Логистика и сборы аукциона — ориентиры, их нужно сверить с актуальными ценами. */
+var RETAIL_FX = typeof window !== "undefined" ? window.AMZ_NBRB : null;
+var RETAIL_FX_VALID = !!(RETAIL_FX && Number.isFinite(RETAIL_FX.USD) && RETAIL_FX.USD > 0 &&
+  Number.isFinite(RETAIL_FX.EUR) && RETAIL_FX.EUR > 0 && /^\d{4}-\d{2}-\d{2}$/.test(RETAIL_FX.date) &&
+  Number.isFinite(Date.parse(RETAIL_FX.date + "T00:00:00Z")) &&
+  new Date(RETAIL_FX.date + "T00:00:00Z").toISOString().slice(0, 10) === RETAIL_FX.date);
 var CONFIG = {
-  usdByn: 3.0091,          // курс USD/BYN
-  eurUsd: 3.3749 / 3.0091,          // курс EUR/USD
-  ratesDate: "2026-10-18",
+  usdByn: RETAIL_FX_VALID ? RETAIL_FX.USD : NaN,
+  eurUsd: RETAIL_FX_VALID ? RETAIL_FX.EUR / RETAIL_FX.USD : NaN,
+  ratesDate: RETAIL_FX_VALID ? RETAIL_FX.date : "",
+  ratesStale: RETAIL_FX_VALID && RETAIL_FX.stale === true,
+  fxReady: RETAIL_FX_VALID,
   repairBudget: 1500, // editable illustrative allowance, not a lot-specific repair quote
   servicePrices: [590, 990, 1999],
   serviceByn: 590,       // наша услуга (минимальный тариф)
@@ -58,6 +65,14 @@ var CONFIG = {
     center: ["TX","OK","LA","AR","KS","NE","CO","NM","MO","IA","MN","ND","SD","IL","WI","IN","MS"]
   }
 };
+
+function retailFxDate(){ return CONFIG.ratesDate.split("-").reverse().join("."); }
+function retailFxNotice(){
+  if (!CONFIG.fxReady) return "Не удалось загрузить курсы НБРБ. Обновите страницу или свяжитесь с менеджером.";
+  return "Курсы НБРБ на " + retailFxDate() + ": 1 $ = " + CONFIG.usdByn + " BYN, 1 € = " + CONFIG.eurUsd.toFixed(4) + " $. " +
+    (CONFIG.ratesStale ? "Используется сохранённый курс; обновление временно недоступно. " : "") +
+    "Таможня считает платежи по курсу на день декларации, поэтому итог может немного измениться.";
+}
 
 var YARDS = {copart:Object.keys(RETAIL_RATES.copart), iaai:Object.keys(RETAIL_RATES.iaai)};
 var PORTS = {klaipeda:{name:"Клайпеду (Литва)",short:"Клайпеды",from:"Клайпеда"},poti:{name:"Поти (Грузия)",short:"Поти",from:"Поти"}};
@@ -168,6 +183,7 @@ function maxBidForBudget(budget, o){
 var BASE="/", $=function(id){return document.getElementById(id)};
 var qsa=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
 var nowYear=new Date().getFullYear(),params=new URLSearchParams(location.search);
+if ($("retailRatesNote")) $("retailRatesNote").textContent = retailFxNotice();
 function track(goal,p){try{if(typeof window.ym==="function")window.ym(91733040,"reachGoal",goal,p||{})}catch(e){}}
 function validFields(rules, error) {
   var messages=[];
@@ -215,6 +231,13 @@ function fillYears(sel, def){
             port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked, repair:Math.max(0,+$("repair").value||0), serviceByn:+$("service").value};
   }
   function calc(){
+    if (!CONFIG.fxReady) {
+      $("calcInputError").hidden=false;
+      $("calcInputError").textContent=retailFxNotice();
+      document.querySelector("#calcForm + .bill .bill-in").hidden=true;
+      $("sendCalc").setAttribute("aria-disabled","true");
+      return null;
+    }
     var ev=val("fuel")==="ev";$("volume").disabled=ev;
     $("evHint").hidden=!ev;$("carOnly").hidden=val("vtype")==="moto";
     var valid=validFields([["volume",1,10000,"Укажите объём двигателя больше нуля."],["price",1,10000000,"Укажите положительную цену или бюджет."],["repair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $."],["year",nowYear-20,nowYear,"Выберите год выпуска."]],$("calcInputError"));
@@ -286,7 +309,8 @@ function fillYears(sel, def){
     $("r-ours").textContent = fmt(r.ours);
     $("r-repair").textContent = fmt(r.repair);
     $("r-total").textContent = fmt(r.total);
-    $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn + " (НБРБ, " + CONFIG.ratesDate + ")";
+    $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn + " (НБРБ, " + retailFxDate() +
+      (CONFIG.ratesStale ? "; сохранённый курс, обновление временно недоступно" : "") + ")";
     refreshRetailLead();
     return {moto:o.moto, price:Math.round(r.price), year:o.year, cc:o.cc, alt:o.alt, port:o.port, yard:o.yard, budget:budget, repair:r.repair, serviceByn:o.serviceByn, benefit:o.benefit, total:Math.round(r.total)};
   }

@@ -140,7 +140,18 @@
 <div class="box">
 <h2>Восстановление — отдельная строка</h2>
 <p>Указанный вами резерв ремонта включён в итог. Значение 1 500 $ — пример: стоимость повреждений оцениваем по фото и отчёту аукциона до ставки. Ремонт можно сделать у партнёрского СТО в Минске.</p>
-<p>Курсы НБРБ на 2026-10-18: 1 $ = 3.0091 BYN, 1 € = 1.1216 $. Таможня считает платежи по курсу на день декларации, поэтому итог может немного измениться.</p>
+<?php
+$amz_retail_fx = function_exists('amz_nbrb_snapshot') ? amz_nbrb_snapshot() : null;
+$amz_retail_fx_valid = is_array($amz_retail_fx) && isset($amz_retail_fx['USD'], $amz_retail_fx['EUR'], $amz_retail_fx['date'])
+    && is_numeric($amz_retail_fx['USD']) && is_finite((float)$amz_retail_fx['USD']) && (float)$amz_retail_fx['USD'] > 0
+    && is_numeric($amz_retail_fx['EUR']) && is_finite((float)$amz_retail_fx['EUR']) && (float)$amz_retail_fx['EUR'] > 0
+    && preg_match('/^\d{4}-\d{2}-\d{2}$/', $amz_retail_fx['date']);
+if ($amz_retail_fx_valid) {
+    $amz_retail_date_parts = explode('-', $amz_retail_fx['date']);
+    $amz_retail_fx_valid = checkdate((int)$amz_retail_date_parts[1], (int)$amz_retail_date_parts[2], (int)$amz_retail_date_parts[0]);
+}
+?>
+<p id="retailRatesNote"><?php if ($amz_retail_fx_valid) { ?>Курсы НБРБ на <?php echo esc_html(implode('.', array_reverse($amz_retail_date_parts))); ?>: 1 $ = <?php echo esc_html($amz_retail_fx['USD']); ?> BYN, 1 € = <?php echo esc_html(number_format($amz_retail_fx['EUR'] / $amz_retail_fx['USD'], 4, '.', '')); ?> $. <?php if (!empty($amz_retail_fx['stale'])) { ?>Используется сохранённый курс; обновление временно недоступно. <?php } ?>Таможня считает платежи по курсу на день декларации, поэтому итог может немного измениться.<?php } else { ?>Не удалось загрузить курсы НБРБ. Обновите страницу или свяжитесь с менеджером.<?php } ?></p>
 <p><a class="btn btn-navy" href="/tamozhennyj-kalkulator/">Только таможня: отдельный калькулятор</a></p>
 </div>
 </div>

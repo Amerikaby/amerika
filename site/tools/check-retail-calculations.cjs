@@ -9,12 +9,43 @@ const rates = {
   copart: {'ALBANY - NY': {car: 1500, moto: 1100}, 'LOS ANGELES - CA': {car: 2200, moto: 1250}},
   iaai: {'ALBANY - NY': {car: 1500, moto: 1100}}
 };
-const context = vm.createContext({RETAIL_RATES: rates});
-vm.runInContext(source.slice(0, source.indexOf('\n(function(){')), context);
+const fixedFx = {USD: 3.0091, EUR: 3.3749, date: '2026-10-18', stale: false};
+function runtime(fx) {
+  const ctx = vm.createContext({RETAIL_RATES: rates, window: fx === undefined ? {} : {AMZ_NBRB: fx}});
+  vm.runInContext(source.slice(0, source.indexOf('\n(function(){')), ctx);
+  return ctx;
+}
+// Fixed FX fixture keeps regression expectations stable when daily NBRB rates change.
+const context = runtime(fixedFx);
 const {CONFIG, CALC_YEAR, costOf, retailRateFor, maxBidForBudget} = context;
 const base = {auction: 'copart', yard: 'ALBANY - NY', moto: false, year: CALC_YEAR - 4,
   cc: 1500, alt: false, ev: false, region: 'east', port: 'klaipeda', sublot: false,
   benefit: false, repair: 1500, serviceByn: 590};
+
+const todayFx = {USD: 2.9883, EUR: 3.3514, date: '2026-10-21', stale: false};
+const today = runtime(todayFx);
+assert.equal(today.CONFIG.usdByn, todayFx.USD);
+assert.equal(today.CONFIG.eurUsd, todayFx.EUR / todayFx.USD, 'Do not round the conversion used in formulas');
+assert.notEqual(today.CONFIG.eurUsd, Number(today.CONFIG.eurUsd.toFixed(4)));
+assert.equal(today.CONFIG.ratesDate, todayFx.date);
+assert.equal(today.retailFxDate(), '21.10.2026');
+assert(today.retailFxNotice().includes('2.9883 BYN'));
+assert(today.retailFxNotice().includes('21.10.2026'));
+assert(!today.retailFxNotice().includes('сохранённый'));
+const todayTotal = 9000 + 1260 + 450 + 1500 + 650 + 2550 * todayFx.EUR / todayFx.USD + (1282.02 + 120 + 200 + 590) / todayFx.USD + 1500;
+assert(Math.abs(today.costOf(9000, base).total - todayTotal) < 1e-7, 'All converted costs use the supplied current snapshot');
+const stale = runtime({...todayFx, date: '2026-10-20', stale: true});
+assert.equal(stale.CONFIG.fxReady, true);
+assert(stale.retailFxNotice().includes('20.10.2026'));
+assert(stale.retailFxNotice().includes('сохранённый курс'));
+for (const fx of [undefined, null, {...todayFx, USD: 0}, {...todayFx, EUR: -1}, {...todayFx, USD: NaN},
+  {...todayFx, EUR: Infinity}, {...todayFx, date: '2026-02-30'}, {...todayFx, date: ''}]) {
+  const invalid = runtime(fx);
+  assert.equal(invalid.CONFIG.fxReady, false);
+  assert(Number.isNaN(invalid.CONFIG.usdByn), 'No hidden hardcoded currency fallback');
+  assert(invalid.retailFxNotice().includes('Не удалось загрузить'));
+  assert(Number.isNaN(invalid.costOf(9000, base).total));
+}
 
 for (const yard of ['', 'Unknown yard', 'constructor', 'toString', '__proto__']) {
   assert.equal(retailRateFor('copart', yard), null, 'Reject non-yard: ' + yard);
@@ -108,9 +139,9 @@ const uiValidator = new Function('$', 'document', validatorSource + '\nreturn va
 let selected = {...base};
 const handlerSource = source.slice(source.indexOf('  function calc(){'), source.indexOf('\n  $("advToggle")'));
 const handler = new Function('val', '$', 'validFields', 'document', 'options', 'RETAIL_RATES', 'cost', 'PORTS',
-  'fmt', 'CONFIG', 'refreshRetailLead', 'nowYear', 'retailRateFor', 'maxBidForBudget', handlerSource + '\nreturn calc;')(
+  'fmt', 'CONFIG', 'refreshRetailLead', 'nowYear', 'retailRateFor', 'maxBidForBudget', 'retailFxNotice', 'retailFxDate', handlerSource + '\nreturn calc;')(
   name => ({fuel: 'ice', vtype: 'car', mode: 'price'})[name], get, uiValidator, documentStub, () => selected,
-  rates, costOf, context.PORTS, n => Math.round(n) + ' $', CONFIG, () => {}, CALC_YEAR, retailRateFor, maxBidForBudget);
+  rates, costOf, context.PORTS, n => Math.round(n) + ' $', CONFIG, () => {}, CALC_YEAR, retailRateFor, maxBidForBudget, context.retailFxNotice, context.retailFxDate);
 assert(handler());
 for (const yard of ['', 'Unknown yard', 'constructor', 'toString', '__proto__']) {
   selected = {...base, yard};
@@ -127,6 +158,13 @@ assert.equal(bill.hidden, true);
 CONFIG.lastLeg.klaipeda = oldLastLeg;
 assert(handler());
 assert.equal(get('sendCalc').attrs['aria-disabled'], 'false');
+CONFIG.fxReady = false;
+assert.equal(handler(), null, 'Missing current rates must disable the calculation');
+assert.equal(get('sendCalc').attrs['aria-disabled'], 'true');
+assert.equal(bill.hidden, true);
+assert(get('calcInputError').textContent.includes('курсы НБРБ'));
+CONFIG.fxReady = true;
+assert(handler());
 
 // Round-trip the actual share serializer and URL loader, not a second implementation.
 const serializeLine = source.match(/var query=new URLSearchParams\(\{[^\n]+\}\);/)[0];
@@ -179,4 +217,4 @@ assert.equal(maxBidForBudget(Number(restoredRegression.nodes.price.value), {...b
 assert.equal(Number(restore('year=' + (CALC_YEAR - 1)).nodes.year.value), CALC_YEAR - 1, 'Legacy year still loads where no redirect removed it');
 assert.equal(Number(restore('year=' + (CALC_YEAR - 4) + '&car_year=' + (CALC_YEAR - 1)).nodes.year.value), CALC_YEAR - 1, 'car_year takes priority');
 
-console.log('PASS: own-yard lookup; final retail sea/Poti +700; expense totals; ' + budgetCases + ' exhaustive budget comparisons; 10m input; invalid fields/EV; invalid result blocks sending; full share round trips and legacy year');
+console.log('PASS: current NBRB snapshot/exact cross-rate/date/stale/absent handling; own-yard lookup; final retail sea/Poti +700; expense totals; ' + budgetCases + ' exhaustive budget comparisons; 10m input; invalid fields/EV; invalid result blocks sending; full share round trips and legacy year');

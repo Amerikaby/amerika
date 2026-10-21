@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 $asset = get_template_directory_uri() . '/assets/retail-20261020/';
 wp_enqueue_style('amz-retail', $asset.'retail.css', array(), '20261020.3');
 wp_enqueue_script('amz-retail-rates', $asset.'rates.php', array(), null, true);
-wp_enqueue_script('amz-retail', $asset.'retail.js', array('amz-retail-rates'), '20261021.3', true);
+wp_enqueue_script('amz-retail', $asset.'retail.js', array('amz-retail-rates'), '20261021.4', true);
 add_filter('script_loader_tag', function($tag,$handle) {
     if (strpos($handle, 'amz-retail')===0) $tag=str_replace('<script ', '<script data-nowprocket data-no-minify="1" ', $tag);
     return $tag;
