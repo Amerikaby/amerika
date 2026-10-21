@@ -97,12 +97,18 @@ function motoDutyVat(value, cc, electric){
 }
 /* Порт по умолчанию: через ЕС только ДВС до 1,9 л. */
 function autoPortFor(moto, alt, cc){ return moto ? CONFIG.moto.autoPort : ((!alt && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti"); }
+/* Площадка должна быть собственной записью тарифа, а не свойством прототипа. */
+function retailRateFor(auction, yard){
+  var own = Object.prototype.hasOwnProperty;
+  var group = own.call(RETAIL_RATES, auction) ? RETAIL_RATES[auction] : null;
+  return group && own.call(group, yard) ? group[yard] : null;
+}
 /* Полная стоимость под ключ, $. o: {moto, year, cc, alt, ev, region, port, sublot, benefit} */
 function costOf(price, o){
   var L = o.moto ? CONFIG.moto : CONFIG;   // у мотоциклов своя логистика и таможня
   var fee = auctionFee(price);
   var inland = L.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
-  var row = RETAIL_RATES[o.auction || "copart"][o.yard || "ALBANY - NY"];
+  var row = retailRateFor(o.auction || "copart", o.yard || "ALBANY - NY");
   var sea = o.port === "klaipeda" ? (row ? row[o.moto ? "moto" : "car"] : NaN) : L.sea.poti[o.region];
   var last = L.lastLeg[o.port];
   var extra = (!o.moto && o.alt) ? CONFIG.altFuelEur * CONFIG.eurUsd : 0;
@@ -122,6 +128,39 @@ function costOf(price, o){
   var delivered = price + fee + inland + sea + last + extra + duty + cust + ours;
   return {price:price, fee:fee, inland:inland, sea:sea, last:last, extra:extra, duty:duty, cust:cust, ours:ours, repair:repair, delivered:delivered,
           total: delivered + repair};
+}
+
+/* Максимальная ставка с шагом 50 $. На границах ставок пошлины итог может
+   уменьшаться, поэтому ищем отдельно внутри каждого тарифного интервала. */
+function maxBidForBudget(budget, o){
+  if (!Number.isFinite(budget) || budget < 0) return 0;
+  var step = 50, upper = Math.floor(budget / step), cuts = [0, upper + 1];
+  function boundary(price){
+    if (!Number.isFinite(price)) return;
+    var index = Math.floor(price / step);
+    // Выделяем и точную границу: аукцион использует <, пошлина — <=.
+    if (index > 0 && index <= upper) cuts.push(index);
+    if (index + 1 > 0 && index + 1 <= upper) cuts.push(index + 1);
+  }
+  CONFIG.auctionFee.forEach(function(tier){ boundary(tier[0]); });
+  if (!o.moto && !o.ev && CALC_YEAR - o.year < 3) {
+    CONFIG.duty.under3.forEach(function(tier){ boundary(tier[0] * CONFIG.eurUsd); });
+  }
+  cuts = cuts.sort(function(a, b){ return a - b; }).filter(function(n, i, all){ return !i || n !== all[i - 1]; });
+  function fits(index){
+    var total = costOf(index * step, o).total;
+    return Number.isFinite(total) && total <= budget;
+  }
+  for (var i = cuts.length - 2; i >= 0; i--) {
+    var lo = cuts[i], hi = cuts[i + 1] - 1;
+    if (!fits(lo)) continue;
+    while (lo < hi) {
+      var mid = Math.ceil((lo + hi) / 2);
+      if (fits(mid)) lo = mid; else hi = mid - 1;
+    }
+    return lo * step;
+  }
+  return 0;
 }
 
 (function(){
@@ -181,7 +220,8 @@ function fillYears(sel, def){
     var valid=validFields([["volume",1,10000,"Укажите объём двигателя больше нуля."],["price",1,10000000,"Укажите положительную цену или бюджет."],["repair",0,100000,"Укажите резерв ремонта от 0 до 100 000 $."],["year",nowYear-20,nowYear,"Выберите год выпуска."]],$("calcInputError"));
     document.querySelector("#calcForm + .bill .bill-in").hidden=!valid;$("sendCalc").setAttribute("aria-disabled",String(!valid));if(!valid)return null;
     var o = options(), budget = val("mode") === "budget";
-    var known = !!RETAIL_RATES[o.auction][o.yard];
+    var rate = retailRateFor(o.auction, o.yard);
+    var known = rate && Number.isFinite(rate[o.moto ? "moto" : "car"]);
     $("yard").setAttribute("aria-invalid", String(!known));
     if (!known) {
       $("calcInputError").hidden=false;
@@ -192,12 +232,16 @@ function fillYears(sel, def){
     }
     var input = Math.max(0, +$("price").value || 0), r;
     if (budget) {
-      var lo = 0, hi = input;                 // ищем самую большую ставку, при которой итог укладывается в бюджет
-      if (cost(0, o).total > input) hi = 0;
-      for (var i = 0; i < 40; i++) { var mid = (lo + hi) / 2; if (cost(mid, o).total <= input) lo = mid; else hi = mid; }
-      r = cost(Math.floor(lo / 50) * 50, o);
+      r = cost(maxBidForBudget(input, o), o);
     } else {
       r = cost(input, o);
+    }
+    if (!Object.keys(r).every(function(key){ return Number.isFinite(r[key]); })) {
+      $("calcInputError").hidden=false;
+      $("calcInputError").textContent="Не удалось рассчитать стоимость. Проверьте параметры или свяжитесь с менеджером.";
+      document.querySelector("#calcForm + .bill .bill-in").hidden=true;
+      $("sendCalc").setAttribute("aria-disabled","true");
+      return null;
     }
     $("priceLabel").textContent = budget ? "Бюджет под ключ, $" : "Цена лота, $";
     $("maxbid").hidden = !budget;
@@ -276,11 +320,12 @@ function fillYears(sel, def){
     });
   });
 
-  /* Подстановка из адреса: ?type=moto&price=9000&year=2021&cc=1500&fuel=alt */
+  /* Подстановка из адреса: car_year не конфликтует с архивным параметром WordPress year. */
   if (params.get("type") === "moto") document.querySelector('#calcForm input[name="vtype"][value="moto"]').checked = true;
   if (params.get("type") === "moto") $("volume").value = 1000;
   if (+params.get("price") > 0) $("price").value = +params.get("price");
-  if (+params.get("year") >= nowYear - 20 && +params.get("year") <= nowYear) $("year").value = +params.get("year");
+  var requestedYear = params.has("car_year") ? params.get("car_year") : params.get("year");
+  if (+requestedYear >= nowYear - 20 && +requestedYear <= nowYear) $("year").value = +requestedYear;
   if (params.has("cc") && +params.get("cc") >= 0) $("volume").value = +params.get("cc");
   var requestedFuel=params.get("fuel");if(requestedFuel==="alt")requestedFuel=Number($("volume").value)===0?"ev":"hybrid";
   if(["hybrid","ev"].includes(requestedFuel))document.querySelector('#calcForm input[name="fuel"][value="'+requestedFuel+'"]').checked=true;
@@ -293,9 +338,9 @@ function fillYears(sel, def){
   if(["auto","klaipeda","poti"].includes(params.get("port")))$("port").value=params.get("port");
   $("yard").value=(params.get("yard")||"ALBANY - NY").slice(0,120);
   $("sublot").checked=params.get("sublot")==="1";
-  if (!RETAIL_RATES[val("auction")][ $("yard").value ]) {
+  if (!retailRateFor(val("auction"), $("yard").value)) {
     var normalized = $("yard").value.toUpperCase().replace(/,\s*/g," - ");
-    if (RETAIL_RATES[val("auction")][normalized]) $("yard").value=normalized;
+    if (retailRateFor(val("auction"), normalized)) $("yard").value=normalized;
   }
   fillYards();
   var used = false;
@@ -306,7 +351,7 @@ function fillYears(sel, def){
 
   $("shareCalc").addEventListener("click",async function(){
     if(!calc())return;
-    var query=new URLSearchParams({type:val("vtype"),mode:val("mode"),price:$("price").value,year:$("year").value,cc:$("volume").value,fuel:val("fuel"),repair:$("repair").value,service:$("service").value,benefit:$("benefit").checked?"1":"0",auction:val("auction"),yard:$("yard").value.trim(),port:$("port").value,sublot:$("sublot").checked?"1":"0"});
+    var query=new URLSearchParams({type:val("vtype"),mode:val("mode"),price:$("price").value,car_year:$("year").value,cc:$("volume").value,fuel:val("fuel"),repair:$("repair").value,service:$("service").value,benefit:$("benefit").checked?"1":"0",auction:val("auction"),yard:$("yard").value.trim(),port:$("port").value,sublot:$("sublot").checked?"1":"0"});
     var url=location.origin+BASE+"kalkulyator/?"+query.toString()+"#calc";
     var status=$("shareCalcStatus");status.hidden=false;
     try{await navigator.clipboard.writeText(url);$("shareCalcFallback").hidden=true;status.textContent="Ссылка скопирована. В ней сохранены параметры; при изменении ставок итог может измениться.";}
