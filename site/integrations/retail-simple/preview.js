@@ -13,13 +13,28 @@ var SIMPLE_CALC_HELPERS=(function(){
   function fuelFor(v){var s=text(v.vehicle_specs&&v.vehicle_specs.fuel_type).toLowerCase();if(/hybrid|phev/.test(s))return 'hybrid';if(/electric|battery|\bbev\b/.test(s))return 'ev';if(/gas|petrol|diesel|flex|ethanol/.test(s))return 'ice';return null}
   function ccFor(v){if(fuelFor(v)==='ev')return 0;var e=v.vehicle_specs&&v.vehicle_specs.engine;if(!e)return null;var liters=Number(e.size_l);if(!Number.isFinite(liters)||liters<=0){var m=/\b(\d+(?:[.,]\d+)?)\s*L\b/i.exec(text(e.raw));liters=m?Number(m[1].replace(',','.')):NaN;}return Number.isFinite(liters)&&liters>0&&liters<=10?Math.round(liters*1000):null}
   function yardFor(location, keys){var raw=text(location&&location.display).replace(/^(?:copart|iaai?)\s*[-:]?\s*/i,'');var candidates=[norm(raw)];var m=/^([A-Z]{2})\s*[-–:]\s*(.+)$/i.exec(raw);if(m)candidates.push(norm(m[2]+' '+m[1]));var found=keys.filter(function(k){return candidates.includes(norm(k))});return found.length===1?found[0]:''}
-  return {norm:norm,matches:matches,lookupInput:lookupInput,fuelFor:fuelFor,ccFor:ccFor,yardFor:yardFor,text:text};
+  function normalizeTariffYards(rates){
+    // Verified legacy typo, not fuzzy matching: Phoenix is AZ, not AR.
+    // Correct the in-page labels only; keep the existing car/moto rates intact.
+    var aliases={};['copart','iaai'].forEach(function(platform){
+      var group=rates[platform];if(!group||!Object.prototype.hasOwnProperty.call(group,'PHOENIX - AR'))return;
+      var old=group['PHOENIX - AR'],current=group['PHOENIX - AZ'];
+      if(current&&(current.car!==old.car||current.moto!==old.moto))return;
+      if(!current)group['PHOENIX - AZ']=old;
+      delete group['PHOENIX - AR'];aliases[platform]={'PHOENIX - AR':'PHOENIX - AZ'};
+    });return aliases;
+  }
+  return {norm:norm,matches:matches,lookupInput:lookupInput,fuelFor:fuelFor,ccFor:ccFor,yardFor:yardFor,normalizeTariffYards:normalizeTariffYards,text:text};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPERS;
 (function(){
   if(typeof document==='undefined')return;
   var root=document.getElementById('amz-retail-calc');if(!root||!document.getElementById('lotLookup'))return;
   var H=SIMPLE_CALC_HELPERS,$=function(id){return document.getElementById(id)},form=$('calcForm'),make=$('carMake'),model=$('carModel');
+  var tariffAliases=H.normalizeTariffYards(RETAIL_RATES);
+  ['copart','iaai'].forEach(function(a){YARDS[a]=Object.keys(RETAIL_RATES[a]||{})});
+  var initialAuction=root.querySelector('input[name=auction]:checked').value;
+  var oldYard=$('yard').value.trim();if(tariffAliases[initialAuction]&&tariffAliases[initialAuction][oldYard])$('yard').value=tariffAliases[initialAuction][oldYard];
   var cache=new Map(),bootstrap=null,bootstrapAt=0,makeRows=[],modelRows=[],makeValue='',makeVersion=0,lookupVersion=0,modelsLoading=false;
   var aliases={'CHEVROLET':'шевроле шеви chevy','BMW':'бмв бэ эм вэ','MERCEDES-BENZ':'мерседес мерс mercedes','VOLKSWAGEN':'фольксваген фольц vw','TOYOTA':'тойота тоёта','HYUNDAI':'хендай хёндай хундай','KIA':'киа кия','NISSAN':'ниссан','AUDI':'ауди','FORD':'форд','HONDA':'хонда','MAZDA':'мазда','LEXUS':'лексус','JEEP':'джип','DODGE':'додж','CHRYSLER':'крайслер','BUICK':'бьюик','CADILLAC':'кадиллак','SUBARU':'субару','VOLVO':'вольво','PORSCHE':'порше','TESLA':'тесла','LAND ROVER':'ленд ровер лэнд ровер','ACURA':'акура','LINCOLN':'линкольн','RAM':'рам','GMC':'джи эм си','MINI':'мини'};
   var modelAliases={EQUINOX:['эквинокс','экви'],CAMRY:['камри'],MALIBU:['малибу'],TRAVERSE:['траверс'],TAHOE:['тахо'],TUCSON:['туксон'],SPORTAGE:['спортейдж'],EXPLORER:['эксплорер'],ESCAPE:['эскейп'],COMPASS:['компас'],COROLLA:['королла'],RAV4:['рав4','рав 4'],JETTA:['джетта'],ELANTRA:['элантра']};
@@ -121,7 +136,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
       $('lotTitle').textContent=v.title;$('lotFacts').textContent=(v.platform==='copart'?'Copart':'IAAI')+' · лот '+v.lot_number+' · '+H.text(v.location&&v.location.display);
       $('lotSource').href=v.platform==='copart'?'https://www.copart.com/lot/'+encodeURIComponent(v.lot_number):'https://www.iaai.com/Search?searchkeyword='+encodeURIComponent(v.lot_number);
       $('lotCard').hidden=false;$('deliverySettings').open=!yard;
-      status($('lotStatus'),'Данные найдены. '+(missing.length?'Уточните '+missing.join(', ')+'. ':'')+'Укажите вашу планируемую цену или бюджет. Порт предложен калькулятором; его можно изменить.');
+      status($('lotStatus'),'Данные найдены. '+(yard?'Площадка: '+yard+'. ':'')+(missing.length?'Уточните '+missing.join(', ')+'. ':'')+'Укажите вашу планируемую цену или бюджет. Порт предложен калькулятором; его можно изменить.');
       $('exampleStatus').textContent='Автомобиль найден у источника. Текущая ставка не является окончательной ценой покупки.';change($('year'));summaries();
     }catch(e){if(ticket===lookupVersion)status($('lotStatus'),e.message)}finally{$('findLot').disabled=false}
   }

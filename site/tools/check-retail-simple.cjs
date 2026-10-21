@@ -19,6 +19,18 @@ assert.equal(H.fuelFor({vehicle_specs:{fuel_type:'unknown'}}),null);count++;
 const yards=['MENTONE - CA','MENTONE EAST - CA','ALBANY - NY'];
 for(const display of ['Mentone (CA)','CA - MENTONE','Copart: Mentone (CA)']){assert.equal(H.yardFor({display},yards),'MENTONE - CA');count++}
 assert.equal(H.yardFor({display:'Mentone'},yards),'');assert.equal(H.yardFor({display:'Unknown (CA)'},yards),'');count+=2;
+const phoenixRow={car:2200,moto:1250};
+const phoenixRates={copart:{'PHOENIX - AR':phoenixRow,'LITTLE ROCK - AR':{car:1700,moto:1100}},iaai:{'PHOENIX - AR':{...phoenixRow}}};
+const aliases=H.normalizeTariffYards(phoenixRates);
+assert.equal(phoenixRates.copart['PHOENIX - AZ'],phoenixRow,'Preserve the exact tariff row');count++;
+assert.equal(phoenixRates.copart['PHOENIX - AR'],undefined);count++;
+assert(phoenixRates.copart['LITTLE ROCK - AR'],'Do not rewrite Arkansas yards');count++;
+assert.equal(aliases.iaai['PHOENIX - AR'],'PHOENIX - AZ','Restore old saved calculation keys');count++;
+assert.equal(H.yardFor({display:'Phoenix (AZ)'},Object.keys(phoenixRates.iaai)),'PHOENIX - AZ','Real IAAI lot46100553');count++;
+assert.deepEqual(H.normalizeTariffYards(phoenixRates),{},'Repeated initialization is idempotent');count++;
+const conflicting={iaai:{'PHOENIX - AR':{car:2000,moto:1000},'PHOENIX - AZ':{car:2200,moto:1250}}};
+assert.deepEqual(H.normalizeTariffYards(conflicting),{},'Never silently replace conflicting prices');count++;
+assert.equal(conflicting.iaai['PHOENIX - AR'].car,2000);count++;
 const base=fs.readFileSync(path.join(dir,'../retail-calculator/retail.js'),'utf8'),preview=fs.readFileSync(path.join(dir,'retail.js'),'utf8');
 assert.equal(base.slice(0,base.indexOf('\n(function(){')),preview.slice(0,preview.indexOf('\n(function(){')),'FX, tariffs, forward and reverse formulas remain byte-identical');count++;
 const body=fs.readFileSync(path.join(dir,'preview-body.php'),'utf8');
