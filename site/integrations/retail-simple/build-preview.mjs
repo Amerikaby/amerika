@@ -51,10 +51,15 @@ const total=body.slice(totalStart,totalEnd);
 body=body.slice(0,detailStart)+total+`<div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary>`+details+'</details>'+body.slice(totalEnd);
 body=body.replace('<span>Итого с восстановлением</span>','<span>В Минске с ремонтом</span>');
 fs.writeFileSync(path.join(here,'preview-body.php'),body);
+fs.writeFileSync(path.join(here,'production-body.php'),body.replace('Калькулятор · тест новой версии','Калькулятор'));
 let js=fs.readFileSync(path.join(base,'retail.js'),'utf8');
 js=js.replace('function calc(){','function calc(){\n    if(window.SIMPLE_LOT_ERROR || document.querySelector(\'#calcForm select[data-combo-invalid="true"]\')){ $("calcInputError").hidden=false; $("calcInputError").textContent=window.SIMPLE_LOT_ERROR || "Выберите значение из списка под полем."; document.querySelector("#calcForm + .bill .bill-in").hidden=true; $("sendCalc").setAttribute("aria-disabled","true"); return null; }');
 js=js.replace('$("r-total").textContent = fmt(r.total);','$("r-total").textContent = fmt(r.total);\n    window.SIMPLE_LAST_RESULT=r; document.dispatchEvent(new CustomEvent("simplecalc:result",{detail:r}));');
 js=js.replace('var url=location.origin+BASE+"kalkulyator/?"+query.toString()+"#calc";', 'query.set("make",$("carMake").value.trim()); query.set("model",$("carModel").value.trim()); query.set("lot",$("lotLookup").value.trim());\n    var url=location.origin+"/newcodex/kalkulyator-simple/?"+query.toString()+"#calc";');
 js=js.replace('var fields=["Техника: "+checked("vtype")','var fields=["Автомобиль: "+[$("carMake").value,$("carModel").value].filter(Boolean).join(" "),"Лот: "+$("lotLookup").value,"Техника: "+checked("vtype")');
+// Closed <details> must not affect the estimate sent to the manager.
+js=js.replace('e.innerText.trim().replace(/\\n+/g,": ")','Array.from(e.children).map(function(c){return c.textContent.trim()}).join(": ")');
+js=js.replace('"Объём: "+$("volume").value+" см³"','"Объём: "+(checked("fuel")==="Электро"?"не требуется (электро)":$("volume").value+" см³")');
 fs.writeFileSync(path.join(here,'retail.js'),js);
+fs.writeFileSync(path.join(here,'retail-production.js'),js.replace('/newcodex/kalkulyator-simple/?','/kalkulyator/?'));
 console.log('Preview generated. Calculation formulas and tariffs reused without changes.');

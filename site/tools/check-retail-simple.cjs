@@ -26,4 +26,8 @@ const ids=Array.from(body.matchAll(/\bid="([A-Za-z][A-Za-z0-9_-]*)"/g),m=>m[1]);
 assert.equal(new Set(ids).size,ids.length,'No duplicate IDs in the preview source');count++;
 for(const id of ['calcForm','year','volume','port','yard','repair','service','r-total','lotLookup','findLot','lotStatus','simpleDeliveryTotal']){assert(ids.includes(id));count++}
 assert(preview.includes('/newcodex/kalkulyator-simple/?'));count++;
+const production=fs.readFileSync(path.join(dir,'retail-production.js'),'utf8');
+assert.equal(base.slice(0,base.indexOf('\n(function(){')),production.slice(0,production.indexOf('\n(function(){')),'Production retains the exact verified financial core');count++;
+assert(production.includes('/kalkulyator/?')&&!production.includes('/newcodex/kalkulyator-simple/?'),'Shared links must reopen production');count++;
+assert.equal(fs.readFileSync(path.join(dir,'production-body.php'),'utf8'),body.replace('Калькулятор · тест новой версии','Калькулятор'),'Production uses the approved body');count++;
 console.log('PASS: '+count+' preview checks: trusted lot URLs, normalization, exact yard matching, missing specs, unique fields, unchanged calculation core.');

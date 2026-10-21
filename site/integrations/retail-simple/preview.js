@@ -66,21 +66,21 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
     return {sync:function(){if(document.activeElement!==input){binding.sync(select.options[select.selectedIndex]&&select.options[select.selectedIndex].textContent||'');select.dataset.comboInvalid=String(!select.value);input.setAttribute('aria-invalid',String(!select.value));}input.disabled=select.disabled},input:input};
   }
   async function loadMakes(){var data=await metadata();makeRows=(data.makes||[]).map(function(v){return {label:String(v),value:String(v),aliases:(aliases[String(v).toUpperCase()]||'').split(' ')}})}
-  async function chooseMake(item){
-    makeValue=item.value;make.value=item.label;model.value='';modelRows=[];modelsLoading=true;model.disabled=false;modelCombo.disabled(false);model.placeholder='Загрузка моделей…';var ticket=++makeVersion;
+  async function chooseMake(item,keepModel){
+    makeValue=item.value;make.value=item.label;if(!keepModel)model.value='';modelRows=[];modelsLoading=true;model.disabled=false;modelCombo.disabled(false);model.placeholder='Загрузка моделей…';var ticket=++makeVersion;
     try{var data=await metadata({make:makeValue});if(ticket!==makeVersion)return;var rows=(data.series||[]).map(function(v){return {label:v.name||v.label||v.series,value:v.series||v.name||v.label}});var known=new Set(rows.map(function(i){return H.norm(i.label)}));(data.models||[]).forEach(function(v){if(!known.has(H.norm(v))&&!rows.some(function(i){return H.norm(v).startsWith(H.norm(i.label))})){rows.push({label:v,value:v})}});modelRows=rows.filter(function(i){return i.label}).map(function(i){i.aliases=modelAliases[String(i.label).toUpperCase()]||[];return i});model.placeholder='Выберите или начните вводить';status($('modelStatus'),'');}
     catch(e){if(ticket===makeVersion){model.placeholder='Можно вписать модель вручную';status($('modelStatus'),e.message)}}
     finally{if(ticket===makeVersion){modelsLoading=false;if(document.activeElement===model&&model.getAttribute('aria-expanded')==='true')modelCombo.refresh();}}
   }
   var makeCombo=combo(make,{label:'Марка',items:function(){return makeRows},load:loadMakes,choose:function(item){chooseMake(item)},edit:function(){makeValue='';makeVersion++;modelsLoading=false;model.value='';modelRows=[];modelCombo.disabled(true);model.placeholder='Сначала выберите марку'}});
-  var modelCombo=combo(model,{label:'Модель',items:function(){return modelRows},pending:function(){return modelsLoading}});modelCombo.disabled(true);
+  var modelCombo=combo(model,{label:'Модель',items:function(){return modelRows},pending:function(){return modelsLoading},load:function(){if(makeValue&&!modelRows.length&&!modelsLoading)return chooseMake({value:makeValue,label:make.value},true)}});modelCombo.disabled(true);
   var yearCombo=selectCombo($('year'),'Год выпуска');
   var portCombo=selectCombo($('port'),'Порт доставки',{auto:['автоматически авто маршрут'],klaipeda:['klaipeda литва клайпеду'],poti:['poti грузия поти']});
   var fuelCombo=selectCombo($('simpleFuel'),'Двигатель',{ice:['gasoline gas petrol diesel бензин дизель'],hybrid:['hybrid phev'],ev:['electric электро bev']});
   var auctionCombo=selectCombo($('simpleAuction'),'Аукцион',{copart:['копарт'],iaai:['IAA айаа иая']});
   combo($('volume'),{label:'Объём двигателя',items:function(){return [1000,1200,1300,1400,1500,1600,1800,1900,2000,2200,2400,2500,3000,3500].map(function(n){return {label:(n/1000).toLocaleString('ru-RU')+' л · '+n+' см³',display:n,value:n,aliases:[String(n),String(n/1000)]}})},choose:function(item){$('volume').value=item.value}});
   combo($('yard'),{label:'Площадка аукциона',items:function(){var a=root.querySelector('input[name=auction]:checked').value;return Object.keys(RETAIL_RATES[a]||{}).map(function(k){return {label:k,value:k}})},choose:function(item){$('yard').value=item.value}});
-  $('simpleFuel').addEventListener('change',function(){var radio=root.querySelector('input[name=fuel][value="'+this.value+'"]');if(radio){window.SIMPLE_LOT_ERROR='';radio.checked=true;change(radio)}});
+  $('simpleFuel').addEventListener('change',function(){var radio=root.querySelector('input[name=fuel][value="'+this.value+'"]');if(radio){if(!window.SIMPLE_LOT_PENDING)window.SIMPLE_LOT_ERROR='';radio.checked=true;change(radio)}});
   $('simpleAuction').addEventListener('change',function(){var radio=root.querySelector('input[name=auction][value="'+this.value+'"]');if(radio){radio.checked=true;change(radio)}});
   form.addEventListener('submit',function(e){e.preventDefault()});
   function money(n){return Math.round(n).toLocaleString('ru-RU')+' $'}
@@ -99,11 +99,11 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
   }
   form.addEventListener('input',function(e){if(e.target.id!=='lotLookup')$('exampleStatus').textContent='Расчёт предварительный. Все подставленные значения можно изменить.';summaries()});
   form.addEventListener('change',summaries);document.addEventListener('simplecalc:result',summaries);
-  $('lotLookup').addEventListener('input',function(){lookupVersion++;$('lotCard').hidden=true;window.SIMPLE_LOT_ERROR=this.value.trim()?'Нажмите «Найти лот» или очистите номер для ручного расчёта.':'';status($('lotStatus'),this.value.trim()?'Нажмите «Найти лот», чтобы загрузить именно этот автомобиль.':'Можно заполнить поля вручную.');});
+  $('lotLookup').addEventListener('input',function(){lookupVersion++;$('lotCard').hidden=true;window.SIMPLE_LOT_PENDING=!!this.value.trim();window.SIMPLE_LOT_ERROR=this.value.trim()?'Нажмите «Найти лот» или очистите номер для ручного расчёта.':'';status($('lotStatus'),this.value.trim()?'Нажмите «Найти лот», чтобы загрузить именно этот автомобиль.':'Можно заполнить поля вручную.');});
   $('lotLookup').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();findLot()}});
   async function findLot(){
     var args=H.lookupInput($('lotLookup').value);if(!args){status($('lotStatus'),'Введите номер из 7–12 цифр или HTTPS-ссылку Copart / IAAI.');return}
-    var ticket=++lookupVersion;$('findLot').disabled=true;status($('lotStatus'),'Ищем автомобиль…');
+    var ticket=++lookupVersion;$('findLot').disabled=true;window.SIMPLE_LOT_PENDING=true;window.SIMPLE_LOT_ERROR='Дождитесь поиска лота или очистите номер для ручного расчёта.';change($('lotLookup'));status($('lotStatus'),'Ищем автомобиль…');
     try{
       var response=await remote(args);if(ticket!==lookupVersion)return;var v=response.payload||{};
       if(!['copart','iaai'].includes(v.platform)||!v.title||!v.lot_number)throw new Error('Лот не найден у источника. Попробуйте ссылку с аукциона или заполните поля вручную.');
@@ -114,7 +114,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
       $('yard').value=yard;if(!yard)missing.push('площадку — она не сопоставлена с тарифной таблицей');
       $('year').value=year>=CALC_YEAR-20&&year<=CALC_YEAR?String(year):'';if(!$('year').value)missing.push('год');
       $('volume').value=cc===null?'':String(cc);if(cc===null)missing.push('объём двигателя');
-      window.SIMPLE_LOT_ERROR='';if(fuel){root.querySelector('input[name=fuel][value="'+fuel+'"]').checked=true;$('simpleFuel').value=fuel;delete $('simpleFuel').dataset.comboInvalid;}else{window.SIMPLE_LOT_ERROR='Источник не указал тип двигателя. Выберите его вручную.';missing.push('тип двигателя')}
+      window.SIMPLE_LOT_PENDING=false;window.SIMPLE_LOT_ERROR='';if(fuel){root.querySelector('input[name=fuel][value="'+fuel+'"]').checked=true;$('simpleFuel').value=fuel;delete $('simpleFuel').dataset.comboInvalid;}else{window.SIMPLE_LOT_ERROR='Источник не указал тип двигателя. Выберите его вручную.';missing.push('тип двигателя')}
       $('simpleAuction').value=v.platform;delete $('simpleAuction').dataset.comboInvalid;delete $('year').dataset.comboInvalid;delete $('port').dataset.comboInvalid;
       $('port').value='auto';make.value=H.text(v.make);makeValue=make.value;model.value=H.text(v.series&&v.series.name||v.model);modelCombo.disabled(false);model.placeholder='Модель из найденного лота';modelRows=[];makeVersion++;
       if(root.querySelector('input[name=mode]:checked').value==='price')$('price').value='';
@@ -127,5 +127,5 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
   }
   $('findLot').addEventListener('click',findLot);
   var params=new URLSearchParams(location.search);make.value=(params.get('make')||'').slice(0,80);model.value=(params.get('model')||'').slice(0,120);$('lotLookup').value=(params.get('lot')||'').slice(0,500);if(make.value){makeValue=make.value;modelCombo.disabled(false);model.placeholder='Выберите или впишите модель';}
-  summaries();
+  summaries();change(form);
 })();

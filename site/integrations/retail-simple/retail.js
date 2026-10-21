@@ -402,10 +402,10 @@ function refreshRetailLead(){
   var root=document.getElementById("amz-retail-calc"), form=root.querySelector(".wpcf7 form");
   if(!form)return;
   var paramsField=form.querySelector('[name="calc-params"]'), resultField=form.querySelector('[name="calc-result"]');
-  var rows=Array.from(root.querySelectorAll(".bill-in .row:not([hidden])")).map(function(e){return e.innerText.trim().replace(/\n+/g,": ")}).filter(Boolean);
+  var rows=Array.from(root.querySelectorAll(".bill-in .row:not([hidden])")).map(function(e){return Array.from(e.children).map(function(c){return c.textContent.trim()}).join(": ")}).filter(Boolean);
   function checked(n){var e=root.querySelector('#calcForm input[name="'+n+'"]:checked');return e?e.parentNode.textContent.trim():"";}
   var fields=["Автомобиль: "+[$("carMake").value,$("carModel").value].filter(Boolean).join(" "),"Лот: "+$("lotLookup").value,"Техника: "+checked("vtype"),"Режим: "+checked("mode"),"Введённая сумма: "+$("price").value+" $",
-    "Год: "+$("year").value,"Объём: "+$("volume").value+" см³","Двигатель: "+checked("fuel"),
+    "Год: "+$("year").value,"Объём: "+(checked("fuel")==="Электро"?"не требуется (электро)":$("volume").value+" см³"),"Двигатель: "+checked("fuel"),
     "Аукцион: "+checked("auction"),"Площадка: "+$("yard").value,"Маршрут: "+$("r-sea-l").textContent,
     "Sublot: "+($("sublot").checked?"да":"нет"),"Льгота 50%: "+($("benefit").checked?"да":"нет"),
     "Ремонт: "+$("repair").value+" $","Услуга: "+$("service").value+" BYN"];
