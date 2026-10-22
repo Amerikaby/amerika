@@ -44,6 +44,8 @@ const form=`<form autocomplete="off" id="calcForm">
 body=body.replace(/<form autocomplete="off" id="calcForm">[\s\S]*?<\/form>/,form);
 body=body.replace('<h1>Калькулятор для розничных клиентов</h1>','<h1>Сколько будет стоить авто в Минске?</h1>');
 body=body.replace(/<p class="lead">[\s\S]*?<\/p>/,'<p class="lead">По номеру лота или вручную. С доставкой, таможней и вашим бюджетом ремонта.</p>');
+body=body.replace(/(<p class="lead">[\s\S]*?<\/p>)/,'$1\n<p class="calc-status-top">Калькулятор пока в доработке. Для точного расчёта <a href="#lead">свяжитесь с менеджером</a>.</p>');
+body=body.replace('<section class="lead-sec" id="lead">', `<section class="calc-status-bottom" aria-labelledby="calcStatusTitle"><div class="wrap"><div class="calc-status-card"><h2 id="calcStatusTitle">Калькулятор пока в доработке</h2><p>Результаты расчёта могут быть неточными. Рекомендуем связаться с менеджером для точного расчёта по вашему автомобилю.</p><div class="calc-status-links"><a class="btn btn-navy" href="#lead">Связаться с менеджером</a><a class="calc-status-phone" href="tel:+375296332828">+375 (29) 633-28-28</a></div></div></div></section>\n<section class="lead-sec" id="lead">`);
 body=body.replace('<p class="eyebrow">Калькулятор</p>','<p class="eyebrow">Калькулятор · тест новой версии</p>');
 const detailStart=body.indexOf('<div class="grp">Аукцион'), detailEnd=body.indexOf('<div class="total">',detailStart);
 const details=body.slice(detailStart,detailEnd),totalStart=detailEnd,totalEnd=body.indexOf('<p class="note warn-note"',totalStart);

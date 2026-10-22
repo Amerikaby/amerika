@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 $asset = get_template_directory_uri() . '/assets/retail-20261020/';
 $simple = get_template_directory_uri() . '/assets/retail-simple-20261021/';
 wp_enqueue_style('amz-retail', $asset.'retail.css', array(), '20261020.3');
-wp_enqueue_style('amz-retail-simple', $simple.'preview.css', array('amz-retail'), '20261021.prod1');
+wp_enqueue_style('amz-retail-simple', $simple.'preview.css', array('amz-retail'), '20261022.notice1');
 wp_enqueue_script('amz-retail-rates', $asset.'rates.php', array(), null, true);
 wp_enqueue_script('amz-retail', $simple.'retail-production.js', array('amz-retail-rates'), '20261021.prod2', true);
 wp_enqueue_script('amz-retail-simple', $simple.'preview.js', array('amz-retail'), '20261021.prod3', true);

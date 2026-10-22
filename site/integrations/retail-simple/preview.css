@@ -1,4 +1,13 @@
 /* Same brand palette; reduce visible detail, keep the full estimate available. */
+#amz-retail-calc .calc-status-top{font-size:13px;line-height:1.6;color:var(--muted);margin:10px 0 0}
+#amz-retail-calc .calc-status-top a{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+#amz-retail-calc .calc-status-bottom{padding:0 0 36px;background:var(--paper)}
+#amz-retail-calc .calc-status-card{padding:28px 32px;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+#amz-retail-calc .calc-status-card h2{font:700 clamp(22px,2.5vw,28px)/1.25 var(--display);color:var(--ink);margin:0 0 12px}
+#amz-retail-calc .calc-status-card p{font-size:16px;line-height:1.65;color:var(--muted);max-width:780px;margin:0 0 20px}
+#amz-retail-calc .calc-status-links{display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap}
+#amz-retail-calc .calc-status-phone{font-size:16px;font-weight:700;color:var(--navy);text-decoration:underline;text-underline-offset:4px}
+@media(max-width:600px){#amz-retail-calc .calc-status-card{padding:22px 20px}#amz-retail-calc .calc-status-links{align-items:flex-start;flex-direction:column}}
 #amz-retail-calc .page-head{padding-block:18px 20px}
 #amz-retail-calc .page-head h1{font-size:clamp(28px,3vw,36px);max-width:none;margin:6px 0 8px}
 #amz-retail-calc .page-head .lead{font-size:16px;max-width:760px}

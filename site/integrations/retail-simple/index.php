@@ -16,7 +16,7 @@ add_filter('pre_get_document_title',function(){return 'Калькулятор а
 $asset=home_url('/newcodex/kalkulyator-simple/');
 $base=get_template_directory_uri().'/assets/retail-20261020/';
 wp_enqueue_style('amz-retail',$base.'retail.css',array(),'20261020.3');
-wp_enqueue_style('amz-retail-simple',$asset.'preview.css',array('amz-retail'),'20261021.2');
+wp_enqueue_style('amz-retail-simple',$asset.'preview.css',array('amz-retail'),'20261022.notice1');
 wp_enqueue_script('amz-retail-rates',$base.'rates.php',array(),null,true);
 wp_enqueue_script('amz-retail',$asset.'retail.js',array('amz-retail-rates'),'20261021.simple2',true);
 wp_enqueue_script('amz-retail-simple',$asset.'preview.js',array('amz-retail'),'20261021.5',true);

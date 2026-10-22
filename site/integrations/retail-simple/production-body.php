@@ -4,6 +4,7 @@
 <p class="eyebrow">Калькулятор</p>
 <h1>Сколько будет стоить авто в Минске?</h1>
 <p class="lead">По номеру лота или вручную. С доставкой, таможней и вашим бюджетом ремонта.</p>
+<p class="calc-status-top">Калькулятор пока в доработке. Для точного расчёта <a href="#lead">свяжитесь с менеджером</a>.</p>
 </div></div>
 <section class="calc-sec" id="calc">
 <div class="wrap">
@@ -117,5 +118,6 @@ if ($amz_retail_fx_valid) {
 </div>
 </div>
 </section>
+<section class="calc-status-bottom" aria-labelledby="calcStatusTitle"><div class="wrap"><div class="calc-status-card"><h2 id="calcStatusTitle">Калькулятор пока в доработке</h2><p>Результаты расчёта могут быть неточными. Рекомендуем связаться с менеджером для точного расчёта по вашему автомобилю.</p><div class="calc-status-links"><a class="btn btn-navy" href="#lead">Связаться с менеджером</a><a class="calc-status-phone" href="tel:+375296332828">+375 (29) 633-28-28</a></div></div></div></section>
 <section class="lead-sec" id="lead"><div class="wrap"><div class="sec-head" style="margin:0"><p class="eyebrow">Расчёт по вашему лоту</p><h2>Получить точный расчёт</h2><p>Оставьте телефон — менеджер проверит выбранный лот, маршрут и все расходы до Минска.</p><div class="retail-summary"><label for="lcar">Ваш предварительный расчёт</label><textarea aria-describedby="retailSummaryNote" id="lcar" placeholder="Нажмите «Получить точный расчёт» под итоговой суммой, чтобы перенести сюда параметры." readonly="" rows="7"></textarea><p class="note" id="retailSummaryNote">Параметры расчёта передадим менеджеру вместе с заявкой.</p></div></div><div class="retail-form-panel"><?php echo do_shortcode('[contact-form-7 id="'.(int)get_option('amz_retail_form_id').'" title="Розничный калькулятор"]'); ?><p class="form-privacy">Ответим в рабочее время: Пн–Пт, 10:00–19:00.</p></div></div></section>
 </main>
