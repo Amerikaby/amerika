@@ -113,71 +113,17 @@ get_header();
 		</section>
 
 
-		<section class="auto-box">
-			<div class="container">
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
-
-				  <li class="nav-item" role="presentation">
-				    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Под заказ</button>
-				  </li>
-
-				  <li class="nav-item" role="presentation">
-				    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="home" aria-selected="false">В наличии</button>
-				  </li>
-
-				  <li class="nav-item" role="presentation"> 
-				    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">В пути</button>
-				  </li>
-
-				</ul>
-
-
-				<div class="tab-content" id="myTabContent">
-				  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-				  	<div class="grid-box">
-				  		<?php ShowAutoOnOrder(); ?>
-				  	</div>
-
-					<div class="auto-box-button">
-
-						<a href="/situation/on-order/" class="btn red">Все авто под заказ</a>
-
-					</div>
-
-				  </div>
-
-				  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-				  	<div class="grid-box">
-				  		<?php ShowAutoInStock(); ?>
-				  	</div>
-
-					<div class="auto-box-button">
-
-						<a href="/situation/in-stock/" class="btn red">Все авто в наличии</a>
-
-					</div>
-
-				  </div>
-
-				  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-
-				  	<div class="grid-box">
-				  		<?php ShowAutoInTransit(); ?>
-				  	</div>
-
-					<div class="auto-box-button">
-
-						<a href="/situation/in-transit/" class="btn red">Все авто в пути</a>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</section>
+		<section class="auto-box" aria-labelledby="amz-on-order-title">
+            <div class="container">
+                <h2 id="amz-on-order-title">Автомобили под заказ</h2>
+                <div class="grid-box">
+                    <?php ShowAutoOnOrder(); ?>
+                </div>
+                <div class="auto-box-button">
+                    <a href="/situation/on-order/" class="btn red">Все авто под заказ</a>
+                </div>
+            </div>
+        </section>
 
 
 	<section class="marks-tabs">

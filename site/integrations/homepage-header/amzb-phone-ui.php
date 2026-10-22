@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AMZB Phone UI
  * Description: Open phone numbers, compact navigation and mobile call link.
- * Version: 2.0.0
+ * Version: 2.1.0
  */
 defined('ABSPATH') || exit;
 add_action('wp_enqueue_scripts', function () {
@@ -50,6 +50,15 @@ add_action('wp_footer', function () {
  if(document.documentElement.dataset.amzbPhoneUi){return;}
  document.documentElement.dataset.amzbPhoneUi='2';
  var track=<?php echo is_user_logged_in() ? 'false' : 'true'; ?>;
+ <?php
+ $amz_forms = array();
+ foreach (get_posts(array('post_type'=>'wpcf7_contact_form','post_status'=>'publish','numberposts'=>-1)) as $amz_form) {
+     $amz_id = (int) $amz_form->ID;
+     $amz_type = in_array($amz_id,array(13312,17726),true) ? 'vin_check' : ($amz_id===2212 ? 'contact_request' : (in_array($amz_id,array(103,3606,3607,17650,17725,17910),true) ? 'vehicle_request' : 'website_request'));
+     $amz_forms[(string)$amz_id] = array('name'=>get_the_title($amz_id),'type'=>$amz_type);
+ }
+?>
+ var leadForms=<?php echo wp_json_encode($amz_forms,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;
  function event(name,params){
   if(!track){return;}
   try{if(typeof window.ym==='function'){window.ym(91733040,'reachGoal',name);}}catch(e){}
@@ -59,10 +68,42 @@ add_action('wp_footer', function () {
   var link=e.target.closest&&e.target.closest('a[href^="tel:"]');
   if(link){event('phone_click',{contact_location:link.closest('.amzb-floating-phone')?'mobile_floating':link.closest('#masthead')?'header':'page'});}
  });
+ // One sender for all published CF7 forms. Only confirmed success counts.
+ // No submitted name, phone, email, VIN or request identifier is sent to analytics.
+ var leadAttempts=new WeakMap();
+ function leadForm(e){
+  var node=e&&e.target;
+  if(!node){return null;}
+  if(node.matches&&node.matches('.wpcf7 form')){return node;}
+  return node.querySelector?node.querySelector('.wpcf7 form,form'):null;
+ }
+ function beginLeadAttempt(e){
+  var form=leadForm(e);
+  if(form){leadAttempts.set(form,{counted:false});}
+ }
+ document.addEventListener('submit',beginLeadAttempt,true);
+ document.addEventListener('wpcf7beforesubmit',beginLeadAttempt,false);
  document.addEventListener('wpcf7mailsent',function(e){
   if(!track){return;}
-  try{if(typeof window.gtag==='function'){window.gtag('event','generate_lead',{form_id:String(e.detail&&e.detail.contactFormId||''),method:'contact_form'});}}catch(err){}
- });
+  var detail=e.detail||{},form=leadForm(e);
+  if(!form){return;}
+  var status=detail.status||(detail.apiResponse&&detail.apiResponse.status);
+  if(status&&status!=='mail_sent'){return;}
+  var field=form.querySelector('[name="_wpcf7"]');
+  var id=String(detail.contactFormId||(field&&field.value)||'');
+  var config=leadForms[id];
+  if(!config||typeof window.gtag!=='function'){return;}
+  var attempt=leadAttempts.get(form);
+  if(!attempt){attempt={counted:false};leadAttempts.set(form,attempt);}
+  if(attempt.counted){return;}
+  attempt.counted=true;
+  try{
+   window.gtag('event','generate_lead',{
+    send_to:'G-ZVGQ3SH216',form_id:id,form_name:config.name,
+    form_type:config.type,method:'contact_form'
+   });
+  }catch(err){attempt.counted=false;}
+ },false);
 })();
 </script>
     <?php
