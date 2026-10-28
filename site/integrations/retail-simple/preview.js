@@ -98,11 +98,16 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
   $('simpleFuel').addEventListener('change',function(){var radio=root.querySelector('input[name=fuel][value="'+this.value+'"]');if(radio){if(!window.SIMPLE_LOT_PENDING)window.SIMPLE_LOT_ERROR='';radio.checked=true;change(radio)}});
   $('simpleAuction').addEventListener('change',function(){var radio=root.querySelector('input[name=auction][value="'+this.value+'"]');if(radio){radio.checked=true;change(radio)}});
   form.addEventListener('submit',function(e){e.preventDefault()});
+  // An empty optional repair field means zero before the core validates/recalculates.
+  function optionalRepair(e){if(e.target.id==='repair'&&!e.target.value.trim())e.target.value='0'}
+  form.addEventListener('input',optionalRepair,true);form.addEventListener('change',optionalRepair,true);
   function money(n){return Math.round(n).toLocaleString('ru-RU')+' $'}
   function summaries(){
     var a=root.querySelector('input[name=auction]:checked').value,f=root.querySelector('input[name=fuel]:checked').value;
     $('deliverySummary').textContent=(a==='copart'?'Copart':'IAAI')+' · '+($('yard').value||'площадка не выбрана');
-    $('costSummary').textContent='Ремонт '+money(Number($('repair').value)||0)+' · услуга '+$('service').value+' BYN'+($('benefit').checked?' · льгота 50%':' · без льготы');
+    var repairBudget=Math.max(0,Number($('repair').value)||0);
+    $('costSummary').textContent=(repairBudget?'Ремонт '+money(repairBudget):'Без ремонта')+' · услуга '+$('service').value+' BYN'+($('benefit').checked?' · льгота 50%':' · без льготы');
+    var totalLabel=$('simpleTotalLabel');if(totalLabel)totalLabel.textContent=repairBudget?'В Минске с ремонтом':'В Минске без ремонта';
     if($('simpleFuel').dataset.comboInvalid!=='true')$('simpleFuel').value=f;fuelCombo.sync();if($('simpleAuction').dataset.comboInvalid!=='true')$('simpleAuction').value=a;auctionCombo.sync();yearCombo.sync();
     var moto=root.querySelector('input[name=vtype]:checked').value==='moto';modelCombo.disabled(moto||!make.value);makeCombo.disabled(moto);$('simpleFuel').querySelector('[value=hybrid]').disabled=moto;
     var cc=Number($('volume').value),routeReady=(f==='ev'||cc>0)&&!window.SIMPLE_LOT_ERROR;

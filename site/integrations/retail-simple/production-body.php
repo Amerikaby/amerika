@@ -3,7 +3,7 @@
 <div class="page-head"><div class="wrap">
 <p class="eyebrow">Калькулятор</p>
 <h1>Сколько будет стоить авто в Минске?</h1>
-<p class="lead">По номеру лота или вручную. С доставкой, таможней и вашим бюджетом ремонта.</p>
+<p class="lead">По номеру лота или вручную. С доставкой и таможней. Ремонт можно добавить по желанию.</p>
 <p class="calc-status-top">Калькулятор пока в доработке. Для точного расчёта <a href="#lead">свяжитесь с менеджером</a>.</p>
 </div></div>
 <section class="calc-sec" id="calc">
@@ -40,10 +40,10 @@
 <label class="check wide" for="sublot"><input id="sublot" type="checkbox"/> Машина вне площадки аукциона (Sublot / Offsite), +100 $</label>
 </div></details>
 <details class="simple-settings wide" id="costSettings"><summary>Ремонт, льгота и наша услуга <span id="costSummary"></span></summary><div class="simple-settings-body">
-<div class="field"><label for="repair">Бюджет восстановления, $</label><input id="repair" max="100000" min="0" step="100" type="number" value="1500"/></div>
+<div class="field"><label for="repair">Ремонт, $ <span class="simple-optional">необязательно</span></label><input id="repair" aria-describedby="repairHelp" max="100000" min="0" step="100" type="number" value="0"/></div>
 <div class="field"><label for="service">Наша услуга, BYN</label><select id="service"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div>
 <label class="check wide" for="benefit" id="benefitWrap"><input id="benefit" type="checkbox"/> Льгота 50% по Указу № 140</label>
-<p class="simple-help wide">1 500 $ — пример резерва, а не оценка повреждений. Возраст на границе 3 и 5 лет уточняется по дате выпуска.</p>
+<p class="simple-help wide" id="repairHelp">По умолчанию ремонт не включён. Впишите свою сумму, если хотите учесть его в итоге. Возраст на границе 3 и 5 лет уточняется по дате выпуска.</p>
 <div class="field wide"><label id="vtypeLabel">Что везём</label><div aria-labelledby="vtypeLabel" class="seg" role="radiogroup"><label><input checked name="vtype" type="radio" value="car"/><span>Автомобиль</span></label><label><input name="vtype" type="radio" value="moto"/><span>Мотоцикл</span></label></div></div>
 </div></details>
 <button hidden aria-controls="adv" aria-expanded="false" id="advToggle" type="button"></button><div id="adv" hidden></div>
@@ -53,7 +53,7 @@
 <div class="bill-head"><b>Ваш расчёт до Минска</b><span>предварительный</span></div>
 <p class="budget-error" hidden="" id="budgetError" role="status">Даже без цены лота расходы выше этого бюджета. Увеличьте бюджет или обсудите варианты с менеджером.</p>
 <div class="maxbid" hidden="" id="maxbid"><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
-<div class="total"><span>В Минске с ремонтом</span><b class="num" id="r-total"></b></div>
+<div class="total"><span id="simpleTotalLabel">В Минске без ремонта</span><b class="num" id="r-total"></b></div>
 <small class="num" id="r-byn"></small>
 <div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary><div class="grp">Аукцион <i>платите аукциону</i></div>
 <div class="row"><span>Лот на аукционе</span><span class="num" id="r-lot"></span></div>
@@ -100,8 +100,8 @@
 <p>Переключите «Мотоцикл»: пошлина для мотоциклов считается процентом от таможенной стоимости плюс НДС 20%, утильсбор не платится. Стоимость доставки мотоцикла пока ориентировочная, точную сумму назовём по вашему лоту.</p>
 </div>
 <div class="box">
-<h2>Восстановление — отдельная строка</h2>
-<p>Указанный вами резерв ремонта включён в итог. Значение 1 500 $ — пример: стоимость повреждений оцениваем по фото и отчёту аукциона до ставки. Ремонт можно сделать у партнёрского СТО в Минске.</p>
+<h2>Ремонт — по желанию</h2>
+<p>По умолчанию стоимость ремонта не включена в итог. Если хотите учесть ремонт, раскройте «Ремонт, льгота и наша услуга» и впишите свою сумму. Калькулятор добавит её к итогу. Точную стоимость восстановления менеджер поможет оценить по фото и отчёту аукциона до ставки.</p>
 <?php
 $amz_retail_fx = function_exists('amz_nbrb_snapshot') ? amz_nbrb_snapshot() : null;
 $amz_retail_fx_valid = is_array($amz_retail_fx) && isset($amz_retail_fx['USD'], $amz_retail_fx['EUR'], $amz_retail_fx['date'])

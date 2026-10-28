@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import productionPricing from './production-pricing.cjs';
 const here=path.dirname(fileURLToPath(import.meta.url)), base=path.join(here,'../retail-calculator');
 let body=fs.readFileSync(path.join(base,'retail-body.php'),'utf8');
 const form=`<form autocomplete="off" id="calcForm">
@@ -33,17 +34,17 @@ const form=`<form autocomplete="off" id="calcForm">
 <label class="check wide" for="sublot"><input id="sublot" type="checkbox"/> Машина вне площадки аукциона (Sublot / Offsite), +100 $</label>
 </div></details>
 <details class="simple-settings wide" id="costSettings"><summary>Ремонт, льгота и наша услуга <span id="costSummary"></span></summary><div class="simple-settings-body">
-<div class="field"><label for="repair">Бюджет восстановления, $</label><input id="repair" max="100000" min="0" step="100" type="number" value="1500"/></div>
+<div class="field"><label for="repair">Ремонт, $ <span class="simple-optional">необязательно</span></label><input id="repair" aria-describedby="repairHelp" max="100000" min="0" step="100" type="number" value="0"/></div>
 <div class="field"><label for="service">Наша услуга, BYN</label><select id="service"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div>
 <label class="check wide" for="benefit" id="benefitWrap"><input id="benefit" type="checkbox"/> Льгота 50% по Указу № 140</label>
-<p class="simple-help wide">1 500 $ — пример резерва, а не оценка повреждений. Возраст на границе 3 и 5 лет уточняется по дате выпуска.</p>
+<p class="simple-help wide" id="repairHelp">По умолчанию ремонт не включён. Впишите свою сумму, если хотите учесть его в итоге. Возраст на границе 3 и 5 лет уточняется по дате выпуска.</p>
 <div class="field wide"><label id="vtypeLabel">Что везём</label><div aria-labelledby="vtypeLabel" class="seg" role="radiogroup"><label><input checked name="vtype" type="radio" value="car"/><span>Автомобиль</span></label><label><input name="vtype" type="radio" value="moto"/><span>Мотоцикл</span></label></div></div>
 </div></details>
 <button hidden aria-controls="adv" aria-expanded="false" id="advToggle" type="button"></button><div id="adv" hidden></div>
 </form>`;
 body=body.replace(/<form autocomplete="off" id="calcForm">[\s\S]*?<\/form>/,form);
 body=body.replace('<h1>Калькулятор для розничных клиентов</h1>','<h1>Сколько будет стоить авто в Минске?</h1>');
-body=body.replace(/<p class="lead">[\s\S]*?<\/p>/,'<p class="lead">По номеру лота или вручную. С доставкой, таможней и вашим бюджетом ремонта.</p>');
+body=body.replace(/<p class="lead">[\s\S]*?<\/p>/,'<p class="lead">По номеру лота или вручную. С доставкой и таможней. Ремонт можно добавить по желанию.</p>');
 body=body.replace(/(<p class="lead">[\s\S]*?<\/p>)/,'$1\n<p class="calc-status-top">Калькулятор пока в доработке. Для точного расчёта <a href="#lead">свяжитесь с менеджером</a>.</p>');
 body=body.replace('<section class="lead-sec" id="lead">', `<section class="calc-status-bottom" aria-labelledby="calcStatusTitle"><div class="wrap"><div class="calc-status-card"><h2 id="calcStatusTitle">Калькулятор пока в доработке</h2><p>Результаты расчёта могут быть неточными. Рекомендуем связаться с менеджером для точного расчёта по вашему автомобилю.</p><div class="calc-status-links"><a class="btn btn-navy" href="#lead">Связаться с менеджером</a><a class="calc-status-phone" href="tel:+375296332828">+375 (29) 633-28-28</a></div></div></div></section>\n<section class="lead-sec" id="lead">`);
 body=body.replace('<p class="eyebrow">Калькулятор</p>','<p class="eyebrow">Калькулятор · тест новой версии</p>');
@@ -51,7 +52,9 @@ const detailStart=body.indexOf('<div class="grp">Аукцион'), detailEnd=bod
 const details=body.slice(detailStart,detailEnd),totalStart=detailEnd,totalEnd=body.indexOf('<p class="note warn-note"',totalStart);
 const total=body.slice(totalStart,totalEnd);
 body=body.slice(0,detailStart)+total+`<div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary>`+details+'</details>'+body.slice(totalEnd);
-body=body.replace('<span>Итого с восстановлением</span>','<span>В Минске с ремонтом</span>');
+body=body.replace('<span>Итого с восстановлением</span>','<span id="simpleTotalLabel">В Минске без ремонта</span>');
+body=body.replace('Восстановление — отдельная строка','Ремонт — по желанию');
+body=body.replace('Указанный вами резерв ремонта включён в итог. Значение 1 500 $ — пример: стоимость повреждений оцениваем по фото и отчёту аукциона до ставки. Ремонт можно сделать у партнёрского СТО в Минске.', 'По умолчанию стоимость ремонта не включена в итог. Если хотите учесть ремонт, раскройте «Ремонт, льгота и наша услуга» и впишите свою сумму. Калькулятор добавит её к итогу. Точную стоимость восстановления менеджер поможет оценить по фото и отчёту аукциона до ставки.');
 fs.writeFileSync(path.join(here,'preview-body.php'),body);
 fs.writeFileSync(path.join(here,'production-body.php'),body.replace('Калькулятор · тест новой версии','Калькулятор'));
 let js=fs.readFileSync(path.join(base,'retail.js'),'utf8');
@@ -63,5 +66,5 @@ js=js.replace('var fields=["Техника: "+checked("vtype")','var fields=["А
 js=js.replace('e.innerText.trim().replace(/\\n+/g,": ")','Array.from(e.children).map(function(c){return c.textContent.trim()}).join(": ")');
 js=js.replace('"Объём: "+$("volume").value+" см³"','"Объём: "+(checked("fuel")==="Электро"?"не требуется (электро)":$("volume").value+" см³")');
 fs.writeFileSync(path.join(here,'retail.js'),js);
-fs.writeFileSync(path.join(here,'retail-production.js'),js.replace('/newcodex/kalkulyator-simple/?','/kalkulyator/?'));
+fs.writeFileSync(path.join(here,'retail-production.js'),productionPricing(js.replace(/\r\n/g,'\n')).replace('/newcodex/kalkulyator-simple/?','/kalkulyator/?'));
 console.log('Preview generated. Calculation formulas and tariffs reused without changes.');

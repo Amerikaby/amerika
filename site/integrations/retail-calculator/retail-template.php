@@ -6,8 +6,8 @@ $simple = get_template_directory_uri() . '/assets/retail-simple-20261021/';
 wp_enqueue_style('amz-retail', $asset.'retail.css', array(), '20261020.3');
 wp_enqueue_style('amz-retail-simple', $simple.'preview.css', array('amz-retail'), '20261022.notice1');
 wp_enqueue_script('amz-retail-rates', $asset.'rates.php', array(), null, true);
-wp_enqueue_script('amz-retail', $simple.'retail-production.js', array('amz-retail-rates'), '20261021.prod2', true);
-wp_enqueue_script('amz-retail-simple', $simple.'preview.js', array('amz-retail'), '20261021.prod3', true);
+wp_enqueue_script('amz-retail', $simple.'retail-production.js', array('amz-retail-rates'), '20261027.pricing1', true);
+wp_enqueue_script('amz-retail-simple', $simple.'preview.js', array('amz-retail'), '20261028.repair0.1', true);
 wp_enqueue_script('amz-retail-form', $simple.'form-transport.js', array('amz-retail-simple'), '20261021.prod1', true);
 wp_add_inline_script('amz-retail-simple', 'window.SIMPLE_CALC_CONFIG='.wp_json_encode(array('ajax'=>admin_url('admin-ajax.php'))).';', 'before');
 add_filter('script_loader_tag', function($tag,$handle) {

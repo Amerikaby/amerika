@@ -31,7 +31,7 @@ var CONFIG = {
     klaipeda: {east:1150, center:1350, west:1900},
     poti:     {east:2000, center:2200, west:2800}
   },
-  lastLeg: {klaipeda:650, poti:1700},  // от порта до Минска, $
+  lastLeg: {klaipeda:null, poti:2490},  // от порта до Минска, $
   euMaxCc: 1900,                       // через ЕС: до 1,9 л, без гибридов и электро
   // Было одной суммой customsExtraByn: 945 BYN. Теперь утильсбор по возрасту + сбор + СВХ/декларант.
   utilByn: {upTo3: 624.92, over3: 1282.02},  // утильсбор, легковые физлиц, с 29.04.2026 (пост. СМ № 195). Для электро: TODO: уточнить льготную ставку
@@ -124,8 +124,10 @@ function costOf(price, o){
   var fee = auctionFee(price);
   var inland = L.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
   var row = retailRateFor(o.auction || "copart", o.yard || "ALBANY - NY");
-  var sea = o.port === "klaipeda" ? (row ? row[o.moto ? "moto" : "car"] : NaN) : L.sea.poti[o.region];
-  var last = L.lastLeg[o.port];
+  var sea = o.port === "klaipeda" ? (row ? row[o.moto ? "moto" : "car"] : NaN) :
+    (!o.moto && row && row.seaConfirmed ? row.carPoti : L.sea.poti[o.region]);
+  // Retail destination leg includes port handling; EUR amount follows the shared daily FX.
+  var last = !o.moto && o.port === "klaipeda" ? 1100 * CONFIG.eurUsd - 50 : L.lastLeg[o.port];
   var extra = (!o.moto && o.alt) ? CONFIG.altFuelEur * CONFIG.eurUsd : 0;
   var duty, cust;
   if (o.moto) {
@@ -290,7 +292,11 @@ function fillYears(sel, def){
     } else {
       txt = "Маршрут: через <b>" + P.name + "</b>, вы выбрали его сами.";
     }
-    txt += o.port === "poti" ? " Тарифы Поти предварительные: подтвердим по конкретному лоту." : " Море рассчитано по выбранной площадке. Наземная доставка — предварительно.";
+    txt += o.port === "poti" ? " Доставку подтвердим по конкретному лоту." : " Море рассчитано по выбранной площадке. Доставка до Минска включает портовое оформление.";
+    if (!o.moto) {
+      var selectedRate = retailRateFor(o.auction, o.yard);
+      if (selectedRate && !selectedRate.seaConfirmed) txt += " Морской тариф предварительный: уточните у менеджера.";
+    }
     $("route").innerHTML = txt;
     $("route").classList.toggle("warn", !o.moto && o.port === "klaipeda" && o.port !== o.autoPort);
 
