@@ -18,7 +18,7 @@
     <label><input type="radio" name="qSize" value="crossover"/><span><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M8 28h80V15l-10-3-9-8H30l-13 12-9 3zM28 15h48M48 5v10"/><circle cx="25" cy="29" r="7"/><circle cx="73" cy="29" r="7"/></svg><b>Кроссовер</b><small>SUV среднего размера</small></span></label>
     <label><input type="radio" name="qSize" value="large"/><span><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M5 28h86V12H68L57 3H27L16 15H5zM29 13h32M44 4v9M68 13v13"/><circle cx="24" cy="29" r="8"/><circle cx="75" cy="29" r="8"/></svg><b>Крупный</b><small>Большой SUV, пикап</small></span></label>
   </div></fieldset>
-  <p id="qSizeNote" class="quick-warning" hidden>Размер пока не меняет базовую сумму: тариф за габариты уточнит менеджер. Доплата не включена в оценку.</p>
+  <p id="qSizeNote" class="quick-warning" hidden>Учтём известные надбавки выбранного размера.</p>
   <div class="quick-route-summary"><span>Маршрут для примера</span><strong id="qRouteSummary">Клайпеда · подбираем площадку</strong><small id="qRouteHint">Минимальная подтверждённая доставка в нашем справочнике.</small></div>
   <details class="quick-settings" id="qSettings"><summary>Уточнить расчёт: маршрут и таможня</summary><div class="quick-settings-body">
     <label for="qPort">Доставка через<select id="qPort"><option value="auto">Автоматически · Клайпеда для примера</option><option value="klaipeda">Клайпеда, Литва</option><option value="poti">Поти, Грузия</option></select></label>
@@ -40,7 +40,7 @@
   <div class="quick-result-top"><span class="eyebrow">Предварительная оценка</span><span class="quick-estimate-tag">Без ремонта</span></div>
   <h2 id="qResultTitle">Авто с доставкой, без таможни</h2><div id="qTotal" class="quick-total">—</div><p id="qByn" class="quick-byn">Введите цену лота, чтобы увидеть бюджет.</p>
   <p id="qError" class="quick-error" role="status" hidden></p>
-  <div class="quick-shipping"><span>Из них доставка до Минска</span><b id="qShipping">—</b><small>США → порт → Минск, базовый тариф</small></div>
+  <div class="quick-shipping"><span>Из них доставка до Минска</span><b id="qShipping">—</b><small>США → порт → Минск, выбранный класс авто</small></div>
   <div class="quick-inclusions"><strong id="qIncluded">Включено: лот, сборы, доставка и наша услуга.</strong><p id="qExcluded">Не включено: таможня и ремонт. Для крупного авто может потребоваться доплата за габариты.</p></div>
   <p id="qCustomsAssumption" class="quick-assumptions" hidden></p>
   <p id="qPolicyNote" class="quick-policy-note">Клайпеда выбрана для ценового примера. Доступность маршрута по вашему автомобилю ещё не проверена.</p>
@@ -72,6 +72,7 @@
 <div class="field"><label for="year">Год выпуска</label><select id="year"></select></div>
 <div class="field"><label for="volume">Объём двигателя, см³</label><input id="volume" inputmode="numeric" min="0" step="1" type="number" value="2000"/></div>
 <div class="field wide" id="clearanceField" hidden><label for="clearance">Клиренс, мм · для авто старше пяти лет</label><input id="clearance" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="Укажите по характеристикам модели"/><p class="simple-help">До 165 мм включительно — Клайпеда; выше или неизвестно — предварительно Поти.</p></div>
+<div class="field wide" id="vehicleSizeField"><label for="vehicleSize">Размер автомобиля</label><select id="vehicleSize"><option value="compact">Легковой · седан, хэтчбек</option><option value="crossover">Кроссовер · SUV среднего размера</option><option value="large">Крупный SUV / пикап</option></select><p class="simple-help">Учтём известные надбавки по США и морю. Для крупных машин окончательный тариф зависит от габаритов.</p></div>
 <div class="field" id="fuelField"><label for="simpleFuel">Двигатель</label><select id="simpleFuel"><option value="ice">Бензин / дизель</option><option value="hybrid">Гибрид</option><option value="ev">Электро</option></select>
 <div hidden aria-hidden="true"><label><input checked name="fuel" type="radio" value="ice"/>Бензин / дизель</label><label id="hybridChoice"><input name="fuel" type="radio" value="hybrid"/>Гибрид</label><label><input name="fuel" type="radio" value="ev"/>Электро</label></div></div>
 <p class="hint wide" hidden id="evHint">Для электромобиля объём не нужен. Условия ввоза подтвердим по лоту.</p>
@@ -99,6 +100,7 @@
 <div class="bill-head"><b>Ваш расчёт до Минска</b><span>предварительный</span></div>
 <p class="budget-error" hidden="" id="budgetError" role="status">Даже без цены лота расходы выше этого бюджета. Увеличьте бюджет или обсудите варианты с менеджером.</p>
 <div class="maxbid" hidden="" id="maxbid"><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
+<p id="sizeQuoteNote" class="quick-warning" hidden></p>
 <div class="total"><span id="simpleTotalLabel">В Минске без ремонта</span><b class="num" id="r-total"></b></div>
 <small class="num" id="r-byn"></small>
 <div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p id="simpleRepairRow" hidden><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary><div class="grp">Аукцион <i>платите аукциону</i></div>

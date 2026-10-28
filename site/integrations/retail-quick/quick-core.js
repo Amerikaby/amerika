@@ -28,19 +28,20 @@ var AMZ_QUICK_CORE=(function(){
     customs=customs||{};
     return {auction:route.auction,yard:route.yard,region:route.region,port:route.port,moto:false,alt:false,ev:false,sublot:false,repair:0,
       year:customs.enabled?new Date().getFullYear()-Number(customs.age):new Date().getFullYear()-4,
-      cc:customs.enabled?Number(customs.liters)*1000:1500,benefit:customs.benefit!==false,serviceByn:config.serviceByn};
+      cc:customs.enabled?Number(customs.liters)*1000:1500,benefit:customs.benefit!==false,serviceByn:config.serviceByn,vehicleSize:route.vehicleSize||'compact'};
   }
-  function routes(rates,config,costFn,port){
+  function routes(rates,config,costFn,port,vehicleSize){
     if(!config.fxReady||!['klaipeda','poti'].includes(port))return [];
     var found=[];
     ['copart','iaai'].forEach(function(auction){Object.keys(rates[auction]||{}).forEach(function(yard){
       var row=rates[auction][yard],area=region(yard,config),sea=row&&(port==='poti'?row.carPoti:row.car);
       if(!row||row.seaConfirmed!==true||!area||!Number.isFinite(sea)||sea<=0)return;
-      var route={auction:auction,yard:yard,region:area,port:port},r=costFn(0,options(route,config));
+      var route={auction:auction,yard:yard,region:area,port:port,vehicleSize:vehicleSize||'compact'},r=costFn(0,options(route,config));
       var shipping=r.inland+r.sea+r.last+r.extra;
-      if([r.inland,r.sea,r.last,r.extra,shipping].every(Number.isFinite)&&shipping>0)found.push(Object.assign(route,{shipping:shipping,inland:r.inland,sea:r.sea,last:r.last}));
+      var sq=r.vehicleSizeQuote,rank=sq&&!sq.seaKnown?2:sq&&!sq.inlandKnown?1:0;
+      if([r.inland,r.sea,r.last,r.extra,shipping].every(Number.isFinite)&&shipping>0)found.push(Object.assign(route,{shipping:shipping,inland:r.inland,sea:r.sea,last:r.last,sizeRank:rank}));
     })});
-    return found.sort(function(a,b){return a.shipping-b.shipping||(a.auction+'|'+a.yard).localeCompare(b.auction+'|'+b.yard,'en')});
+    return found.sort(function(a,b){return a.sizeRank-b.sizeRank||a.shipping-b.shipping||(a.auction+'|'+a.yard).localeCompare(b.auction+'|'+b.yard,'en')});
   }
   function estimate(price,route,config,costFn,customs){
     price=Number(price);customs=customs||{};

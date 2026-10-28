@@ -119,7 +119,7 @@ function retailRateFor(auction, yard){
   return group && own.call(group, yard) ? group[yard] : null;
 }
 /* Полная стоимость под ключ, $. o: {moto, year, cc, alt, ev, region, port, sublot, benefit} */
-function costOf(price, o){
+function costOfBase(price, o){
   var L = o.moto ? CONFIG.moto : CONFIG;   // у мотоциклов своя логистика и таможня
   var fee = auctionFee(price);
   var inland = L.inland[o.region] + (o.sublot ? CONFIG.sublot : 0);
@@ -149,6 +149,10 @@ function costOf(price, o){
 
 /* Максимальная ставка с шагом 50 $. На границах ставок пошлины итог может
    уменьшаться, поэтому ищем отдельно внутри каждого тарифного интервала. */
+function costOf(price,o){
+  var r=costOfBase(price,o);if(o.moto||!o.vehicleSize||o.vehicleSize==='compact')return r;
+  return AMZ_SIZE_CORE.apply(r,AMZ_SIZE_CORE.quote(AMZ_SIZE_RATES,o.auction||'copart',o.yard||'ALBANY - NY',o.port,o.vehicleSize));
+}
 function maxBidForBudgetUnrestricted(budget, o){
   if (!Number.isFinite(budget) || budget < 0) return 0;
   var step = 50, upper = Math.floor(budget / step), cuts = [0, upper + 1];
@@ -231,7 +235,7 @@ function fillYears(sel, def){
     var autoPort = autoPortFor(moto, alt, cc);
     var port = $("port").value === "auto" ? autoPort : $("port").value;
     return {auction:val("auction"), moto:moto, year:+$("year").value, cc:cc, alt:alt, ev:!moto && ev, region:region, yard:yard,
-            port:port, autoPort:autoPort, sublot:$("sublot").checked, benefit:$("benefit").checked, repair:Math.max(0,+$("repair").value||0), serviceByn:+$("service").value};
+            port:port, autoPort:autoPort, vehicleSize:$("vehicleSize").value, sublot:$("sublot").checked, benefit:$("benefit").checked, repair:Math.max(0,+$("repair").value||0), serviceByn:+$("service").value};
   }
   function calc(){
     if(window.SIMPLE_LOT_ERROR || document.querySelector('#calcForm select[data-combo-invalid="true"]')){ $("calcInputError").hidden=false; $("calcInputError").textContent=window.SIMPLE_LOT_ERROR || "Выберите значение из списка под полем."; document.querySelector("#calcForm + .bill .bill-in").hidden=true; $("sendCalc").setAttribute("aria-disabled","true"); return null; }
@@ -276,7 +280,11 @@ function fillYears(sel, def){
     $("maxbid").hidden = !budget;
     $("budgetError").hidden = !budget || cost(0,o).total <= input;
     if(budget && cost(0,o).total>input) $("maxbid").hidden=true;
-    $("r-max").textContent = fmt(r.price);
+    var incompleteSize=!o.moto&&r.vehicleSizeQuote&&r.vehicleSizeQuote.missing.length>0;
+    if(budget&&incompleteSize)$("maxbid").hidden=true;
+    $("r-max").textContent = budget&&incompleteSize ? "не определена: есть неизвестная доплата" : fmt(r.price);
+    $("sizeQuoteNote").hidden=!incompleteSize;
+    $("sizeQuoteNote").textContent=incompleteSize?r.vehicleSizeQuote.missing.join(' ')+(budget?' Лимит ставки не рассчитан: сначала уточните эти расходы у менеджера.':''):'';
     $("evHint").hidden = !ev;
     $("carOnly").hidden = o.moto;
     $("hybridChoice").hidden=o.moto;
@@ -287,6 +295,7 @@ function fillYears(sel, def){
     var P=PORTS[o.port], routePolicy=AMZ_PREVIEW_ROUTE(o.moto,o.alt,o.cc);
     var txt="Маршрут: через <b>"+P.name+"</b>. "+routePolicy.reason+" Дату выпуска и параметры по лоту подтвердит менеджер.";
     if(!o.moto){var selectedRate=retailRateFor(o.auction,o.yard);if(selectedRate&&!selectedRate.seaConfirmed)txt+=" Морской тариф предварительный: уточните у менеджера.";}
+    if(!o.moto&&o.vehicleSize!=='compact'){var sq=AMZ_SIZE_CORE.quote(AMZ_SIZE_RATES,o.auction,o.yard,o.port,o.vehicleSize);txt+=' Учтённая надбавка за размер: '+fmt(sq.total)+'. '+sq.missing.join(' ');}
     $("route").innerHTML=txt;$("route").classList.toggle("warn",routePolicy.status==="unknown");
 
     $("r-lot").textContent = fmt(r.price);
@@ -304,7 +313,7 @@ function fillYears(sel, def){
     $("r-cust").textContent = fmt(r.cust);
     $("r-ours").textContent = fmt(r.ours);
     $("r-repair").textContent = fmt(r.repair);
-    $("r-total").textContent = fmt(r.total);
+    $("r-total").textContent = (incompleteSize?"от ≈ ":"")+fmt(r.total);
     window.SIMPLE_LAST_RESULT=r; document.dispatchEvent(new CustomEvent("simplecalc:result",{detail:r}));
     $("r-byn").textContent = "≈ " + Math.round(r.total * CONFIG.usdByn).toLocaleString("ru-RU") + " BYN по курсу " + CONFIG.usdByn + " (НБРБ, " + retailFxDate() +
       (CONFIG.ratesStale ? "; сохранённый курс, обновление временно недоступно" : "") + ")";
@@ -351,6 +360,7 @@ function fillYears(sel, def){
   var requestedFuel=params.get("fuel");if(requestedFuel==="alt")requestedFuel=Number($("volume").value)===0?"ev":"hybrid";
   if(["hybrid","ev"].includes(requestedFuel))document.querySelector('#calcForm input[name="fuel"][value="'+requestedFuel+'"]').checked=true;
 
+  if(["compact","crossover","large"].includes(params.get("vehicleSize")))$("vehicleSize").value=params.get("vehicleSize");
   if(params.has("clearance")) $("clearance").value=params.get("clearance");
   if(params.has("repair")) $("repair").value = Math.max(0,Number(params.get("repair"))||0);
   if(CONFIG.servicePrices.includes(Number(params.get("service")))) $("service").value=params.get("service");
@@ -374,7 +384,7 @@ function fillYears(sel, def){
   $("shareCalc").addEventListener("click",async function(){
     if(!calc())return;
     var query=new URLSearchParams({type:val("vtype"),mode:val("mode"),price:$("price").value,car_year:$("year").value,cc:$("volume").value,fuel:val("fuel"),repair:$("repair").value,service:$("service").value,benefit:$("benefit").checked?"1":"0",auction:val("auction"),yard:$("yard").value.trim(),port:$("port").value,sublot:$("sublot").checked?"1":"0"});
-    query.set("make",$("carMake").value.trim()); query.set("model",$("carModel").value.trim()); query.set("lot",$("lotLookup").value.trim());
+    query.set("vehicleSize",$("vehicleSize").value); query.set("make",$("carMake").value.trim()); query.set("model",$("carModel").value.trim()); query.set("lot",$("lotLookup").value.trim());
     query.set("view","detail"); query.set("clearance",$("clearance").value); var url=location.origin+"/newcodex/kalkulyator-quick/?"+query.toString()+"#calc";
     var status=$("shareCalcStatus");status.hidden=false;
     try{await navigator.clipboard.writeText(url);$("shareCalcFallback").hidden=true;status.textContent="Ссылка скопирована. В ней сохранены параметры; при изменении ставок итог может измениться.";}

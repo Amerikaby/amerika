@@ -9,6 +9,8 @@ body=body.replace('<p class="eyebrow">Калькулятор</p>','<p class="eye
 body=body.replace(/<p class="lead">[\s\S]*?<\/p>/,'<p class="lead">Быстро прикинуть покупку и доставку — или разобрать все расходы по вашему лоту.</p>');
 body=body.replace('<div class="calc">',switcher+panel+'\n<div class="calc" id="quickDetailed" role="tabpanel" aria-labelledby="detailedTab" hidden>');
 body=body.replace('<div class="field" id="fuelField">','<div class="field wide" id="clearanceField" hidden><label for="clearance">Клиренс, мм · для авто старше пяти лет</label><input id="clearance" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="Укажите по характеристикам модели"/><p class="simple-help">До 165 мм включительно — Клайпеда; выше или неизвестно — предварительно Поти.</p></div>\n<div class="field" id="fuelField">');
+body=body.replace('<div class="field" id="fuelField">','<div class="field wide" id="vehicleSizeField"><label for="vehicleSize">Размер автомобиля</label><select id="vehicleSize"><option value="compact">Легковой · седан, хэтчбек</option><option value="crossover">Кроссовер · SUV среднего размера</option><option value="large">Крупный SUV / пикап</option></select><p class="simple-help">Учтём известные надбавки по США и морю. Для крупных машин окончательный тариф зависит от габаритов.</p></div>\n<div class="field" id="fuelField">');
+body=body.replace('<div class="total"><span id="simpleTotalLabel">','<p id="sizeQuoteNote" class="quick-warning" hidden></p>\n<div class="total"><span id="simpleTotalLabel">');
 body=body.replace('Через Евросоюз в Беларусь сейчас можно везти легковые машины с двигателем до 1,9 литра. Машины с большим объёмом, гибриды и электромобили идут через грузинский порт Поти. Калькулятор выбирает порт сам, но его можно сменить в расширенных настройках.', 'Рабочее правило маршрута: авто до пяти лет с двигателем до 1,9 л — Клайпеда; старше пяти лет — Клайпеда при клиренсе не выше 165 мм, независимо от объёма. Остальные — Поти. Для мотоцикла сумма покупки, сборов и доставки до Клайпеды должна быть не выше 5 000 $. Дату выпуска и параметры по конкретной машине подтвердит менеджер.');
 body=body.replace(/<section class="lead-sec" id="lead">[\s\S]*?<\/main>/,`<section class="lead-sec" id="lead"><div class="wrap"><div class="quick-contact"><p class="eyebrow">По вашему лоту</p><h2>Обсудите расчёт с менеджером</h2><p>Проверим площадку, маршрут, габариты и расходы по конкретному автомобилю. До ставки уточним итог; счёт на оплату подготовит менеджер.</p><label for="qSummary">Ваш предварительный расчёт</label><textarea id="qSummary" readonly rows="7"></textarea><div class="quick-contact-links"><a class="btn btn-red" href="https://t.me/+375296332828" target="_blank" rel="noopener noreferrer">Написать менеджеру в Telegram</a><a class="btn btn-line" href="tel:+375296332828">+375 (29) 633-28-28</a></div><small>Тестовая страница. Форма отправки заявки здесь не подключена; можно связаться с менеджером напрямую.</small></div></div></section>\n</main>`);
 if(!body.includes('id="quickPanel"')||body.includes('contact-form-7'))throw new Error('Preview body was not assembled correctly');
@@ -18,6 +20,21 @@ const oldAuto='function autoPortFor(moto, alt, cc){ return moto ? CONFIG.moto.au
 if(!core.includes(oldAuto))throw new Error('Route policy source changed');
 core=core.replace(oldAuto,'function autoPortFor(moto, alt, cc){ return AMZ_PREVIEW_ROUTE(moto, alt, cc).port; }');
 core=core.replace('function maxBidForBudget(budget, o){','function maxBidForBudgetUnrestricted(budget, o){');
+core=core.replace('function costOf(price, o){','function costOfBase(price, o){');
+core=core.replace('function maxBidForBudgetUnrestricted(budget, o){',`function costOf(price,o){
+  var r=costOfBase(price,o);if(o.moto||!o.vehicleSize||o.vehicleSize==='compact')return r;
+  return AMZ_SIZE_CORE.apply(r,AMZ_SIZE_CORE.quote(AMZ_SIZE_RATES,o.auction||'copart',o.yard||'ALBANY - NY',o.port,o.vehicleSize));
+}
+function maxBidForBudgetUnrestricted(budget, o){`);
+core=core.replace('port:port, autoPort:autoPort, sublot:', 'port:port, autoPort:autoPort, vehicleSize:$("vehicleSize").value, sublot:');
+core=core.replace('if(params.has("repair"))','if(["compact","crossover","large"].includes(params.get("vehicleSize")))$("vehicleSize").value=params.get("vehicleSize");\n  if(params.has("repair"))');
+core=core.replace('query.set("make",','query.set("vehicleSize",$("vehicleSize").value); query.set("make",');
+core=core.replace('    $("r-max").textContent = fmt(r.price);',`    var incompleteSize=!o.moto&&r.vehicleSizeQuote&&r.vehicleSizeQuote.missing.length>0;
+    if(budget&&incompleteSize)$("maxbid").hidden=true;
+    $("r-max").textContent = budget&&incompleteSize ? "не определена: есть неизвестная доплата" : fmt(r.price);
+    $("sizeQuoteNote").hidden=!incompleteSize;
+    $("sizeQuoteNote").textContent=incompleteSize?r.vehicleSizeQuote.missing.join(' ')+(budget?' Лимит ставки не рассчитан: сначала уточните эти расходы у менеджера.':''):'';`);
+core=core.replace('$("r-total").textContent = fmt(r.total);','$("r-total").textContent = (incompleteSize?"от ≈ ":"")+fmt(r.total);');
 core=core.replace('\n(function(){','\nfunction maxBidForBudget(budget,o){return AMZ_QUICK_CORE.motoMaxBid(budget,o,maxBidForBudgetUnrestricted,costOf);}\n(function(){');
 core=core.replace('var o = options(), budget = val("mode") === "budget";', 'var o = options(), budget = val("mode") === "budget";\n    var routeDecision=AMZ_PREVIEW_ROUTE(o.moto,o.alt,o.cc);\n    if(o.port==="klaipeda" && routeDecision.status!=="allowed"){ $("calcInputError").hidden=false; $("calcInputError").textContent=routeDecision.reason+" Выберите автоматический маршрут или Поти."; document.querySelector("#calcForm + .bill .bill-in").hidden=true; $("sendCalc").setAttribute("aria-disabled","true"); return null; }');
 const routeStart=core.indexOf('    var P = PORTS[o.port], txt;'),routeEnd=core.indexOf('    $("r-lot").textContent',routeStart);
@@ -25,6 +42,7 @@ if(routeStart<0||routeEnd<0)throw new Error('Route explanation source changed');
 core=core.slice(0,routeStart)+`    var P=PORTS[o.port], routePolicy=AMZ_PREVIEW_ROUTE(o.moto,o.alt,o.cc);
     var txt="Маршрут: через <b>"+P.name+"</b>. "+routePolicy.reason+" Дату выпуска и параметры по лоту подтвердит менеджер.";
     if(!o.moto){var selectedRate=retailRateFor(o.auction,o.yard);if(selectedRate&&!selectedRate.seaConfirmed)txt+=" Морской тариф предварительный: уточните у менеджера.";}
+    if(!o.moto&&o.vehicleSize!=='compact'){var sq=AMZ_SIZE_CORE.quote(AMZ_SIZE_RATES,o.auction,o.yard,o.port,o.vehicleSize);txt+=' Учтённая надбавка за размер: '+fmt(sq.total)+'. '+sq.missing.join(' ');}
     $("route").innerHTML=txt;$("route").classList.toggle("warn",routePolicy.status==="unknown");
 
 `+core.slice(routeEnd);

@@ -1,0 +1,25 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=path.join(__dirname,'../integrations/retail-quick');
+const quick=fs.readFileSync(path.join(dir,'quick.js'),'utf8'),core=fs.readFileSync(path.join(dir,'production-core.js'),'utf8');
+const fields={'calc-params':{value:'stale detail'},'calc-result':{value:'stale detail'},'post-url':{value:''}};
+const form={querySelector:s=>fields[s.match(/name="([^"]+)"/)[1]]};
+const quickCtx={root:{querySelector:()=>form},mode:'quick',location:{href:'https://amerika.by/kalkulyator/'},result:{total:12411,price:8000,fee:1260,shipping:2950,service:200,customsEnabled:false},$:()=>({value:'visible quick summary'}),money:n=>n+' $'};
+vm.createContext(quickCtx);
+vm.runInContext(quick.slice(quick.indexOf('  function writeQuickLead(){'),quick.indexOf('  function prepareLead(){')),quickCtx);
+assert.equal(quickCtx.writeQuickLead(),true);
+assert.match(fields['calc-params'].value,/Тип расчёта: Быстрый/);
+assert.match(fields['calc-result'].value,/Итого: 12411 \$/);
+assert.match(fields['calc-result'].value,/Таможня: не включена/);
+assert.match(fields['calc-result'].value,/Ремонт: не включён/);
+quickCtx.result=null;quickCtx.writeQuickLead();
+assert.equal(fields['calc-params'].value,'');assert.equal(fields['calc-result'].value,'');
+quickCtx.mode='detail';fields['calc-result'].value='valid detail';quickCtx.writeQuickLead();
+assert.equal(fields['calc-result'].value,'valid detail');
+// The actual generated detailed calc must reject a budget below fixed costs.
+const elements={};const el=id=>elements[id]||(elements[id]={value:id==='price'?'100':'1000',hidden:true,textContent:'',checked:false,setAttribute(k,v){this[k]=v}});
+const bill={hidden:false};let refreshes=0;
+const ctx={window:{},document:{querySelector:s=>s.includes(".bill")?bill:null},$:el,val:n=>n==='mode'?'budget':'ice',CONFIG:{fxReady:true},validFields:()=>true,options:()=>({port:'poti',auction:'copart',yard:'ALBANY - NY'}),AMZ_PREVIEW_ROUTE:()=>({status:'allowed'}),retailRateFor:()=>({car:450}),cost:()=>({price:0,total:1000}),maxBidForBudget:()=>0,nowYear:2026,refreshRetailLead:()=>refreshes++};
+vm.createContext(ctx);vm.runInContext(core.slice(core.indexOf('  function calc(){'),core.indexOf('  $("advToggle").addEventListener')),ctx);
+assert.equal(ctx.calc(),null);assert.equal(bill.hidden,true);assert.equal(el('sendCalc')['aria-disabled'],'true');assert.match(el('calcInputError').textContent,/Бюджета недостаточно/);assert.equal(refreshes,1);
+assert(core.includes('Максимальная ставка: '));assert(core.includes('window.AMZ_ACTIVE_CALC.prepareLead()'));
+console.log('PASS: active-mode lead payload, stale-state clearing, insufficient budget, detailed bid included');
