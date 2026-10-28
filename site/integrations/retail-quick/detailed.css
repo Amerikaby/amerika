@@ -1,0 +1,61 @@
+/* Same brand palette; reduce visible detail, keep the full estimate available. */
+#amz-retail-calc .calc-status-top{font-size:13px;line-height:1.6;color:var(--muted);margin:10px 0 0}
+#amz-retail-calc .calc-status-top a{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+#amz-retail-calc .calc-status-bottom{padding:0 0 36px;background:var(--paper)}
+#amz-retail-calc .calc-status-card{padding:28px 32px;border:1px solid var(--line);border-radius:16px;background:var(--soft)}
+#amz-retail-calc .calc-status-card h2{font:700 clamp(22px,2.5vw,28px)/1.25 var(--display);color:var(--ink);margin:0 0 12px}
+#amz-retail-calc .calc-status-card p{font-size:16px;line-height:1.65;color:var(--muted);max-width:780px;margin:0 0 20px}
+#amz-retail-calc .calc-status-links{display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap}
+#amz-retail-calc .calc-status-phone{font-size:16px;font-weight:700;color:var(--navy);text-decoration:underline;text-underline-offset:4px}
+@media(max-width:600px){#amz-retail-calc .calc-status-card{padding:22px 20px}#amz-retail-calc .calc-status-links{align-items:flex-start;flex-direction:column}}
+#amz-retail-calc .page-head{padding-block:18px 20px}
+#amz-retail-calc .page-head h1{font-size:clamp(28px,3vw,36px);max-width:none;margin:6px 0 8px}
+#amz-retail-calc .page-head .lead{font-size:16px;max-width:760px}
+#amz-retail-calc .calc-sec{padding-block:0 42px;background:var(--paper)}
+#amz-retail-calc .calc{box-shadow:0 16px 50px -32px rgba(15,31,61,.28);border:1px solid var(--line);overflow:visible}
+#amz-retail-calc .calc-body{grid-template-columns:1.2fr 1fr}
+#amz-retail-calc .calc form{gap:17px 16px}
+#amz-retail-calc .bill{border-radius:0 20px 20px 0;padding:28px}
+#amz-retail-calc .bill-in{top:94px}
+#amz-retail-calc .bill-head{margin-bottom:16px}
+#amz-retail-calc .total{margin-top:0;background:var(--navy);padding:20px 18px;display:block}
+#amz-retail-calc .total span{display:block;margin-bottom:8px;color:var(--ink)}
+#amz-retail-calc .total b{font-size:clamp(34px,3.7vw,48px)}
+#amz-retail-calc #r-byn{font-size:12px;text-align:left;line-height:1.5;margin:6px 0 10px}
+#amz-retail-calc .simple-lot{padding:16px;background:var(--soft);border-radius:12px;min-width:0}
+#amz-retail-calc .simple-lot>label{margin-bottom:9px;color:var(--ink)}
+#amz-retail-calc .simple-lot-input{display:flex;gap:8px}
+#amz-retail-calc .simple-lot-input input{background:#fff;flex:1;font-size:14px}
+#amz-retail-calc .simple-lot-input .btn{min-height:50px;padding:10px 15px;font-size:13px;flex-shrink:0}
+#amz-retail-calc .simple-help{font:400 12.5px/1.5 var(--body);color:var(--muted);margin:7px 0 0}
+#amz-retail-calc .simple-optional{font-weight:400;font-size:11px;color:var(--muted)}
+#amz-retail-calc .simple-lot-card{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:13px;display:grid;gap:4px}
+#amz-retail-calc [hidden]{display:none!important}
+#amz-retail-calc .simple-lot-card a{font-size:12px}
+#amz-retail-calc .simple-settings{border-top:1px solid var(--line);padding-top:12px;min-width:0}
+#amz-retail-calc .simple-settings summary,#amz-retail-calc .simple-breakdown summary{font:700 13px/1.5 var(--display);cursor:pointer;color:var(--navy);list-style-position:inside}
+#amz-retail-calc .simple-settings summary span{display:block;padding-left:14px;font:400 12px/1.5 var(--body);color:var(--muted);margin-top:3px}
+#amz-retail-calc .simple-settings-body{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+#amz-retail-calc .simple-settings-body .hint{margin-top:0}
+#amz-retail-calc .simple-totals{display:grid;gap:0;margin:4px 0 14px}
+#amz-retail-calc .simple-totals p{display:flex;justify-content:space-between;gap:14px;margin:0;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+#amz-retail-calc .simple-totals p span{color:var(--muted)}
+#amz-retail-calc .simple-totals b{white-space:nowrap;font-size:15px}
+#amz-retail-calc .simple-breakdown{margin:2px 0 9px}
+#amz-retail-calc .simple-breakdown[open]{padding-bottom:12px;border-bottom:1px solid var(--line)}
+#amz-retail-calc .simple-breakdown .grp{margin-top:16px}
+#amz-retail-calc .route{font-size:12.5px;line-height:1.6;margin:0;padding:10px 12px}
+#amz-retail-calc .bill .actions{margin-top:14px;display:grid;grid-template-columns:1fr}
+#amz-retail-calc .bill .actions .btn{font-size:13px;min-height:46px}
+#amz-retail-calc .bill .actions .btn-line{background:transparent;min-height:36px;border-color:transparent;text-decoration:underline}
+#amz-retail-calc .adv-toggle,#amz-retail-calc #adv{display:none!important}
+#amz-retail-calc .sc-combo{position:relative;min-width:0}
+#amz-retail-calc .sc-combo input{padding-right:38px}
+#amz-retail-calc .sc-arrow{position:absolute;right:1px;top:1px;width:36px;height:48px;border:0;background:transparent;color:var(--navy);font-size:19px;cursor:pointer;border-radius:9px}
+#amz-retail-calc .sc-list{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:230px;overflow-y:auto;background:#fff;border:1px solid #c8d5db;border-radius:10px;box-shadow:0 14px 30px rgba(15,31,61,.16);z-index:100;padding:5px;overscroll-behavior:contain}
+#amz-retail-calc .sc-option{display:block;text-align:left;width:100%;padding:11px 10px;border:0;border-radius:6px;background:#fff;font:600 14px/1.35 var(--body);color:var(--ink);cursor:pointer}
+#amz-retail-calc .sc-option:hover,#amz-retail-calc .sc-option[aria-selected=true]{background:var(--soft)}
+#amz-retail-calc .sc-message{display:block;padding:9px;font:400 12px/1.5 var(--body);color:var(--muted)}
+#amz-retail-calc .sc-combo input[aria-invalid=true]{border-color:#a91d37}
+@media(max-width:960px){#amz-retail-calc .calc-body{grid-template-columns:1fr}#amz-retail-calc .bill{border-radius:0 0 20px 20px}#amz-retail-calc .bill-in{position:static}}
+@media(max-width:600px){#amz-retail-calc .page-head{padding-block:18px 20px}#amz-retail-calc .page-head h1{font-size:29px}#amz-retail-calc .page-head .lead{font-size:15px}#amz-retail-calc .simple-lot{padding:12px}#amz-retail-calc .bill{padding:22px 18px}#amz-retail-calc .simple-lot-input input{font-size:13px;min-width:0}#amz-retail-calc .simple-lot-input .btn{min-height:44px;padding-inline:10px;font-size:12px}#amz-retail-calc .simple-settings-body{grid-template-columns:1fr}#amz-retail-calc .simple-totals p{font-size:13px}}

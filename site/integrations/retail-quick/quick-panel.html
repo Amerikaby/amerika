@@ -1,0 +1,43 @@
+<section id="quickPanel" class="quick-panel" role="tabpanel" aria-labelledby="quickTab">
+<div class="quick-layout">
+<form id="quickForm" class="quick-form" autocomplete="off">
+  <div class="quick-intro"><p>Без номера лота. Таможня — только по желанию.</p></div>
+  <div class="quick-price"><label for="qPrice">Цена лота, $ <span>ваша ставка без сборов аукциона</span></label><input id="qPrice" type="number" min="1" max="10000000" step="100" inputmode="decimal" placeholder="Например, 8 000" aria-describedby="qPriceHelp"/><p id="qPriceHelp">Сборы аукциона добавим к расчёту.</p></div>
+  <fieldset class="quick-sizes"><legend>Какой автомобиль?</legend><div class="quick-size-options">
+    <label><input type="radio" name="qSize" value="compact" checked/><span><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M9 28h78v-9l-15-3-13-9H34l-12 9-13 5zM26 16h42M44 8v8"/><circle cx="26" cy="29" r="7"/><circle cx="72" cy="29" r="7"/></svg><b>Легковой</b><small>Седан, хэтчбек</small></span></label>
+    <label><input type="radio" name="qSize" value="crossover"/><span><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M8 28h80V15l-10-3-9-8H30l-13 12-9 3zM28 15h48M48 5v10"/><circle cx="25" cy="29" r="7"/><circle cx="73" cy="29" r="7"/></svg><b>Кроссовер</b><small>SUV среднего размера</small></span></label>
+    <label><input type="radio" name="qSize" value="large"/><span><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M5 28h86V12H68L57 3H27L16 15H5zM29 13h32M44 4v9M68 13v13"/><circle cx="24" cy="29" r="8"/><circle cx="75" cy="29" r="8"/></svg><b>Крупный</b><small>Большой SUV, пикап</small></span></label>
+  </div></fieldset>
+  <p id="qSizeNote" class="quick-warning" hidden>Размер пока не меняет базовую сумму: тариф за габариты уточнит менеджер. Доплата не включена в оценку.</p>
+  <div class="quick-route-summary"><span>Маршрут для примера</span><strong id="qRouteSummary">Клайпеда · подбираем площадку</strong><small id="qRouteHint">Минимальная подтверждённая доставка в нашем справочнике.</small></div>
+  <details class="quick-settings" id="qSettings"><summary>Уточнить расчёт: маршрут и таможня</summary><div class="quick-settings-body">
+    <label for="qPort">Доставка через<select id="qPort"><option value="auto">Автоматически · Клайпеда для примера</option><option value="klaipeda">Клайпеда, Литва</option><option value="poti">Поти, Грузия</option></select></label>
+    <label for="qYard">Площадка аукциона<input id="qYard" type="text" list="qYardOptions" placeholder="Автоматически — минимальный маршрут"/><datalist id="qYardOptions"></datalist></label>
+    <p>Площадка настоящего лота может отличаться — тогда изменится доставка. Здесь доступны площадки с подтверждённым морским тарифом.</p>
+  </div>
+  <div class="quick-customs-toggle"><label for="qCustoms"><input id="qCustoms" type="checkbox"/> Добавить таможню</label><span>Необязательно — нужны двигатель и возраст</span></div>
+  <div id="qCustomsFields" class="quick-customs-fields">
+    <label for="qLiters">Двигатель, л<input id="qLiters" type="number" min="0.1" max="10" step="0.1" inputmode="decimal" list="qEngineList" placeholder="Например, 1.5"/><datalist id="qEngineList"><option value="1.0"></option><option value="1.2"></option><option value="1.4"></option><option value="1.5"></option><option value="1.6"></option><option value="1.8"></option><option value="2.0"></option><option value="2.5"></option><option value="3.0"></option></datalist></label>
+    <label for="qAge">Возраст автомобиля<select id="qAge"><option value="">Выберите возраст</option></select></label>
+    <label for="qClearance" id="qClearanceField" hidden>Клиренс, мм<input id="qClearance" type="number" min="50" max="600" step="1" inputmode="numeric" placeholder="Например, 160"/></label>
+    <label class="quick-benefit" for="qBenefit"><input id="qBenefit" type="checkbox" checked/> Льгота 50% по Указу № 140</label>
+    <p>Эти параметры также проверяют маршрут, даже без таможни. Для бензина и дизеля; дату выпуска, гибриды и электро проверит менеджер.</p>
+  </div>
+  <p id="qRouteWarning" class="quick-warning" hidden></p>
+  </details>
+</form>
+<aside class="quick-result" aria-labelledby="qResultTitle">
+  <div class="quick-result-top"><span class="eyebrow">Предварительная оценка</span><span class="quick-estimate-tag">Без ремонта</span></div>
+  <h2 id="qResultTitle">Авто с доставкой, без таможни</h2><div id="qTotal" class="quick-total">—</div><p id="qByn" class="quick-byn">Введите цену лота, чтобы увидеть бюджет.</p>
+  <p id="qError" class="quick-error" role="status" hidden></p>
+  <div class="quick-shipping"><span>Из них доставка до Минска</span><b id="qShipping">—</b><small>США → порт → Минск, базовый тариф</small></div>
+  <div class="quick-inclusions"><strong id="qIncluded">Включено: лот, сборы, доставка и наша услуга.</strong><p id="qExcluded">Не включено: таможня и ремонт. Для крупного авто может потребоваться доплата за габариты.</p></div>
+  <p id="qCustomsAssumption" class="quick-assumptions" hidden></p>
+  <p id="qPolicyNote" class="quick-policy-note">Клайпеда выбрана для ценового примера. Доступность маршрута по вашему автомобилю ещё не проверена.</p>
+  <a id="qManager" class="btn btn-red" href="#lead">Уточнить по моему лоту</a>
+  <details class="quick-breakdown-details" id="qBreakdownWrap" hidden><summary>Из чего складывается сумма</summary><div id="qBreakdown" class="quick-breakdown" hidden><p><span>Ваш лот</span><b id="qLotTotal"></b></p><p><span>Сборы аукциона</span><b id="qFee"></b></p><p><span>Доставка до Минска</span><b id="qDelivery"></b></p><p><span>Наша услуга · 590 BYN</span><b id="qService"></b></p><p id="qCustomsRow" hidden><span>Таможня и оформление</span><b id="qCustomsTotal"></b></p></div></details>
+  <button id="qToDetailed" class="quick-text-link" type="button">Перейти к подробному расчёту →</button>
+  <button id="qShare" class="quick-text-link" type="button">Ссылка на этот расчёт</button><p id="qShareStatus" role="status" class="quick-share-status" hidden></p><input id="qShareUrl" type="url" readonly aria-label="Ссылка на быстрый расчёт" hidden/>
+  <p id="qFxNote" class="quick-fx-note"></p>
+</aside></div>
+</section>

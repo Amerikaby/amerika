@@ -1,0 +1,38 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const here=path.dirname(fileURLToPath(import.meta.url)),simple=path.join(here,'../retail-simple');
+let body=fs.readFileSync(path.join(simple,'production-body.php'),'utf8');
+const panel=fs.readFileSync(path.join(here,'quick-panel.html'),'utf8');
+const switcher=`<div class="quick-mode-switch" id="quickModeSwitch" role="tablist" aria-label="Способ расчёта"><button id="quickTab" role="tab" aria-selected="true" aria-controls="quickPanel" type="button">Быстрый расчёт<span>Цена лота и тип автомобиля</span></button><button id="detailedTab" role="tab" aria-selected="false" aria-controls="quickDetailed" tabindex="-1" type="button">Подробный расчёт<span>Лот, двигатель и все расходы</span></button></div><p class="quick-mode-note" id="quickDetailedNote" hidden>Проверьте год, двигатель и площадку конкретного лота. Расчёт остаётся предварительным; счёт на оплату выставит менеджер после проверки.</p>`;
+body=body.replace('<p class="eyebrow">Калькулятор</p>','<p class="eyebrow">Калькулятор · тест двух режимов</p>');
+body=body.replace(/<p class="lead">[\s\S]*?<\/p>/,'<p class="lead">Быстро прикинуть покупку и доставку — или разобрать все расходы по вашему лоту.</p>');
+body=body.replace('<div class="calc">',switcher+panel+'\n<div class="calc" id="quickDetailed" role="tabpanel" aria-labelledby="detailedTab" hidden>');
+body=body.replace('<div class="field" id="fuelField">','<div class="field wide" id="clearanceField" hidden><label for="clearance">Клиренс, мм · для авто старше пяти лет</label><input id="clearance" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="Укажите по характеристикам модели"/><p class="simple-help">До 165 мм включительно — Клайпеда; выше или неизвестно — предварительно Поти.</p></div>\n<div class="field" id="fuelField">');
+body=body.replace('Через Евросоюз в Беларусь сейчас можно везти легковые машины с двигателем до 1,9 литра. Машины с большим объёмом, гибриды и электромобили идут через грузинский порт Поти. Калькулятор выбирает порт сам, но его можно сменить в расширенных настройках.', 'Рабочее правило маршрута: авто до пяти лет с двигателем до 1,9 л — Клайпеда; старше пяти лет — Клайпеда при клиренсе не выше 165 мм, независимо от объёма. Остальные — Поти. Для мотоцикла сумма покупки, сборов и доставки до Клайпеды должна быть не выше 5 000 $. Дату выпуска и параметры по конкретной машине подтвердит менеджер.');
+body=body.replace(/<section class="lead-sec" id="lead">[\s\S]*?<\/main>/,`<section class="lead-sec" id="lead"><div class="wrap"><div class="quick-contact"><p class="eyebrow">По вашему лоту</p><h2>Обсудите расчёт с менеджером</h2><p>Проверим площадку, маршрут, габариты и расходы по конкретному автомобилю. До ставки уточним итог; счёт на оплату подготовит менеджер.</p><label for="qSummary">Ваш предварительный расчёт</label><textarea id="qSummary" readonly rows="7"></textarea><div class="quick-contact-links"><a class="btn btn-red" href="https://t.me/+375296332828" target="_blank" rel="noopener noreferrer">Написать менеджеру в Telegram</a><a class="btn btn-line" href="tel:+375296332828">+375 (29) 633-28-28</a></div><small>Тестовая страница. Форма отправки заявки здесь не подключена; можно связаться с менеджером напрямую.</small></div></div></section>\n</main>`);
+if(!body.includes('id="quickPanel"')||body.includes('contact-form-7'))throw new Error('Preview body was not assembled correctly');
+fs.writeFileSync(path.join(here,'body.php'),body);
+let core=fs.readFileSync(path.join(simple,'retail-production.js'),'utf8');
+const oldAuto='function autoPortFor(moto, alt, cc){ return moto ? CONFIG.moto.autoPort : ((!alt && cc <= CONFIG.euMaxCc) ? "klaipeda" : "poti"); }';
+if(!core.includes(oldAuto))throw new Error('Route policy source changed');
+core=core.replace(oldAuto,'function autoPortFor(moto, alt, cc){ return AMZ_PREVIEW_ROUTE(moto, alt, cc).port; }');
+core=core.replace('function maxBidForBudget(budget, o){','function maxBidForBudgetUnrestricted(budget, o){');
+core=core.replace('\n(function(){','\nfunction maxBidForBudget(budget,o){return AMZ_QUICK_CORE.motoMaxBid(budget,o,maxBidForBudgetUnrestricted,costOf);}\n(function(){');
+core=core.replace('var o = options(), budget = val("mode") === "budget";', 'var o = options(), budget = val("mode") === "budget";\n    var routeDecision=AMZ_PREVIEW_ROUTE(o.moto,o.alt,o.cc);\n    if(o.port==="klaipeda" && routeDecision.status!=="allowed"){ $("calcInputError").hidden=false; $("calcInputError").textContent=routeDecision.reason+" Выберите автоматический маршрут или Поти."; document.querySelector("#calcForm + .bill .bill-in").hidden=true; $("sendCalc").setAttribute("aria-disabled","true"); return null; }');
+const routeStart=core.indexOf('    var P = PORTS[o.port], txt;'),routeEnd=core.indexOf('    $("r-lot").textContent',routeStart);
+if(routeStart<0||routeEnd<0)throw new Error('Route explanation source changed');
+core=core.slice(0,routeStart)+`    var P=PORTS[o.port], routePolicy=AMZ_PREVIEW_ROUTE(o.moto,o.alt,o.cc);
+    var txt="Маршрут: через <b>"+P.name+"</b>. "+routePolicy.reason+" Дату выпуска и параметры по лоту подтвердит менеджер.";
+    if(!o.moto){var selectedRate=retailRateFor(o.auction,o.yard);if(selectedRate&&!selectedRate.seaConfirmed)txt+=" Морской тариф предварительный: уточните у менеджера.";}
+    $("route").innerHTML=txt;$("route").classList.toggle("warn",routePolicy.status==="unknown");
+
+`+core.slice(routeEnd);
+const original='var url=location.origin+"/kalkulyator/?"+query.toString()+"#calc";';
+if(!core.includes(original))throw new Error('Shared URL source changed');
+core=core.replace(original,'query.set("view","detail"); query.set("clearance",$("clearance").value); var url=location.origin+"/newcodex/kalkulyator-quick/?"+query.toString()+"#calc";');
+core=core.replace('if(params.has("repair"))', 'if(params.has("clearance")) $("clearance").value=params.get("clearance");\n  if(params.has("repair"))');
+fs.writeFileSync(path.join(here,'retail-core.js'),core);
+fs.copyFileSync(path.join(simple,'preview.js'),path.join(here,'detailed.js'));
+fs.copyFileSync(path.join(simple,'preview.css'),path.join(here,'detailed.css'));
+console.log('Two-mode preview generated; production files are not modified.');
