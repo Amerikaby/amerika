@@ -106,6 +106,7 @@ if(typeof module!=='undefined'&&module.exports)module.exports=SIMPLE_CALC_HELPER
     var a=root.querySelector('input[name=auction]:checked').value,f=root.querySelector('input[name=fuel]:checked').value;
     $('deliverySummary').textContent=(a==='copart'?'Copart':'IAAI')+' · '+($('yard').value||'площадка не выбрана');
     var repairBudget=Math.max(0,Number($('repair').value)||0);
+    ['simpleRepairRow','simpleRepairGroup','simpleRepairDetail'].forEach(function(id){var row=$(id);if(row)row.hidden=repairBudget<=0});
     $('costSummary').textContent=(repairBudget?'Ремонт '+money(repairBudget):'Без ремонта')+' · услуга '+$('service').value+' BYN'+($('benefit').checked?' · льгота 50%':' · без льготы');
     var totalLabel=$('simpleTotalLabel');if(totalLabel)totalLabel.textContent=repairBudget?'В Минске с ремонтом':'В Минске без ремонта';
     if($('simpleFuel').dataset.comboInvalid!=='true')$('simpleFuel').value=f;fuelCombo.sync();if($('simpleAuction').dataset.comboInvalid!=='true')$('simpleAuction').value=a;auctionCombo.sync();yearCombo.sync();

@@ -42,7 +42,8 @@
 <details class="simple-settings wide" id="costSettings"><summary>Ремонт, льгота и наша услуга <span id="costSummary"></span></summary><div class="simple-settings-body">
 <div class="field"><label for="repair">Ремонт, $ <span class="simple-optional">необязательно</span></label><input id="repair" aria-describedby="repairHelp" max="100000" min="0" step="100" type="number" value="0"/></div>
 <div class="field"><label for="service">Наша услуга, BYN</label><select id="service"><option value="590">Покупка лота · 590</option><option value="990">Подбор · 990</option><option value="1999">Под ключ · 1999</option></select></div>
-<label class="check wide" for="benefit" id="benefitWrap"><input id="benefit" type="checkbox"/> Льгота 50% по Указу № 140</label>
+<label class="check wide" for="benefit" id="benefitWrap"><input id="benefit" aria-describedby="benefitHelp" type="checkbox" checked/> Льгота 50% по Указу № 140</label>
+<p class="simple-help wide" id="benefitHelp">Снимите галочку, если льгота не применяется.</p>
 <p class="simple-help wide" id="repairHelp">По умолчанию ремонт не включён. Впишите свою сумму, если хотите учесть его в итоге. Возраст на границе 3 и 5 лет уточняется по дате выпуска.</p>
 <div class="field wide"><label id="vtypeLabel">Что везём</label><div aria-labelledby="vtypeLabel" class="seg" role="radiogroup"><label><input checked name="vtype" type="radio" value="car"/><span>Автомобиль</span></label><label><input name="vtype" type="radio" value="moto"/><span>Мотоцикл</span></label></div></div>
 </div></details>
@@ -55,7 +56,7 @@
 <div class="maxbid" hidden="" id="maxbid"><span>Можно ставить на аукционе до</span><b class="num" id="r-max"></b></div>
 <div class="total"><span id="simpleTotalLabel">В Минске без ремонта</span><b class="num" id="r-total"></b></div>
 <small class="num" id="r-byn"></small>
-<div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary><div class="grp">Аукцион <i>платите аукциону</i></div>
+<div class="simple-totals" aria-label="Из чего складывается цена"><p><span>Авто и сборы аукциона</span><b id="simpleAuctionTotal"></b></p><p><span>Вся доставка до Минска</span><b id="simpleDeliveryTotal"></b></p><p><span>Таможня и оформление</span><b id="simpleCustomsTotal"></b></p><p><span>Наша услуга</span><b id="simpleServiceTotal"></b></p><p id="simpleRepairRow" hidden><span>Резерв ремонта</span><b id="simpleRepairTotal"></b></p></div><details class="simple-breakdown"><summary>Показать подробную смету</summary><div class="grp">Аукцион <i>платите аукциону</i></div>
 <div class="row"><span>Лот на аукционе</span><span class="num" id="r-lot"></span></div>
 <div class="row"><span>Сборы аукциона</span><span class="num" id="r-fee"></span></div>
 <div class="grp">Доставка <i>платите перевозчику</i></div>
@@ -68,7 +69,7 @@
 <div class="row"><span id="r-cust-l">Утильсбор, СВХ, декларант</span><span class="num" id="r-cust"></span></div>
 <div class="grp">Мы <i>по договору</i></div>
 <div class="row ours"><span>Наша услуга</span><span class="num" id="r-ours"></span></div>
-<div class="grp">Восстановление <i>отдельный бюджет</i></div><div class="row"><span>Ваш резерв</span><span class="num" id="r-repair"></span></div>
+<div class="grp" id="simpleRepairGroup" hidden>Восстановление <i>отдельный бюджет</i></div><div class="row" id="simpleRepairDetail" hidden><span>Ваш резерв</span><span class="num" id="r-repair"></span></div>
 </details><p class="note warn-note" hidden="" id="motoNote"><b>Расчёт для мотоциклов ориентировочный.</b> Доставку мотоцикла считаем по вашему лоту: стоимость места в контейнере зависит от размеров техники.</p>
 <p class="note">Расчёт ориентировочный: стоимость зависит от аукциона, площадки и состояния лота. Таможня считает платежи по курсу на день декларации. Точный расчёт по конкретной машине сделает менеджер.</p>
 <div class="actions">

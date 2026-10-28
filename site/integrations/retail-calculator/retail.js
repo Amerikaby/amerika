@@ -356,7 +356,7 @@ function fillYears(sel, def){
 
   if(params.has("repair")) $("repair").value = Math.max(0,Number(params.get("repair"))||0);
   if(CONFIG.servicePrices.includes(Number(params.get("service")))) $("service").value=params.get("service");
-  $("benefit").checked=params.get("benefit")==="1";
+  if(params.has("benefit")) $("benefit").checked=params.get("benefit")==="1";
   if(params.get("mode")==="budget")document.querySelector('#calcForm input[name="mode"][value="budget"]').checked=true;
   if(params.get("auction")==="iaai")document.querySelector('#calcForm input[name="auction"][value="iaai"]').checked=true;
   if(["auto","klaipeda","poti"].includes(params.get("port")))$("port").value=params.get("port");
